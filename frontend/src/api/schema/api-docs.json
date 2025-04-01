@@ -1,0 +1,482 @@
+{
+	"openapi": "3.0.1",
+	"info": { "title": "OpenAPI definition", "version": "v0" },
+	"servers": [
+		{ "url": "http://localhost:8080", "description": "Generated server url" }
+	],
+	"paths": {
+		"/urp/users/{userId}/bind-role": {
+			"post": {
+				"tags": ["user-role-permission-controller"],
+				"operationId": "bindRoleToUser",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "format": "int64" }
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "array",
+								"items": { "type": "integer", "format": "int64" }
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": { "200": { "description": "OK" } }
+			}
+		},
+		"/urp/user": {
+			"post": {
+				"tags": ["user-role-permission-controller"],
+				"operationId": "upsertUser",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/UserUpsertDto" }
+						}
+					},
+					"required": true
+				},
+				"responses": { "200": { "description": "OK" } }
+			},
+			"delete": {
+				"tags": ["user-role-permission-controller"],
+				"operationId": "deleteUser",
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "query",
+						"required": true,
+						"schema": { "type": "integer", "format": "int64" }
+					}
+				],
+				"responses": { "200": { "description": "OK" } }
+			}
+		},
+		"/urp/roles/{roleId}/bind-permission": {
+			"post": {
+				"tags": ["user-role-permission-controller"],
+				"operationId": "bindPermissionToRole",
+				"parameters": [
+					{
+						"name": "roleId",
+						"in": "path",
+						"required": true,
+						"schema": { "type": "integer", "format": "int64" }
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "array",
+								"items": { "type": "integer", "format": "int64" }
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": { "200": { "description": "OK" } }
+			}
+		},
+		"/urp/role": {
+			"post": {
+				"tags": ["user-role-permission-controller"],
+				"operationId": "upsertRole",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/RoleUpsertDto" }
+						}
+					},
+					"required": true
+				},
+				"responses": { "200": { "description": "OK" } }
+			},
+			"delete": {
+				"tags": ["user-role-permission-controller"],
+				"operationId": "deleteRole",
+				"parameters": [
+					{
+						"name": "roleId",
+						"in": "query",
+						"required": true,
+						"schema": { "type": "integer", "format": "int64" }
+					}
+				],
+				"responses": { "200": { "description": "OK" } }
+			}
+		},
+		"/urp/permission": {
+			"post": {
+				"tags": ["user-role-permission-controller"],
+				"operationId": "upsertPermission",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/PermissionUpsertDto" }
+						}
+					},
+					"required": true
+				},
+				"responses": { "200": { "description": "OK" } }
+			},
+			"delete": {
+				"tags": ["user-role-permission-controller"],
+				"operationId": "deletePermission",
+				"parameters": [
+					{
+						"name": "permissionId",
+						"in": "query",
+						"required": true,
+						"schema": { "type": "integer", "format": "int64" }
+					}
+				],
+				"responses": { "200": { "description": "OK" } }
+			}
+		},
+		"/urp/me": {
+			"get": {
+				"tags": ["user-role-permission-controller"],
+				"operationId": "currentUser",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": {
+								"schema": {
+									"$ref": "#/components/schemas/UserRolePermissionDto"
+								}
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["user-role-permission-controller"],
+				"operationId": "upsertMe",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/UserUpsertDto" }
+						}
+					},
+					"required": true
+				},
+				"responses": { "200": { "description": "OK" } }
+			}
+		},
+		"/auth/sign-up": {
+			"post": {
+				"tags": ["sign-controller"],
+				"operationId": "signUp",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/SignUpDto" }
+						}
+					},
+					"required": true
+				},
+				"responses": { "201": { "description": "Created" } }
+			}
+		},
+		"/auth/sign-out": {
+			"post": {
+				"tags": ["sign-controller"],
+				"operationId": "signOut",
+				"responses": { "200": { "description": "OK" } }
+			}
+		},
+		"/auth/sign-in": {
+			"post": {
+				"tags": ["sign-controller"],
+				"operationId": "signIn",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/SignInDto" }
+						}
+					},
+					"required": true
+				},
+				"responses": { "200": { "description": "OK" } }
+			}
+		},
+		"/urp/users": {
+			"get": {
+				"tags": ["user-role-permission-controller"],
+				"operationId": "queryUsers",
+				"parameters": [
+					{
+						"name": "pageRequestDto",
+						"in": "query",
+						"required": true,
+						"schema": { "$ref": "#/components/schemas/PageRequestDto" }
+					},
+					{
+						"name": "userQueryDto",
+						"in": "query",
+						"required": true,
+						"schema": { "$ref": "#/components/schemas/UserQueryDto" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": {
+								"schema": {
+									"$ref": "#/components/schemas/PageResponseDtoListUserRolePermissionDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/urp/roles": {
+			"get": {
+				"tags": ["user-role-permission-controller"],
+				"operationId": "queryRoles",
+				"parameters": [
+					{
+						"name": "pageRequestDto",
+						"in": "query",
+						"required": true,
+						"schema": { "$ref": "#/components/schemas/PageRequestDto" }
+					},
+					{
+						"name": "roleQueryDto",
+						"in": "query",
+						"required": true,
+						"schema": { "$ref": "#/components/schemas/RoleQueryDto" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": {
+								"schema": {
+									"$ref": "#/components/schemas/PageResponseDtoListRoleDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/urp/permissions": {
+			"get": {
+				"tags": ["user-role-permission-controller"],
+				"operationId": "queryPermissions",
+				"parameters": [
+					{
+						"name": "pageRequestDto",
+						"in": "query",
+						"required": true,
+						"schema": { "$ref": "#/components/schemas/PageRequestDto" }
+					},
+					{
+						"name": "permissionQueryDto",
+						"in": "query",
+						"required": true,
+						"schema": { "$ref": "#/components/schemas/PermissionQueryDto" }
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"*/*": {
+								"schema": {
+									"$ref": "#/components/schemas/PageResponseDtoListPermissionDto"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"UserUpsertDto": {
+				"required": ["enable", "password", "username"],
+				"type": "object",
+				"properties": {
+					"id": { "type": "integer", "format": "int64" },
+					"username": { "type": "string" },
+					"password": { "type": "string" },
+					"enable": { "type": "boolean" }
+				}
+			},
+			"RoleUpsertDto": {
+				"required": ["code", "name"],
+				"type": "object",
+				"properties": {
+					"id": { "type": "integer", "format": "int64" },
+					"code": { "type": "string" },
+					"name": { "type": "string" }
+				}
+			},
+			"PermissionUpsertDto": {
+				"required": ["code", "name"],
+				"type": "object",
+				"properties": {
+					"id": { "type": "integer", "format": "int64" },
+					"code": { "type": "string" },
+					"name": { "type": "string" }
+				}
+			},
+			"SignUpDto": {
+				"required": ["password", "username"],
+				"type": "object",
+				"properties": {
+					"username": { "type": "string" },
+					"password": { "type": "string" }
+				}
+			},
+			"SignInDto": {
+				"required": ["password", "username"],
+				"type": "object",
+				"properties": {
+					"username": { "type": "string" },
+					"password": { "type": "string" }
+				}
+			},
+			"PageRequestDto": {
+				"type": "object",
+				"properties": {
+					"page": { "type": "integer", "format": "int32" },
+					"size": { "type": "integer", "format": "int32" },
+					"sortBy": {
+						"type": "object",
+						"additionalProperties": {
+							"type": "string",
+							"enum": ["ASC", "DESC"]
+						}
+					},
+					"sortFields": {
+						"type": "array",
+						"items": { "$ref": "#/components/schemas/SortFieldObject" }
+					},
+					"offset": { "type": "integer", "format": "int64" }
+				}
+			},
+			"SortFieldObject": {
+				"type": "object",
+				"properties": {
+					"order": { "type": "string", "enum": ["ASC", "DESC", "DEFAULT"] },
+					"name": { "type": "string" }
+				}
+			},
+			"UserQueryDto": {
+				"type": "object",
+				"properties": { "username": { "type": "string" } }
+			},
+			"PageResponseDtoListUserRolePermissionDto": {
+				"type": "object",
+				"properties": {
+					"total": { "type": "integer", "format": "int64" },
+					"data": {
+						"type": "array",
+						"items": { "$ref": "#/components/schemas/UserRolePermissionDto" }
+					}
+				}
+			},
+			"PermissionDto": {
+				"type": "object",
+				"properties": {
+					"id": { "type": "integer", "format": "int64" },
+					"code": { "type": "string" },
+					"name": { "type": "string" }
+				}
+			},
+			"RoleDto": {
+				"type": "object",
+				"properties": {
+					"id": { "type": "integer", "format": "int64" },
+					"code": { "type": "string" },
+					"name": { "type": "string" },
+					"permissions": {
+						"type": "array",
+						"items": { "$ref": "#/components/schemas/PermissionDto" }
+					}
+				}
+			},
+			"UserRolePermissionDto": {
+				"type": "object",
+				"properties": {
+					"id": { "type": "integer", "format": "int64" },
+					"username": { "type": "string" },
+					"password": { "type": "string", "writeOnly": true },
+					"enable": { "type": "boolean" },
+					"roles": {
+						"type": "array",
+						"items": { "$ref": "#/components/schemas/RoleDto" }
+					},
+					"createTime": { "type": "string", "format": "date-time" },
+					"permissions": {
+						"uniqueItems": true,
+						"type": "array",
+						"items": { "$ref": "#/components/schemas/PermissionDto" }
+					}
+				}
+			},
+			"RoleQueryDto": {
+				"type": "object",
+				"properties": {
+					"userId": { "type": "integer", "format": "int64" },
+					"roleId": { "type": "integer", "format": "int64" },
+					"roleCode": { "type": "string" },
+					"roleName": { "type": "string" },
+					"roleIdList": {
+						"type": "array",
+						"items": { "type": "integer", "format": "int64" }
+					}
+				}
+			},
+			"PageResponseDtoListRoleDto": {
+				"type": "object",
+				"properties": {
+					"total": { "type": "integer", "format": "int64" },
+					"data": {
+						"type": "array",
+						"items": { "$ref": "#/components/schemas/RoleDto" }
+					}
+				}
+			},
+			"PermissionQueryDto": {
+				"type": "object",
+				"properties": {
+					"roleId": { "type": "integer", "format": "int64" },
+					"permissionId": { "type": "integer", "format": "int64" },
+					"permissionCode": { "type": "string" },
+					"permissionName": { "type": "string" },
+					"permissionIdList": {
+						"type": "array",
+						"items": { "type": "integer", "format": "int64" }
+					}
+				}
+			},
+			"PageResponseDtoListPermissionDto": {
+				"type": "object",
+				"properties": {
+					"total": { "type": "integer", "format": "int64" },
+					"data": {
+						"type": "array",
+						"items": { "$ref": "#/components/schemas/PermissionDto" }
+					}
+				}
+			}
+		}
+	}
+}

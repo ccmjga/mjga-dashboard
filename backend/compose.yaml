@@ -1,0 +1,42 @@
+services:
+  database:
+    image: 'postgres:17.3'
+    container_name: database
+    hostname: database
+    environment:
+      POSTGRES_DB: ${DATABASE_DB}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - ${DATABASE_EXPOSE_PORT}:5432
+    volumes:
+      - ${DATABASE_STORE}:/var/lib/postgresql/data
+    restart: always
+  web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      extra_hosts:
+        - host.docker.internal:host-gateway
+    container_name: web
+    hostname: web
+    environment:
+      LOG_PATH: ${LOG_PATH}
+      DATABASE_DB: ${DATABASE_DB}
+      DATABASE_DEFAULT_SCHEMA: ${DATABASE_DEFAULT_SCHEMA}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_HOST_PORT: ${DATABASE_HOST_PORT}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
+      ALLOWED_METHODS: ${ALLOWED_METHODS}
+      ALLOWED_HEADERS: ${ALLOWED_HEADERS}
+      ALLOWED_EXPOSE_HEADERS: ${ALLOWED_EXPOSE_HEADERS}
+    depends_on:
+      - database
+    ports:
+      - ${WEB_EXPOSE_PORT}:8080
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    volumes:
+      - ${LOG_PATH}:/var/log
+    restart: always
