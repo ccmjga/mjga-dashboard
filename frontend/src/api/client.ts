@@ -26,7 +26,7 @@ const myMiddleware: Middleware = {
 };
 
 const client = createClient<paths>({
-	baseUrl: "http://localhost:8080/",
+	baseUrl: `http://localhost:${import.meta.env.VITE_BACKEND_PORT}/`,
 	querySerializer: {
 		object: {
 			style: "form",
