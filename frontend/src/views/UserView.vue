@@ -171,7 +171,7 @@
   <UserDeleteModal :id="'user-delete-modal'" :closeModal="() => {
     userDeleteModal!.hide();
   }" :onSubmit="deleteSelectedUser" title="确定删除该用户吗" content="删除用户"></UserDeleteModal>
-  <UserUpsertModal :onSubmit="handleUpsertModalSubmit" :closeModal="() => {
+  <UserUpsertModal :id="'user-upsert-modal'" :onSubmit="handleUpsertModalSubmit" :closeModal="() => {
     userUpsertModal!.hide();
   }" mode="edit" :user="selectedUser">
   </UserUpsertModal>
@@ -248,7 +248,7 @@ const handleUpsertUserClick = async (user?: UserRolePermission) => {
 	});
 };
 
-const deleteSelectedUser = async (event: Event) => {
+const deleteSelectedUser = async () => {
 	if (!selectedUser?.value?.id) return;
 	await deleteUser(selectedUser.value.id);
 	await fetchUsersWith(currentPage.value, pageSize.value, {

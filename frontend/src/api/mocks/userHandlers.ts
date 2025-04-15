@@ -41,9 +41,11 @@ export default [
 	}),
 	http.post("/urp/user", () => {
 		console.log('Captured a "POST /posts" request');
+		return HttpResponse.json();
 	}),
 	http.delete("/urp/user", ({ params }) => {
 		console.log(`Captured a "DELETE /posts/${params.id}" request`);
+		return HttpResponse.json();
 	}),
 	http.post("/urp/me", () => {
 		console.log('Captured a "POST /posts" request');
