@@ -41,8 +41,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
 import type { Permission } from "@/types/permission";
+import { computed, ref, watch } from "vue";
 
 const props = defineProps<{
 	mode: "create" | "edit";

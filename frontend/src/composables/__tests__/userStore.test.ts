@@ -1,6 +1,6 @@
+import useUserStore from "@/composables/auth/useUserStore";
 import { createPinia, setActivePinia } from "pinia";
 import { beforeEach, describe, expect, it } from "vitest";
-import useUserStore from "@/composables/auth/useUserStore";
 
 describe("User Store", () => {
 	beforeEach(() => {

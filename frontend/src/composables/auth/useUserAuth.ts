@@ -1,7 +1,7 @@
-import { ref } from "vue";
 import client from "@/api/client";
-import useUserStore from "../store/useUserStore";
+import { ref } from "vue";
 import useAuthStore from "../store/useAuthStore";
+import useUserStore from "../store/useUserStore";
 
 const useUserAuth = () => {
 	const isAuthenticated = ref(false);

@@ -1,7 +1,7 @@
-import { defineStore } from "pinia";
-import type { AlertProps } from "../../types/alert";
 import { StorageSerializers, useStorage } from "@vueuse/core";
+import { defineStore } from "pinia";
 import { computed } from "vue";
+import type { AlertProps } from "../../types/alert";
 
 const useAlertStore = defineStore("alertStore", () => {
 	const alertStorage = useStorage<AlertProps>(

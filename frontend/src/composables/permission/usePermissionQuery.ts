@@ -1,7 +1,7 @@
 import client from "@/api/client";
 import { ref } from "vue";
-import { usePagination } from "../page";
 import type { Permission } from "../../types/permission";
+import { usePagination } from "../page";
 
 const usePermissionsPaginationQuery = (page: number, size: number) => {
 	const paginationHooks = usePagination({

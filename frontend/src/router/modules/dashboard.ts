@@ -1,7 +1,7 @@
 import type { RouteRecordRaw } from "vue-router";
 import Dashboard from "../../components/Dashboard.vue";
 import OverView from "../../views/OverView.vue";
-import { RouteName, RoutePath } from "../constants";
+import { ROLE, RouteName, RoutePath } from "../constants";
 import userManagementRoutes from "./user";
 
 const dashboardRoutes: RouteRecordRaw = {
@@ -23,7 +23,7 @@ const dashboardRoutes: RouteRecordRaw = {
 		{
 			path: RoutePath.SETTINGS,
 			name: RouteName.SETTINGS,
-			component: () => import("../../views/Settings.vue"),
+			component: () => import("@/views/Settings.vue"),
 			meta: {
 				requiresAuth: true,
 			},
@@ -32,7 +32,16 @@ const dashboardRoutes: RouteRecordRaw = {
 		{
 			path: RoutePath.NOTFOUND,
 			name: RouteName.NOTFOUND,
-			component: () => import("../../views/NotFound.vue"),
+			component: () => import("@/views/NotFound.vue"),
+		},
+		{
+			path: RoutePath.SCHEDULERVIEW,
+			name: RouteName.SCHEDULERVIEW,
+			component: () => import("@/views/SchedulerView.vue"),
+			meta: {
+				requiresAuth: true,
+				hasRole: ROLE.ADMIN,
+			},
 		},
 	],
 };

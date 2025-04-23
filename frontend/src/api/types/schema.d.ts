@@ -196,6 +196,22 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/scheduler/jobs": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get: operations["jobs"];
+		put?: never;
+		post?: never;
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -235,14 +251,14 @@ export interface components {
 			sortBy?: {
 				[key: string]: "ASC" | "DESC";
 			};
-			sortFields?: components["schemas"]["SortFieldObject"][];
 			/** Format: int64 */
 			offset?: number;
+			sortFields?: components["schemas"]["SortFieldObject"][];
 		};
 		SortFieldObject: {
+			name?: string;
 			/** @enum {string} */
 			order?: "ASC" | "DESC" | "DEFAULT";
-			name?: string;
 		};
 		UserQueryDto: {
 			username?: string;
@@ -303,6 +319,50 @@ export interface components {
 			/** Format: int64 */
 			total?: number;
 			data?: components["schemas"]["PermissionDto"][];
+		};
+		JobTriggerDto: {
+			name?: string;
+			group?: string;
+			className?: string;
+			jobDataMap?: {
+				dirty?: boolean;
+				allowsTransientData?: boolean;
+				keys?: string[];
+				empty?: boolean;
+				wrappedMap?: {
+					[key: string]: Record<string, never>;
+				};
+			} & {
+				[key: string]: Record<string, never>;
+			};
+			triggerName?: string;
+			triggerGroup?: string;
+			schedulerType?: string;
+			cronExpression?: string;
+			/** Format: int64 */
+			startTime?: number;
+			/** Format: int64 */
+			endTime?: number;
+			/** Format: int64 */
+			nextFireTime?: number;
+			/** Format: int64 */
+			previousFireTime?: number;
+			triggerJobDataMap?: {
+				dirty?: boolean;
+				allowsTransientData?: boolean;
+				keys?: string[];
+				empty?: boolean;
+				wrappedMap?: {
+					[key: string]: Record<string, never>;
+				};
+			} & {
+				[key: string]: Record<string, never>;
+			};
+		};
+		PageResponseDtoListJobTriggerDto: {
+			/** Format: int64 */
+			total?: number;
+			data?: components["schemas"]["JobTriggerDto"][];
 		};
 	};
 	responses: never;
@@ -656,6 +716,28 @@ export interface operations {
 				};
 				content: {
 					"*/*": components["schemas"]["PageResponseDtoListPermissionDto"];
+				};
+			};
+		};
+	};
+	jobs: {
+		parameters: {
+			query: {
+				pageRequestDto: components["schemas"]["PageRequestDto"];
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody?: never;
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content: {
+					"*/*": components["schemas"]["PageResponseDtoListJobTriggerDto"];
 				};
 			};
 		};

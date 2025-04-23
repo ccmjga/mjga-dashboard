@@ -28,10 +28,10 @@
 import { initFlowbite } from "flowbite";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { RoutePath } from "../router/constants";
-import useUserAuth from "../composables/auth/useUserAuth";
 import { z } from "zod";
+import useUserAuth from "../composables/auth/useUserAuth";
 import useAlertStore from "../composables/store/useAlertStore";
+import { RoutePath } from "../router/constants";
 
 const username = ref("admin");
 const password = ref("admin");

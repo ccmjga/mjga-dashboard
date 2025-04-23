@@ -62,6 +62,7 @@ dependencies {
     implementation("org.flywaydb:flyway-core:$flywayVersion")
     implementation("org.flywaydb:flyway-database-postgresql:$flywayVersion")
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.0")
+    implementation("org.springframework.boot:spring-boot-starter-quartz")
     testImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
     testImplementation("org.testcontainers:postgresql:$testcontainersVersion")
     testImplementation("org.testcontainers:testcontainers-bom:$testcontainersVersion")
@@ -135,7 +136,7 @@ jooq {
         generator {
             database {
                 includes = ".*"
-                excludes = "qrtz_.*"
+//                excludes = "qrtz_.*"
                 name = "org.jooq.meta.extensions.ddl.DDLDatabase"
                 properties {
                     property {

@@ -1,45 +1,38 @@
 import client from "@/api/client";
-import { computed, ref } from "vue";
-import type { Role } from "../../types/role";
+import { ref } from "vue";
+import type { components } from "../../api/types/schema";
+import type { JobTriggerDto } from "../../types/jobs";
+import type { UserRolePermission } from "../../types/user";
 import { usePagination } from "../page";
 
-export const useRolesPaginationQuery = (page: number, size: number) => {
+export const useJobsPaginationQuery = (page: number, size: number) => {
 	const paginationHooks = usePagination({
 		initialPage: page,
 		initialPageSize: size,
 	});
 
 	const total = ref<number>(0);
-	const roles = ref<Role[]>();
+	const jobs = ref<JobTriggerDto[]>();
 
-	const fetchRolesWith = async (
+	const fetchJobsWith = async (
 		page: number,
 		size: number,
 		param: {
-			name?: string;
+			jobName?: string;
 		},
 	) => {
-		const { data } = await client.GET("/urp/roles", {
+		const { data } = await client.GET("/scheduler/jobs", {
 			params: {
 				query: {
 					pageRequestDto: {
-						page,
-						size,
-					},
-					roleQueryDto: {
-						roleName: param.name,
+						page: page,
+						size: size,
 					},
 				},
 			},
 		});
-
-		if (!data) {
-			throw new Error("获取角色数据失败");
-		}
-
-		total.value = data.total ?? 0;
-		roles.value = data.data ?? [];
-
+		total.value = !data || !data.total ? 0 : data.total;
+		jobs.value = data?.data ?? [];
 		paginationHooks.updatePaginationState({
 			currentPage: page,
 			pageSize: size,
@@ -58,7 +51,7 @@ export const useRolesPaginationQuery = (page: number, size: number) => {
 			isLastPage: paginationHooks.isLastPage,
 		},
 		total,
-		roles,
-		fetchRolesWith,
+		jobs,
+		fetchJobsWith,
 	};
 };
