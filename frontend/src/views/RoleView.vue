@@ -253,7 +253,7 @@ const handleSearch = async () => {
 };
 
 const handlePageChange = async (page: number) => {
-	if (page < 1 || page > totalPages.value || isLoading.value) return;
+	if (page < 1 || page > totalPages.value) return;
 	await fetchRolesWith(page, pageSize.value, { name: roleName.value });
 };
 </script>

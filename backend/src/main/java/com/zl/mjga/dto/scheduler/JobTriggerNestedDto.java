@@ -2,11 +2,9 @@ package com.zl.mjga.dto.scheduler;
 
 import java.util.List;
 import java.util.Map;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.quartz.JobDataMap;
 
 @Data
 @AllArgsConstructor

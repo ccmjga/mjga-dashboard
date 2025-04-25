@@ -25,6 +25,7 @@ export interface JobTriggerDto {
 	nextFireTime?: number;
 	/** Format: int64 */
 	previousFireTime?: number;
+	triggerState?: string;
 	triggerJobDataMap?: {
 		dirty?: boolean;
 		allowsTransientData?: boolean;

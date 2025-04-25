@@ -1,24 +1,22 @@
 import client from "@/api/client";
 import { ref } from "vue";
-import type { components } from "../../api/types/schema";
 import type { JobTriggerDto } from "../../types/jobs";
-import type { UserRolePermission } from "../../types/user";
 import { usePagination } from "../page";
 
-export const useJobsPaginationQuery = (page: number, size: number) => {
+export const useJobsPaginationQuery = (page = 1, size = 10) => {
 	const paginationHooks = usePagination({
 		initialPage: page,
 		initialPageSize: size,
 	});
 
 	const total = ref<number>(0);
-	const jobs = ref<JobTriggerDto[]>();
+	const jobs = ref<JobTriggerDto[]>([]);
 
 	const fetchJobsWith = async (
 		page: number,
 		size: number,
-		param: {
-			jobName?: string;
+		param?: {
+			name?: string;
 		},
 	) => {
 		const { data } = await client.GET("/scheduler/jobs", {

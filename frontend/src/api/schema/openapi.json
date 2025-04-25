@@ -263,6 +263,119 @@
         }
       }
     },
+    "/scheduler/trigger/resume": {
+      "post": {
+        "tags": [
+          "scheduler-controller"
+        ],
+        "operationId": "resumeTrigger",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TriggerKey"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/scheduler/trigger/pause": {
+      "post": {
+        "tags": [
+          "scheduler-controller"
+        ],
+        "operationId": "pauseJob",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TriggerKey"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/scheduler/job/update": {
+      "post": {
+        "tags": [
+          "scheduler-controller"
+        ],
+        "operationId": "triggerJob",
+        "parameters": [
+          {
+            "name": "cron",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TriggerKey"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/scheduler/job/trigger": {
+      "post": {
+        "tags": [
+          "scheduler-controller"
+        ],
+        "operationId": "triggerJob_1",
+        "parameters": [
+          {
+            "name": "startAt",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobKey"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/auth/sign-up": {
       "post": {
         "tags": [
@@ -526,6 +639,28 @@
             "type": "string"
           },
           "name": {
+            "type": "string"
+          }
+        }
+      },
+      "TriggerKey": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          }
+        }
+      },
+      "JobKey": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "group": {
             "type": "string"
           }
         }
@@ -800,29 +935,6 @@
           },
           "jobDataMap": {
             "type": "object",
-            "properties": {
-              "dirty": {
-                "type": "boolean"
-              },
-              "allowsTransientData": {
-                "type": "boolean"
-              },
-              "keys": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "empty": {
-                "type": "boolean"
-              },
-              "wrappedMap": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "object"
-                }
-              }
-            },
             "additionalProperties": {
               "type": "object"
             }
@@ -855,31 +967,11 @@
             "type": "integer",
             "format": "int64"
           },
+          "triggerState": {
+            "type": "string"
+          },
           "triggerJobDataMap": {
             "type": "object",
-            "properties": {
-              "dirty": {
-                "type": "boolean"
-              },
-              "allowsTransientData": {
-                "type": "boolean"
-              },
-              "keys": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "empty": {
-                "type": "boolean"
-              },
-              "wrappedMap": {
-                "type": "object",
-                "additionalProperties": {
-                  "type": "object"
-                }
-              }
-            },
             "additionalProperties": {
               "type": "object"
             }

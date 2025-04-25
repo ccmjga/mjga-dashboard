@@ -100,6 +100,70 @@ export interface paths {
 		patch?: never;
 		trace?: never;
 	};
+	"/scheduler/trigger/resume": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post: operations["resumeTrigger"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/scheduler/trigger/pause": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post: operations["pauseJob"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/scheduler/job/update": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post: operations["triggerJob"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
+	"/scheduler/job/trigger": {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		get?: never;
+		put?: never;
+		post: operations["triggerJob_1"];
+		delete?: never;
+		options?: never;
+		head?: never;
+		patch?: never;
+		trace?: never;
+	};
 	"/auth/sign-up": {
 		parameters: {
 			query?: never;
@@ -235,6 +299,14 @@ export interface components {
 			code: string;
 			name: string;
 		};
+		TriggerKey: {
+			name?: string;
+			group?: string;
+		};
+		JobKey: {
+			name?: string;
+			group?: string;
+		};
 		SignUpDto: {
 			username: string;
 			password: string;
@@ -325,14 +397,6 @@ export interface components {
 			group?: string;
 			className?: string;
 			jobDataMap?: {
-				dirty?: boolean;
-				allowsTransientData?: boolean;
-				keys?: string[];
-				empty?: boolean;
-				wrappedMap?: {
-					[key: string]: Record<string, never>;
-				};
-			} & {
 				[key: string]: Record<string, never>;
 			};
 			triggerName?: string;
@@ -347,15 +411,8 @@ export interface components {
 			nextFireTime?: number;
 			/** Format: int64 */
 			previousFireTime?: number;
+			triggerState?: string;
 			triggerJobDataMap?: {
-				dirty?: boolean;
-				allowsTransientData?: boolean;
-				keys?: string[];
-				empty?: boolean;
-				wrappedMap?: {
-					[key: string]: Record<string, never>;
-				};
-			} & {
 				[key: string]: Record<string, never>;
 			};
 		};
@@ -577,6 +634,98 @@ export interface operations {
 		requestBody: {
 			content: {
 				"application/json": components["schemas"]["UserUpsertDto"];
+			};
+		};
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content?: never;
+			};
+		};
+	};
+	resumeTrigger: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["TriggerKey"];
+			};
+		};
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content?: never;
+			};
+		};
+	};
+	pauseJob: {
+		parameters: {
+			query?: never;
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["TriggerKey"];
+			};
+		};
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content?: never;
+			};
+		};
+	};
+	triggerJob: {
+		parameters: {
+			query: {
+				cron: string;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["TriggerKey"];
+			};
+		};
+		responses: {
+			/** @description OK */
+			200: {
+				headers: {
+					[name: string]: unknown;
+				};
+				content?: never;
+			};
+		};
+	};
+	triggerJob_1: {
+		parameters: {
+			query: {
+				startAt: number;
+			};
+			header?: never;
+			path?: never;
+			cookie?: never;
+		};
+		requestBody: {
+			content: {
+				"application/json": components["schemas"]["JobKey"];
 			};
 		};
 		responses: {

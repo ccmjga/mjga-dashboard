@@ -1,11 +1,9 @@
 package com.zl.mjga.dto.scheduler;
 
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.quartz.JobDataMap;
-
-import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -23,5 +21,6 @@ public class JobTriggerDto {
   private long endTime;
   private long nextFireTime;
   private long previousFireTime;
+  private String triggerState;
   private Map triggerJobDataMap;
 }

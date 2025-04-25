@@ -16,7 +16,8 @@ export default [
 			},
 			triggerName: faker.word.sample(),
 			triggerGroup: faker.helpers.arrayElement(["DEFAULT", "SYSTEM"]),
-			schedulerType: "CRON",
+			schedulerType: faker.helpers.arrayElement(["CRON", "SIMPLE"]),
+			triggerState: faker.helpers.arrayElement(["PAUSE", "WAITING"]),
 			cronExpression: "0 0/30 * * * ?",
 			startTime: faker.date.past().getTime(),
 			endTime: faker.date.future().getTime(),
@@ -36,5 +37,13 @@ export default [
 			total: 20,
 		};
 		return HttpResponse.json(mockData);
+	}),
+	http.post("/scheduler/trigger/resume", () => {
+		console.log('Captured a "POST /scheduler/trigger/resume" request');
+		return HttpResponse.json();
+	}),
+	http.post("/scheduler/trigger/pause", () => {
+		console.log('Captured a "POST /scheduler/trigger/pause" request');
+		return HttpResponse.json();
 	}),
 ];

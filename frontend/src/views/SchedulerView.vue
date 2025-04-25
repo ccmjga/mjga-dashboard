@@ -1,5 +1,5 @@
 <template>
-  <div class="relative overflow-x-auto px-4 pt-6 xl:grid-cols-3 xl:gap-4 sm:rounded-lg">
+  <div class="relative overflow-x-scroll px-4 pt-6 xl:grid-cols-3 xl:gap-4 sm:rounded-lg">
     <div class="mb-4 col-span-full">
       <nav class="flex mb-5" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
@@ -51,20 +51,10 @@
         </div>
       </form>
       <!-- Create Modal toggle -->
-      <button @click="handleUpsertJobClick()"
-        class="flex items-center block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 absolute right-5 bottom-2"
-        type="button">
-        <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd"
-            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-            clip-rule="evenodd">
-          </path>
-        </svg>
-        新增任务
-      </button>
     </div>
 
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <table
+      class="w-full text-sm text-left rtl:text-right shadow-lg rounded-lg text-gray-500 dark:text-gray-400 overflow-x-auto">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
           <th scope="col" class="p-4">
@@ -74,17 +64,15 @@
               <label for="checkbox-all-search" class="sr-only">checkbox</label>
             </div>
           </th>
-          <th scope="col" class="px-6 py-3">名称</th>
-          <th scope="col" class="px-6 py-3">分组</th>
-          <th scope="col" class="px-6 py-3">触发器名称</th>
-          <th scope="col" class="px-6 py-3">触发器分组</th>
-          <th scope="col" class="px-6 py-3">开始时间</th>
-          <th scope="col" class="px-6 py-3">结束时间</th>
-          <th scope="col" class="px-6 py-3">下次执行时间</th>
-          <th scope="col" class="px-6 py-3">上次执行时间</th>
-          <th scope="col" class="px-6 py-3">调度类型</th>
-          <th scope="col" class="px-6 py-3">Cron表达式</th>
-          <th scope="col" class="px-6 py-3">类名</th>
+          <th scope="col" class="px-6 py-3">任务</th>
+          <th scope="col" class="px-6 py-3">触发器</th>
+          <th scope="col" class="px-6 py-3">开始</th>
+          <th scope="col" class="px-6 py-3">结束</th>
+          <th scope="col" class="px-6 py-3">下次执行</th>
+          <th scope="col" class="px-6 py-3">上次执行</th>
+          <th scope="col" class="px-6 py-3">类型</th>
+          <th scope="col" class="px-6 py-3">Cron</th>
+          <th scope="col" class="px-6 py-3">编辑</th>
           <th scope="col" class="px-6 py-3">操作</th>
         </tr>
       </thead>
@@ -98,34 +86,49 @@
               <label :for="'checkbox-table-search-' + job.name" class="sr-only">checkbox</label>
             </div>
           </td>
-          <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ job.name }}</td>
-          <td class="px-6 py-4">{{ job.group }}</td>
-          <td class="px-6 py-4">{{ job.triggerName }}</td>
-          <td class="px-6 py-4">{{ job.triggerGroup }}</td>
+          <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{
+            `${job.name}:${job.group}` }}</td>
+          <td class="px-6 py-4">{{ `${job.triggerName}:${job.triggerGroup}` }}</td>
           <td class="px-6 py-4">{{ new Date(job.startTime!).toLocaleString() }}</td>
           <td class="px-6 py-4">{{ job.endTime ? new Date(job.endTime).toLocaleString() : undefined }}</td>
           <td class="px-6 py-4">{{ job.nextFireTime ? new Date(job.nextFireTime).toLocaleString() : undefined}}</td>
-          <td class="px-6 py-4">{{ job.previousFireTime ? new Date(job.previousFireTime).toLocaleString() : undefined }}
+          <td class="px-6 py-4">{{ job.previousFireTime ? new Date(job.previousFireTime).toLocaleString() : undefined
+            }}
           </td>
           <td class="px-6 py-4">{{ job.schedulerType }}</td>
           <td class="px-6 py-4">{{ job.cronExpression }}</td>
-          <td class="px-6 py-4">{{ job.className }}</td>
-
-          <td class="px-6 py-4 flex items-center">
-            <button @click="handleUpsertJobClick()"
-              class="flex items-center block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 me-2"
+          <td class="px-6 py-4 whitespace-nowrap">
+            <button @click="" :disabled="job.schedulerType !== 'CRON'"
+              :class="['flex items-center block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 me-2' , { 'opacity-50 cursor-not-allowed': job.schedulerType !== 'CRON' }]"
               type="button">
               <svg class="me-1 -ms-1 w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                 height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
               </svg>
-              编辑
+              更新
             </button>
-            <button
-              class="bg-red-700 hover:bg-red-800 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 block text-white focus:ring-4 focus:outline-nonefont-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              @click="handleDeleteJobClick()" type="button">
-              删除任务
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <button :disabled="job.triggerState !== 'PAUSE'" :class="['inline-flex items-center text-white bg-green-700 hover:bg-green-800 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-900  text-white focus:ring-4 focus:outline-nonefont-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2',
+                { 'opacity-50 cursor-not-allowed': job.triggerState !== 'PAUSE' }]" @click="handleResumeJobClick(job)"
+              type="button">
+              <svg class="me-1 -ms-1  w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 18V6l8 6-8 6Z" />
+              </svg>
+              恢复
+            </button>
+            <button :disabled="job.triggerState === 'PAUSE'" :class="['inline-flex items-center mr-2 text-white bg-red-700 hover:bg-red-800 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900 block text-white focus:ring-4 focus:outline-nonefont-medium rounded-lg text-sm px-5 py-2.5 text-center',
+              { 'opacity-50 cursor-not-allowed': job.triggerState === 'PAUSE' }]" @click="handlePauseJobClick(job)"
+              type="button">
+              <svg class="me-1 -ms-1 w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M10 9v6m4-6v6m7-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+              暂停
             </button>
           </td>
         </tr>
@@ -169,25 +172,27 @@
     </nav>
   </div>
 
-  <JobDeleteModal :id="'job-delete-modal'" :closeModal="() => {
-    jobDeleteModal!.hide();
-  }" :onSubmit="() => {}" title="确定删除该任务吗" content="删除任务"></JobDeleteModal>
-  <JobUpsertModal :id="'job-upsert-modal'" :onSubmit="()=> {}" :closeModal="() => {
-    jobUpsertModal!.hide();
-  }" mode="edit" :job="() => {}">
-  </JobUpsertModal>
+  <PopupModal :id="'job-resume-modal'" :closeModal="() => {
+    jobResumeModal!.hide();
+  }" :onSubmit="handleResumeModalConfirmClick" title="确定恢复该任务吗？" content="恢复任务"></PopupModal>
+  <PopupModal :id="'job-pause-modal'" :closeModal="() => {
+    jobPauseModal!.hide();
+  }" :onSubmit="handlePauseModalConfirmClick" title="确定暂停该任务吗" content="暂停任务"></PopupModal>
 </template>
 
 <script setup lang="ts">
-import JobDeleteModal from "@/components/PopupModal.vue";
+import PopupModal from "@/components/PopupModal.vue";
+import { useJobControl } from "@/composables/job/useJobControl";
 import { useJobsPaginationQuery } from "@/composables/job/useJobQuery";
 import { RoutePath } from "@/router/constants";
+import type { JobTriggerDto } from "@/types/jobs";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
 
 const jobName = ref<string>("");
-const jobUpsertModal = ref<ModalInterface>();
-const jobDeleteModal = ref<ModalInterface>();
+const jobResumeModal = ref<ModalInterface>();
+const jobPauseModal = ref<ModalInterface>();
+const selectedJob = ref<JobTriggerDto>();
 
 const {
 	pagination: {
@@ -204,47 +209,92 @@ const {
 	fetchJobsWith,
 } = useJobsPaginationQuery(1, 10);
 
-const handleUpsertJobClick = () => {};
+const {
+	resumeTrigger,
+	pauseTrigger,
+	isLoading: controlLoading,
+} = useJobControl();
 
-const handleDeleteJobClick = () => {};
+const handleResumeJobClick = async (currentJob: JobTriggerDto) => {
+	selectedJob.value = currentJob;
+	await nextTick(() => {
+		jobResumeModal.value?.show();
+	});
+};
+
+const handlePauseJobClick = async (currentJob: JobTriggerDto) => {
+	selectedJob.value = currentJob;
+	await nextTick(() => {
+		jobPauseModal.value?.show();
+	});
+};
+
+const handleResumeModalConfirmClick = async () => {
+	if (selectedJob.value?.triggerState !== "PAUSE" || controlLoading.value) {
+		return;
+	}
+	await resumeTrigger({
+		// biome-ignore lint/style/noNonNullAssertion: <explanation>
+		triggerName: selectedJob.value.triggerName!,
+		// biome-ignore lint/style/noNonNullAssertion: <explanation>
+		triggerGroup: selectedJob.value.group!,
+	});
+	await fetchJobsWith(currentPage.value, pageSize.value, {});
+  jobResumeModal.value?.hide();
+};
+
+const handlePauseModalConfirmClick = async () => {
+	if (selectedJob.value?.triggerState === "PAUSE" || controlLoading.value) {
+		return;
+	}
+	await pauseTrigger({
+		// biome-ignore lint/style/noNonNullAssertion: <explanation>
+		triggerName: selectedJob!.value!.triggerName!,
+		// biome-ignore lint/style/noNonNullAssertion: <explanation>
+		triggerGroup: selectedJob!.value!.group!,
+	});
+	await fetchJobsWith(currentPage.value, pageSize.value, {});
+  jobPauseModal.value?.hide();
+};
 
 const handleSearch = async () => {
 	await fetchJobsWith(currentPage.value, pageSize.value, {
-		jobName,
+		name: jobName.value,
 	});
 };
 
 const handlePageChange = async (page: number) => {
 	if (page < 1 || page > totalPages.value) return;
 	await fetchJobsWith(page, pageSize.value, {
-		jobName: jobName.value,
+		name: jobName.value,
 	});
 };
 
 onMounted(async () => {
-	initFlowbite();
-	await fetchJobsWith(currentPage.value, pageSize.value, {
-		jobName: undefined,
+    	await fetchJobsWith(currentPage.value, pageSize.value, {
+		name: undefined,
 	});
-	const $upsertModalElement: HTMLElement | null =
-		document.querySelector("#job-upsert-modal");
-	const $deleteModalElement: HTMLElement | null =
-		document.querySelector("#job-delete-modal");
+	initFlowbite();
+	const $jobResumeModalElement: HTMLElement | null =
+		document.querySelector("#job-resume-modal");
+	const $jobPauseModalElement: HTMLElement | null =
+		document.querySelector("#job-pause-modal");
 
-	jobUpsertModal.value = new Modal(
-		$upsertModalElement,
+	jobResumeModal.value = new Modal(
+		$jobResumeModalElement,
 		{},
 		{
-			id: "job-upsert-modal",
+			id: "job-resume-modal",
 		},
 	);
-	jobDeleteModal.value = new Modal(
-		$deleteModalElement,
+	jobPauseModal.value = new Modal(
+		$jobPauseModalElement,
 		{},
 		{
-			id: "job-delete-modal",
+			id: "job-pause-modal",
 		},
 	);
+
 });
 </script>
 
