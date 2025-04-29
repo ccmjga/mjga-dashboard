@@ -98,7 +98,7 @@
           <td class="px-6 py-4">{{ job.schedulerType }}</td>
           <td class="px-6 py-4">{{ job.cronExpression }}</td>
           <td class="px-6 py-4 whitespace-nowrap">
-            <button @click="" :disabled="job.schedulerType !== 'CRON'"
+            <button @click="handleCronUpdateClick(job)" :disabled="job.schedulerType !== 'CRON'"
               :class="['flex items-center block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 me-2' , { 'opacity-50 cursor-not-allowed': job.schedulerType !== 'CRON' }]"
               type="button">
               <svg class="me-1 -ms-1 w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
@@ -178,12 +178,18 @@
   <PopupModal :id="'job-pause-modal'" :closeModal="() => {
     jobPauseModal!.hide();
   }" :onSubmit="handlePauseModalConfirmClick" title="确定暂停该任务吗" content="暂停任务"></PopupModal>
+  <JobUpdateModal :job="selectedJob" :id="'job-update-modal'" :closeModal="() => {
+    jobUpdateModal!.hide();
+  }" :onSubmit="handleJobUpdateModalConfirmClick"></JobUpdateModal>
 </template>
 
 <script setup lang="ts">
+import JobUpdateModal from "@/components/JobUpdateModal.vue";
 import PopupModal from "@/components/PopupModal.vue";
 import { useJobControl } from "@/composables/job/useJobControl";
 import { useJobsPaginationQuery } from "@/composables/job/useJobQuery";
+import { useJobUpdate } from "@/composables/job/useJobUpdate";
+import useAlertStore from "@/composables/store/useAlertStore";
 import { RoutePath } from "@/router/constants";
 import type { JobTriggerDto } from "@/types/jobs";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
@@ -192,6 +198,7 @@ import { nextTick, onMounted, ref } from "vue";
 const jobName = ref<string>("");
 const jobResumeModal = ref<ModalInterface>();
 const jobPauseModal = ref<ModalInterface>();
+const jobUpdateModal = ref<ModalInterface>();
 const selectedJob = ref<JobTriggerDto>();
 
 const {
@@ -209,17 +216,28 @@ const {
 	fetchJobsWith,
 } = useJobsPaginationQuery(1, 10);
 
+const alertStore = useAlertStore();
+
 const {
 	resumeTrigger,
 	pauseTrigger,
 	isLoading: controlLoading,
 } = useJobControl();
 
+const {updateCron} = useJobUpdate()
+
 const handleResumeJobClick = async (currentJob: JobTriggerDto) => {
 	selectedJob.value = currentJob;
 	await nextTick(() => {
 		jobResumeModal.value?.show();
 	});
+};
+
+const handleCronUpdateClick = async (currentJob: JobTriggerDto) => {
+  selectedJob.value = currentJob;
+  await nextTick(() => {
+    jobUpdateModal.value?.show();
+  });
 };
 
 const handlePauseJobClick = async (currentJob: JobTriggerDto) => {
@@ -239,8 +257,29 @@ const handleResumeModalConfirmClick = async () => {
 		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		triggerGroup: selectedJob.value.group!,
 	});
-	await fetchJobsWith(currentPage.value, pageSize.value, {});
+	await fetchJobsWith(currentPage.value, pageSize.value, {name:jobName.value});
   jobResumeModal.value?.hide();
+    alertStore.showAlert({
+    level: "success",
+    content: "操作成功",
+  })
+};
+
+const handleJobUpdateModalConfirmClick = async () => {
+	await updateCron({
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    triggerName: selectedJob.value!.triggerName!,
+		// biome-ignore lint/style/noNonNullAssertion: <explanation>
+		triggerGroup: selectedJob.value!.group!,
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    cron: selectedJob.value!.cronExpression!
+	});
+	await fetchJobsWith(currentPage.value, pageSize.value, {name:jobName.value});
+  jobUpdateModal.value?.hide();
+  alertStore.showAlert({
+    level: "success",
+    content: "操作成功",
+  });
 };
 
 const handlePauseModalConfirmClick = async () => {
@@ -253,8 +292,12 @@ const handlePauseModalConfirmClick = async () => {
 		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		triggerGroup: selectedJob!.value!.group!,
 	});
-	await fetchJobsWith(currentPage.value, pageSize.value, {});
+	await fetchJobsWith(currentPage.value, pageSize.value, {name:jobName.value});
   jobPauseModal.value?.hide();
+    alertStore.showAlert({
+    level: "success",
+    content: "操作成功",
+  })
 };
 
 const handleSearch = async () => {
@@ -271,14 +314,16 @@ const handlePageChange = async (page: number) => {
 };
 
 onMounted(async () => {
-    	await fetchJobsWith(currentPage.value, pageSize.value, {
-		name: undefined,
+  await fetchJobsWith(currentPage.value, pageSize.value, {
+		name: jobName.value,
 	});
 	initFlowbite();
 	const $jobResumeModalElement: HTMLElement | null =
 		document.querySelector("#job-resume-modal");
 	const $jobPauseModalElement: HTMLElement | null =
 		document.querySelector("#job-pause-modal");
+  const $jobUpdateModalElement: HTMLElement | null =
+		document.querySelector("#job-update-modal");
 
 	jobResumeModal.value = new Modal(
 		$jobResumeModalElement,
@@ -294,7 +339,14 @@ onMounted(async () => {
 			id: "job-pause-modal",
 		},
 	);
-
+  jobUpdateModal.value = new Modal(
+		$jobUpdateModalElement,
+		{},
+		{
+			id: "job-update-modal",
+		},
+	);
+    
 });
 </script>
 

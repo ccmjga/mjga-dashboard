@@ -314,7 +314,7 @@
         "tags": [
           "scheduler-controller"
         ],
-        "operationId": "triggerJob",
+        "operationId": "updateJob",
         "parameters": [
           {
             "name": "cron",
@@ -347,7 +347,7 @@
         "tags": [
           "scheduler-controller"
         ],
-        "operationId": "triggerJob_1",
+        "operationId": "triggerJob",
         "parameters": [
           {
             "name": "startAt",

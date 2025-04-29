@@ -41,7 +41,7 @@ public class SchedulerController {
   }
 
   @PostMapping("/job/update")
-  public void triggerJob(@RequestBody TriggerKey triggerKey, @RequestParam String cron)
+  public void updateJob(@RequestBody TriggerKey triggerKey, @RequestParam String cron)
       throws SchedulerException {
     schedulerService.updateCronTrigger(triggerKey, cron);
   }

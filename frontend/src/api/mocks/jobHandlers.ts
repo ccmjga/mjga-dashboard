@@ -46,4 +46,8 @@ export default [
 		console.log('Captured a "POST /scheduler/trigger/pause" request');
 		return HttpResponse.json();
 	}),
+	http.post("/scheduler/job/update", () => {
+		console.log('Captured a "POST /scheduler/job/update" request');
+		return HttpResponse.json();
+	}),
 ];
