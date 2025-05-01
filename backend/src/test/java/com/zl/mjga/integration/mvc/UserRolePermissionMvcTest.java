@@ -17,6 +17,7 @@ import com.zl.mjga.repository.RoleRepository;
 import com.zl.mjga.repository.UserRepository;
 import com.zl.mjga.service.UserRolePermissionService;
 import java.util.List;
+import java.util.stream.Stream;
 import org.jooq.generated.mjga.tables.pojos.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -229,6 +230,8 @@ class UserRolePermissionMvcTest {
     Long stubUserId = 1L;
     Long stubRoleId1 = 1L;
     Long stubRoleId2 = 2L;
+    when(userRolePermissionService.removeDuplicateRoleId(anyLong(), anyList()))
+        .thenReturn(Stream.of(stubRoleId1, stubRoleId2).toList());
     mockMvc
         .perform(
             post(String.format("/urp/users/%s/bind-role", stubUserId))

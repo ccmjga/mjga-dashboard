@@ -36,6 +36,16 @@ export default [
 		return HttpResponse.json();
 	}),
 
+	http.post("/urp/users/:userId/bind-role", async ({ request }) => {
+		console.log('Captured a "POST /urp/users/:userId/bind-role" request');
+		return HttpResponse.json();
+	}),
+
+	http.post("/urp/users/:userId/unbind-role", async ({ request }) => {
+		console.log('Captured a "POST /urp/users/:userId/unbind-role" request');
+		return HttpResponse.json();
+	}),
+
 	http.delete("/urp/role", ({ params }) => {
 		console.log(`Captured a "DELETE /urp/role ${params.id}" request`);
 		return HttpResponse.json();

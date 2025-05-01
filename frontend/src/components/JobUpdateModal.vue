@@ -40,7 +40,7 @@ import type { JobTriggerDto } from "@/types/jobs";
 import { computed, ref, watch } from "vue";
 
 const props = defineProps<{
-  id: string;
+	id: string;
 	job?: JobTriggerDto;
 	closeModal: () => void;
 	onSubmit: (data: Partial<JobTriggerDto>) => void;

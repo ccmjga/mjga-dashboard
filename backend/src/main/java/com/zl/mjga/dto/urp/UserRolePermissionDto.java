@@ -12,6 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class UserRolePermissionDto {
   private Long id;
   private String username;
@@ -20,7 +21,7 @@ public class UserRolePermissionDto {
   private String password;
 
   private Boolean enable;
-  private List<RoleDto> roles = new LinkedList<>();
+  @Builder.Default private List<RoleDto> roles = new LinkedList<>();
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
   private OffsetDateTime createTime;

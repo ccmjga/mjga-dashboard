@@ -17,6 +17,8 @@ export const useRolesPaginationQuery = (page: number, size: number) => {
 		size: number,
 		param: {
 			name?: string;
+			userId?: number;
+			bindState: "BIND" | "ALL" | "UNBIND";
 		},
 	) => {
 		const { data } = await client.GET("/urp/roles", {
@@ -28,6 +30,8 @@ export const useRolesPaginationQuery = (page: number, size: number) => {
 					},
 					roleQueryDto: {
 						roleName: param.name,
+						userId: param.userId,
+						bindState: param.bindState,
 					},
 				},
 			},

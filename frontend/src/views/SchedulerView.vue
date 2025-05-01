@@ -224,7 +224,7 @@ const {
 	isLoading: controlLoading,
 } = useJobControl();
 
-const {updateCron} = useJobUpdate()
+const { updateCron } = useJobUpdate();
 
 const handleResumeJobClick = async (currentJob: JobTriggerDto) => {
 	selectedJob.value = currentJob;
@@ -234,10 +234,10 @@ const handleResumeJobClick = async (currentJob: JobTriggerDto) => {
 };
 
 const handleCronUpdateClick = async (currentJob: JobTriggerDto) => {
-  selectedJob.value = currentJob;
-  await nextTick(() => {
-    jobUpdateModal.value?.show();
-  });
+	selectedJob.value = currentJob;
+	await nextTick(() => {
+		jobUpdateModal.value?.show();
+	});
 };
 
 const handlePauseJobClick = async (currentJob: JobTriggerDto) => {
@@ -257,29 +257,33 @@ const handleResumeModalConfirmClick = async () => {
 		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		triggerGroup: selectedJob.value.group!,
 	});
-	await fetchJobsWith(currentPage.value, pageSize.value, {name:jobName.value});
-  jobResumeModal.value?.hide();
-    alertStore.showAlert({
-    level: "success",
-    content: "操作成功",
-  })
+	await fetchJobsWith(currentPage.value, pageSize.value, {
+		name: jobName.value,
+	});
+	jobResumeModal.value?.hide();
+	alertStore.showAlert({
+		level: "success",
+		content: "操作成功",
+	});
 };
 
 const handleJobUpdateModalConfirmClick = async () => {
 	await updateCron({
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    triggerName: selectedJob.value!.triggerName!,
+		// biome-ignore lint/style/noNonNullAssertion: <explanation>
+		triggerName: selectedJob.value!.triggerName!,
 		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		triggerGroup: selectedJob.value!.group!,
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    cron: selectedJob.value!.cronExpression!
+		// biome-ignore lint/style/noNonNullAssertion: <explanation>
+		cron: selectedJob.value!.cronExpression!,
 	});
-	await fetchJobsWith(currentPage.value, pageSize.value, {name:jobName.value});
-  jobUpdateModal.value?.hide();
-  alertStore.showAlert({
-    level: "success",
-    content: "操作成功",
-  });
+	await fetchJobsWith(currentPage.value, pageSize.value, {
+		name: jobName.value,
+	});
+	jobUpdateModal.value?.hide();
+	alertStore.showAlert({
+		level: "success",
+		content: "操作成功",
+	});
 };
 
 const handlePauseModalConfirmClick = async () => {
@@ -292,12 +296,14 @@ const handlePauseModalConfirmClick = async () => {
 		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		triggerGroup: selectedJob!.value!.group!,
 	});
-	await fetchJobsWith(currentPage.value, pageSize.value, {name:jobName.value});
-  jobPauseModal.value?.hide();
-    alertStore.showAlert({
-    level: "success",
-    content: "操作成功",
-  })
+	await fetchJobsWith(currentPage.value, pageSize.value, {
+		name: jobName.value,
+	});
+	jobPauseModal.value?.hide();
+	alertStore.showAlert({
+		level: "success",
+		content: "操作成功",
+	});
 };
 
 const handleSearch = async () => {
@@ -314,7 +320,7 @@ const handlePageChange = async (page: number) => {
 };
 
 onMounted(async () => {
-  await fetchJobsWith(currentPage.value, pageSize.value, {
+	await fetchJobsWith(currentPage.value, pageSize.value, {
 		name: jobName.value,
 	});
 	initFlowbite();
@@ -322,7 +328,7 @@ onMounted(async () => {
 		document.querySelector("#job-resume-modal");
 	const $jobPauseModalElement: HTMLElement | null =
 		document.querySelector("#job-pause-modal");
-  const $jobUpdateModalElement: HTMLElement | null =
+	const $jobUpdateModalElement: HTMLElement | null =
 		document.querySelector("#job-update-modal");
 
 	jobResumeModal.value = new Modal(
@@ -339,14 +345,13 @@ onMounted(async () => {
 			id: "job-pause-modal",
 		},
 	);
-  jobUpdateModal.value = new Modal(
+	jobUpdateModal.value = new Modal(
 		$jobUpdateModalElement,
 		{},
 		{
 			id: "job-update-modal",
 		},
 	);
-    
 });
 </script>
 

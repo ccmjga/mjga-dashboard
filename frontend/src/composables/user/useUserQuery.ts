@@ -3,14 +3,26 @@ import { ref } from "vue";
 import type { UserRolePermission } from "../../types/user";
 import { usePagination } from "../page";
 
-export const useUsersPaginationQuery = (page: number, size: number) => {
+export const useUserQuery = () => {
 	const paginationHooks = usePagination({
-		initialPage: page,
-		initialPageSize: size,
+		initialPage: 1,
+		initialPageSize: 10,
 	});
 
 	const total = ref<number>(0);
 	const users = ref<UserRolePermission[]>([]);
+	const user = ref<UserRolePermission>();
+
+	const getUserInfo = async (userId: number) => {
+		const { data } = await client.GET("/urp/user", {
+			params: {
+				query: {
+					userId: userId,
+				},
+			},
+		});
+		user.value = data;
+	};
 
 	const fetchUsersWith = async (
 		page: number,
@@ -52,6 +64,8 @@ export const useUsersPaginationQuery = (page: number, size: number) => {
 		},
 		total,
 		users,
+		user,
 		fetchUsersWith,
+		getUserInfo,
 	};
 };

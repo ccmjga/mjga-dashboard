@@ -4,7 +4,7 @@
       <nav class="flex mb-5" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
           <li class="inline-flex items-center">
-            <RouterLink :to="`${RoutePath.DASHBOARD}`"
+            <RouterLink :to="`${RouteName.OVERVIEW}`"
               class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
               <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -64,7 +64,7 @@
       </button>
     </div>
 
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <table class="w-full text-sm text-left rtl:text-right shadow-lg rounded-lg text-gray-500 dark:text-gray-400">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
           <th scope="col" class="p-4">
@@ -107,10 +107,10 @@
             </div>
 
           </td>
-          <td class="px-6 py-4 flex items-center">
+          <td class="px-6 py-4 flex items-center gap-x-2">
             <!-- Edit Modal toggle -->
             <button @click="handleUpsertUserClick(user)"
-              class="flex items-center block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 me-2"
+              class="flex items-center block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button">
               <svg class="me-1 -ms-1 w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                 height="24" fill="none" viewBox="0 0 24 24">
@@ -121,7 +121,14 @@
             </button>
             <button
               class="
-              bg-red-700 hover:bg-red-800 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700
+              bg-yellow-600 hover:bg-yellow-700 focus:outline-none dark:bg-yellow-600 dark:hover:bg-yellow-700
+              focus:ring-yellow-500 block text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              @click="handleBindRoleClick(user)" type="button">
+              分配角色
+            </button>
+            <button
+              class="
+              bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700
               dark:focus:ring-red-900 block text-white focus:ring-4 focus:outline-nonefont-medium rounded-lg text-sm px-5 py-2.5 text-center"
               @click="handleDeleteUserClick(user)" type="button">
               删除用户
@@ -181,16 +188,19 @@
 import UserDeleteModal from "@/components/PopupModal.vue";
 import UserUpsertModal from "@/components/UserUpsertModal.vue";
 import useUserDelete from "@/composables/user/useUserDelete";
-import { useUsersPaginationQuery } from "@/composables/user/useUsersQuery";
-import { RoutePath } from "@/router/constants";
+import { useUserQuery } from "@/composables/user/useUserQuery";
+import { RouteName } from "@/router/constants";
 import type { UserRolePermission } from "@/types/user";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 const username = ref<string>("");
 const selectedUser = ref<UserRolePermission>();
 const userUpsertModal = ref<ModalInterface>();
 const userDeleteModal = ref<ModalInterface>();
+const router = useRouter();
+const route = useRoute();
 
 const {
 	pagination: {
@@ -205,7 +215,7 @@ const {
 	total,
 	users,
 	fetchUsersWith,
-} = useUsersPaginationQuery(1, 10);
+} = useUserQuery(1, 10);
 
 const { deleteUser } = useUserDelete();
 
@@ -245,6 +255,15 @@ const handleUpsertUserClick = async (user?: UserRolePermission) => {
 	selectedUser.value = user;
 	await nextTick(() => {
 		userUpsertModal.value?.show();
+	});
+};
+
+const handleBindRoleClick = async (user: UserRolePermission) => {
+	router.push({
+		name: RouteName.BINDROLEVIEW,
+		params: {
+			userId: user.id,
+		},
 	});
 };
 

@@ -3,13 +3,13 @@ package com.zl.mjga.repository;
 import static org.jooq.generated.mjga.tables.Permission.PERMISSION;
 import static org.jooq.generated.mjga.tables.Role.ROLE;
 import static org.jooq.generated.mjga.tables.RolePermissionMap.ROLE_PERMISSION_MAP;
+import static org.jooq.generated.mjga.tables.UserRoleMap.USER_ROLE_MAP;
 import static org.jooq.impl.DSL.asterisk;
 import static org.jooq.impl.DSL.noCondition;
 
 import com.zl.mjga.dto.PageRequestDto;
 import com.zl.mjga.dto.urp.RoleQueryDto;
 import java.util.List;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.Configuration;
 import org.jooq.Record;
@@ -41,9 +41,16 @@ public class RoleRepository extends RoleDao {
         .select(asterisk(), DSL.count(ROLE.ID).over().as("total_role"))
         .from(ROLE)
         .where(
-            CollectionUtils.isEmpty(roleQueryDto.getRoleIdList())
-                ? noCondition()
-                : ROLE.ID.in(roleQueryDto.getRoleIdList()))
+            switch (roleQueryDto.getBindState()) {
+              case BIND -> ROLE.ID.in(ctx().select(USER_ROLE_MAP.ROLE_ID).from(USER_ROLE_MAP));
+              case UNBIND ->
+                  ROLE.ID.notIn(
+                      ctx()
+                          .select(USER_ROLE_MAP.ROLE_ID)
+                          .from(USER_ROLE_MAP)
+                          .where(USER_ROLE_MAP.USER_ID.eq(roleQueryDto.getUserId())));
+              case ALL -> noCondition();
+            })
         .and(
             roleQueryDto.getRoleId() == null ? noCondition() : ROLE.ID.eq(roleQueryDto.getRoleId()))
         .and(

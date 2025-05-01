@@ -246,8 +246,6 @@ class UserRolePermissionUnitTest {
     UserRoleMap stubUserRoleMap2 = new UserRoleMap();
     stubUserRoleMap2.setUserId(1L);
     stubUserRoleMap2.setRoleId(2L);
-    when(userRoleMapRepository.fetchByUserId(any(Long.class)))
-        .thenReturn(List.of(stubUserRoleMap, stubUserRoleMap2));
 
     Result<Record> mockRoleResult =
         dslContext.newResult(
@@ -308,7 +306,6 @@ class UserRolePermissionUnitTest {
     assertThat(pageResult.getTotal()).isEqualTo(0L);
 
     roleQueryDto.setUserId(1L);
-    when(userRoleMapRepository.fetchByUserId(any(Long.class))).thenReturn(new ArrayList<>());
     PageResponseDto<List<RoleDto>> pageResult2 =
         userRolePermissionService.pageQueryRole(PageRequestDto.of(0, 5), roleQueryDto);
     assertThat(pageResult2.getTotal()).isEqualTo(0L);
@@ -396,7 +393,6 @@ class UserRolePermissionUnitTest {
 
     when(roleRepository.selectByRoleIdIn(anyList())).thenReturn(List.of(stubRole));
     userRolePermissionService.bindRoleToUser(stubUserId, List.of(stubRole.getId()));
-    verify(userRoleMapRepository, times(1)).deleteByUserId(anyLong());
     verify(userRoleMapRepository, times(1)).insert(Mockito.eq(List.of(userRoleMap)));
   }
 
@@ -413,17 +409,22 @@ class UserRolePermissionUnitTest {
             () -> userRolePermissionService.bindRoleToUser(stubUserId, List.of(stubRole.getId())))
         .isInstanceOf(BusinessException.class)
         .hasMessage("bind role not exist");
-    verify(userRoleMapRepository, times(1)).deleteByUserId(anyLong());
     verify(userRoleMapRepository, times(0)).insert(anyList());
   }
 
   @Test
-  void bindRoleToUser_givenNotExistRoleId_shouldUnbindUsersRole() {
+  void removeDuplicateRoleId_givenDuplicateRoleId_shouldRemoveItAndReturnFilterList() {
     Long stubUserId = 1L;
-
-    userRolePermissionService.bindRoleToUser(stubUserId, new ArrayList<>());
-    verify(userRoleMapRepository, times(1)).deleteByUserId(anyLong());
-    verify(userRoleMapRepository, times(0)).insert(anyList());
+    List<Long> stubRoleIds = List.of(1L, 2L);
+    when(userRepository.fetchUniqueUserDtoWithNestedRolePermissionBy(stubUserId))
+        .thenReturn(
+            UserRolePermissionDto.builder()
+                .roles(List.of(RoleDto.builder().id(1L).build()))
+                .build());
+    List<Long> filterList =
+        userRolePermissionService.removeDuplicateRoleId(stubUserId, stubRoleIds);
+    assertThat(filterList.size()).isEqualTo(1);
+    assertThat(filterList.get(0)).isEqualTo(2L);
   }
 
   @Test

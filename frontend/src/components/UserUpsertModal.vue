@@ -72,7 +72,7 @@ import { onMounted, ref, watch } from "vue";
 import { z } from "zod";
 
 const userUpsert = useUserUpsert();
-const alertStore = useAlertStore()
+const alertStore = useAlertStore();
 
 const { mode, user, onSubmit } = defineProps<{
 	mode: "edit" | "create";
@@ -115,10 +115,10 @@ const handleSubmit = (event: Event) => {
 	} catch (error) {
 		if (error instanceof z.ZodError) {
 			console.error("表单验证错误:", error.errors);
-      alertStore.showAlert({
-        level: "error",
-        content: `请检查您填写的字段：${error.errors[0].path}`
-      });
+			alertStore.showAlert({
+				level: "error",
+				content: `请检查您填写的字段：${error.errors[0].path}`,
+			});
 		}
 	}
 };

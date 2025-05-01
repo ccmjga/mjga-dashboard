@@ -96,17 +96,6 @@ public class UserRolePermissionService {
 
   public PageResponseDto<List<RoleDto>> pageQueryRole(
       PageRequestDto pageRequestDto, RoleQueryDto roleQueryDto) {
-    if (roleQueryDto.getUserId() != null) {
-      List<Long> roleIdList =
-          userRoleMapRepository.fetchByUserId(roleQueryDto.getUserId()).stream()
-              .map(UserRoleMap::getRoleId)
-              .toList();
-      if (roleIdList.isEmpty()) {
-        return PageResponseDto.empty();
-      } else {
-        roleQueryDto.setRoleIdList(roleIdList);
-      }
-    }
     Result<Record> roleRecords = roleRepository.pageFetchBy(pageRequestDto, roleQueryDto);
     if (roleRecords.isEmpty()) {
       return PageResponseDto.empty();
@@ -178,12 +167,26 @@ public class UserRolePermissionService {
     rolePermissionMapRepository.insert(permissionMapList);
   }
 
-  @Transactional(rollbackFor = Throwable.class)
-  public void bindRoleToUser(Long userId, List<Long> roleIdList) {
-    userRoleMapRepository.deleteByUserId(userId);
+  public List<Long> removeDuplicateRoleId(Long userId, List<Long> roleIdList) {
+    UserRolePermissionDto userRolePermissionDto =
+        userRepository.fetchUniqueUserDtoWithNestedRolePermissionBy(userId);
+    List<Long> userRoleIdList =
+        userRolePermissionDto.getRoles().stream().map(RoleDto::getId).toList();
+    return roleIdList.stream().filter(roleId -> !userRoleIdList.contains(roleId)).toList();
+  }
+
+  public void unBindRoleToUser(Long userId, List<Long> roleIdList) {
     if (CollectionUtils.isEmpty(roleIdList)) {
       return;
     }
+    List<Role> roles = roleRepository.selectByRoleIdIn(roleIdList);
+    if (CollectionUtils.isEmpty(roles)) {
+      throw new BusinessException("unbind role not exist");
+    }
+    userRoleMapRepository.deleteBy(userId, roleIdList);
+  }
+
+  public void bindRoleToUser(Long userId, List<Long> roleIdList) {
     List<Role> roles = roleRepository.selectByRoleIdIn(roleIdList);
     if (CollectionUtils.isEmpty(roles)) {
       throw new BusinessException("bind role not exist");

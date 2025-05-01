@@ -5,6 +5,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 public class PermissionDto {
   private Long id;
   private String code;

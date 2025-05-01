@@ -9,6 +9,7 @@ import com.zl.mjga.dto.PageRequestDto;
 import com.zl.mjga.dto.urp.PermissionQueryDto;
 import com.zl.mjga.dto.urp.RoleQueryDto;
 import com.zl.mjga.dto.urp.UserQueryDto;
+import com.zl.mjga.model.urp.BindState;
 import com.zl.mjga.repository.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -138,6 +139,7 @@ public class UserRolePermissionDALTest extends AbstractDataAccessLayerTest {
   void role_pageFetchBy() {
     RoleQueryDto roleQueryDto = new RoleQueryDto();
     roleQueryDto.setRoleName("testRole");
+    roleQueryDto.setBindState(BindState.ALL);
     Result<Record> records = roleRepository.pageFetchBy(PageRequestDto.of(0, 10), roleQueryDto);
     assertThat(records.get(0).getValue("total_role")).isEqualTo(2);
     assertThat(records.get(0).getValue(ROLE.NAME)).isEqualTo("testRoleA");
@@ -145,6 +147,7 @@ public class UserRolePermissionDALTest extends AbstractDataAccessLayerTest {
 
     roleQueryDto = new RoleQueryDto();
     roleQueryDto.setRoleCode("testRoleA");
+    roleQueryDto.setBindState(BindState.ALL);
     records = roleRepository.pageFetchBy(PageRequestDto.of(0, 10), roleQueryDto);
     assertThat(records.get(0).getValue("total_role")).isEqualTo(1);
     assertThat(records.get(0).getValue(ROLE.NAME)).isEqualTo("testRoleA");
@@ -152,6 +155,7 @@ public class UserRolePermissionDALTest extends AbstractDataAccessLayerTest {
     roleQueryDto = new RoleQueryDto();
     roleQueryDto.setRoleName("test");
     roleQueryDto.setRoleCode("testRoleA");
+    roleQueryDto.setBindState(BindState.ALL);
     records = roleRepository.pageFetchBy(PageRequestDto.of(0, 10), roleQueryDto);
     assertThat(records.get(0).getValue("total_role")).isEqualTo(1);
     assertThat(records.get(0).getValue(ROLE.NAME)).isEqualTo("testRoleA");

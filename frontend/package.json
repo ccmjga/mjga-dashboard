@@ -50,8 +50,6 @@
 		"vue-tsc": "^2.2.8"
 	},
 	"msw": {
-		"workerDirectory": [
-			"public"
-		]
+		"workerDirectory": ["public"]
 	}
 }

@@ -40,7 +40,6 @@ import { initFlowbite } from "flowbite";
 import { onMounted, ref } from "vue";
 
 defineProps<{
-	content: string;
 	title: string;
 	id: string;
 	closeModal: () => void;

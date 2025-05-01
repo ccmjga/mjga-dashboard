@@ -11,6 +11,44 @@
     }
   ],
   "paths": {
+    "/urp/users/{userId}/unbind-role": {
+      "post": {
+        "tags": [
+          "user-role-permission-controller"
+        ],
+        "operationId": "unBindRoleToUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/urp/users/{userId}/bind-role": {
       "post": {
         "tags": [
@@ -50,6 +88,35 @@
       }
     },
     "/urp/user": {
+      "get": {
+        "tags": [
+          "user-role-permission-controller"
+        ],
+        "operationId": "user",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserRolePermissionDto"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "user-role-permission-controller"
