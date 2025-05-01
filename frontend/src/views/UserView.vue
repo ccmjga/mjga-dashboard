@@ -110,28 +110,38 @@
           <td class="px-6 py-4 flex items-center gap-x-2">
             <!-- Edit Modal toggle -->
             <button @click="handleUpsertUserClick(user)"
-              class="flex items-center block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              class="flex items-center block gap-x-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button">
-              <svg class="me-1 -ms-1 w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                height="24" fill="none" viewBox="0 0 24 24">
+              <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
               </svg>
               编辑
             </button>
             <button
-              class="
+              class="flex items-center block gap-x-1
               bg-yellow-600 hover:bg-yellow-700 focus:outline-none dark:bg-yellow-600 dark:hover:bg-yellow-700
               focus:ring-yellow-500 block text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               @click="handleBindRoleClick(user)" type="button">
+              <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              </svg>
               分配角色
             </button>
             <button
-              class="
+              class="flex items-center block gap-x-1
               bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700
               dark:focus:ring-red-900 block text-white focus:ring-4 focus:outline-nonefont-medium rounded-lg text-sm px-5 py-2.5 text-center"
               @click="handleDeleteUserClick(user)" type="button">
-              删除用户
+              <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M5 12h14" />
+              </svg>
+              删除
             </button>
           </td>
         </tr>
@@ -200,7 +210,6 @@ const selectedUser = ref<UserRolePermission>();
 const userUpsertModal = ref<ModalInterface>();
 const userDeleteModal = ref<ModalInterface>();
 const router = useRouter();
-const route = useRoute();
 
 const {
 	pagination: {
@@ -215,7 +224,7 @@ const {
 	total,
 	users,
 	fetchUsersWith,
-} = useUserQuery(1, 10);
+} = useUserQuery();
 
 const { deleteUser } = useUserDelete();
 
