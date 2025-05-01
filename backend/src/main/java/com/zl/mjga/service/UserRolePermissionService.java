@@ -18,6 +18,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.generated.mjga.tables.pojos.*;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -144,12 +145,7 @@ public class UserRolePermissionService {
         permissionRecords.get(0).getValue("total_permission", Integer.class), permissionDtoList);
   }
 
-  @Transactional(rollbackFor = Throwable.class)
   public void bindPermissionToRole(Long roleId, List<Long> permissionIdList) {
-    rolePermissionMapRepository.deleteByRoleId(roleId);
-    if (CollectionUtils.isEmpty(permissionIdList)) {
-      return;
-    }
     List<Permission> permissions = permissionRepository.selectByPermissionIdIn(permissionIdList);
     if (CollectionUtils.isEmpty(permissions)) {
       throw new BusinessException("bind permission not exist");
@@ -167,12 +163,33 @@ public class UserRolePermissionService {
     rolePermissionMapRepository.insert(permissionMapList);
   }
 
-  public List<Long> removeDuplicateRoleId(Long userId, List<Long> roleIdList) {
+  public void unBindPermissionToRole(Long roleId, List<Long> permissionIdList) {
+    if (CollectionUtils.isEmpty(permissionIdList)) {
+      return;
+    }
+    List<Permission> permissions = permissionRepository.selectByPermissionIdIn(permissionIdList);
+    if (CollectionUtils.isEmpty(permissions)) {
+      throw new BusinessException("unbind role not exist");
+    }
+    rolePermissionMapRepository.deleteBy(roleId, permissionIdList);
+  }
+
+  public @NonNull List<Long> removeDuplicateRoleId(Long userId, List<Long> roleIdList) {
     UserRolePermissionDto userRolePermissionDto =
         userRepository.fetchUniqueUserDtoWithNestedRolePermissionBy(userId);
     List<Long> userRoleIdList =
         userRolePermissionDto.getRoles().stream().map(RoleDto::getId).toList();
     return roleIdList.stream().filter(roleId -> !userRoleIdList.contains(roleId)).toList();
+  }
+
+  public @NonNull List<Long> removeDuplicatePermissionId(Long roleId, List<Long> permissionIdList) {
+    List<Long> rolePermissionIdList =
+        rolePermissionMapRepository.fetchByRoleId(roleId).stream()
+            .map(RolePermissionMap::getPermissionId)
+            .toList();
+    return permissionIdList.stream()
+        .filter(permissionId -> !rolePermissionIdList.contains(permissionId))
+        .toList();
   }
 
   public void unBindRoleToUser(Long userId, List<Long> roleIdList) {

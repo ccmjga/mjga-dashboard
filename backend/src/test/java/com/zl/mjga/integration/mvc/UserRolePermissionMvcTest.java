@@ -252,6 +252,9 @@ class UserRolePermissionMvcTest {
     Long stubRoleId = 1L;
     Long stubPermissionId1 = 1L;
     Long stubPermissionId2 = 2L;
+    List<Long> stubPermissionIds = List.of(stubPermissionId1, stubPermissionId2);
+    when(userRolePermissionService.removeDuplicatePermissionId(anyLong(), anyList()))
+        .thenReturn(stubPermissionIds);
     mockMvc
         .perform(
             post(String.format("/urp/roles/%s/bind-permission", stubRoleId))
@@ -262,7 +265,6 @@ class UserRolePermissionMvcTest {
                     """)
                 .with(csrf()))
         .andExpect(status().isOk());
-    verify(userRolePermissionService, times(1))
-        .bindPermissionToRole(stubRoleId, List.of(stubPermissionId1, stubPermissionId2));
+    verify(userRolePermissionService, times(1)).bindPermissionToRole(stubRoleId, stubPermissionIds);
   }
 }

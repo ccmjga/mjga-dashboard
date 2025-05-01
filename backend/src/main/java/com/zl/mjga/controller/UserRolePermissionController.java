@@ -129,6 +129,17 @@ public class UserRolePermissionController {
   @PostMapping("/roles/{roleId}/bind-permission")
   @ResponseStatus(HttpStatus.OK)
   void bindPermissionToRole(@PathVariable Long roleId, @RequestBody List<Long> permissionIdList) {
-    userRolePermissionService.bindPermissionToRole(roleId, permissionIdList);
+    List<Long> filtedPermissionIdList =
+        userRolePermissionService.removeDuplicatePermissionId(roleId, permissionIdList);
+    if (CollectionUtils.isNotEmpty(filtedPermissionIdList)) {
+      userRolePermissionService.bindPermissionToRole(roleId, filtedPermissionIdList);
+    }
+  }
+
+  @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_USER_ROLE_PERMISSION)")
+  @PostMapping("/roles/{roleId}/unbind-permission")
+  @ResponseStatus(HttpStatus.OK)
+  void unBindPermissionToRole(@PathVariable Long roleId, @RequestBody List<Long> permissionIdList) {
+    userRolePermissionService.unBindPermissionToRole(roleId, permissionIdList);
   }
 }

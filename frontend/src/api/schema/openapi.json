@@ -161,6 +161,44 @@
         }
       }
     },
+    "/urp/roles/{roleId}/unbind-permission": {
+      "post": {
+        "tags": [
+          "user-role-permission-controller"
+        ],
+        "operationId": "unBindPermissionToRole",
+        "parameters": [
+          {
+            "name": "roleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/urp/roles/{roleId}/bind-permission": {
       "post": {
         "tags": [
@@ -929,6 +967,14 @@
               "type": "integer",
               "format": "int64"
             }
+          },
+          "bindState": {
+            "type": "string",
+            "enum": [
+              "BIND",
+              "UNBIND",
+              "ALL"
+            ]
           }
         }
       },

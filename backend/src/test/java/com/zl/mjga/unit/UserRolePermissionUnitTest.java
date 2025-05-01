@@ -441,7 +441,6 @@ class UserRolePermissionUnitTest {
     when(permissionRepository.selectByPermissionIdIn(anyList()))
         .thenReturn(List.of(stubPermission));
     userRolePermissionService.bindPermissionToRole(stubRoleId, List.of(stubPermission.getId()));
-    verify(rolePermissionMapRepository, times(1)).deleteByRoleId(anyLong());
     verify(rolePermissionMapRepository, times(1)).insert(Mockito.eq(List.of(rolePermissionMap)));
   }
 
@@ -460,17 +459,22 @@ class UserRolePermissionUnitTest {
                     stubRoleId, List.of(stubPermission.getId())))
         .isInstanceOf(BusinessException.class)
         .hasMessage("bind permission not exist");
-    verify(rolePermissionMapRepository, times(1)).deleteByRoleId(anyLong());
     verify(rolePermissionMapRepository, times(0)).insert(Mockito.eq(new ArrayList<>()));
   }
 
   @Test
-  void bindPermissionToRole_givenEmptyPermission_shouldUnbindRolesPermission() {
+  void removeDuplicatePermissionId_givenDuplicatePermissionId_shouldRemoveItAndReturnFilterList() {
     Long stubRoleId = 1L;
-
-    userRolePermissionService.bindPermissionToRole(stubRoleId, new ArrayList<>());
-    verify(rolePermissionMapRepository, times(1)).deleteByRoleId(anyLong());
-    verify(rolePermissionMapRepository, times(0)).insert(Mockito.eq(new ArrayList<>()));
+    List<Long> stubPermissionIds = List.of(1L, 2L);
+    RolePermissionMap rolePermissionMap = new RolePermissionMap();
+    rolePermissionMap.setRoleId(stubRoleId);
+    rolePermissionMap.setPermissionId(1L);
+    when(rolePermissionMapRepository.fetchByRoleId(stubRoleId))
+        .thenReturn(List.of(rolePermissionMap));
+    List<Long> filterList =
+        userRolePermissionService.removeDuplicatePermissionId(stubRoleId, stubPermissionIds);
+    assertThat(filterList.size()).isEqualTo(1);
+    assertThat(filterList.get(0)).isEqualTo(2L);
   }
 
   @Test
