@@ -1,7 +1,7 @@
 import client from "@/api/client";
 import { faker } from "@faker-js/faker";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { useRolesPaginationQuery } from "../useRolesQuery";
+import { useRolesQuery } from "../useRolesQuery";
 
 vi.mock("@/api/client");
 
@@ -11,7 +11,7 @@ describe("useRolesPaginationQuery", () => {
 	});
 
 	it("初始状态应该正确", () => {
-		const { roles, total, isLoading, error } = useRolesPaginationQuery(1, 10);
+		const { roles, total, isLoading, error } = useRolesQuery(1, 10);
 		expect(roles.value).toEqual([]);
 		expect(total.value).toBe(0);
 		expect(isLoading.value).toBe(false);
@@ -40,7 +40,7 @@ describe("useRolesPaginationQuery", () => {
 			},
 		});
 
-		const rolesPaginationQuery = useRolesPaginationQuery(1, 10);
+		const rolesPaginationQuery = useRolesQuery(1, 10);
 		await rolesPaginationQuery.fetchRolesWith(1, 10, {
 			name: "",
 		});

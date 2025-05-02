@@ -48,7 +48,7 @@ public class UserRolePermissionController {
 
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).READ_USER_ROLE_PERMISSION)")
   @GetMapping("/user")
-  UserRolePermissionDto user(@RequestParam Long userId) {
+  UserRolePermissionDto queryUserWithRolePermission(@RequestParam Long userId) {
     return userRolePermissionService.queryUniqueUserWithRolePermission(userId);
   }
 
@@ -68,6 +68,12 @@ public class UserRolePermissionController {
   @DeleteMapping("/role")
   void deleteRole(@RequestParam Long roleId) {
     roleRepository.deleteById(roleId);
+  }
+
+  @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_USER_ROLE_PERMISSION)")
+  @GetMapping("/role")
+  RoleDto queryRoleWithPermission(@RequestParam Long roleId) {
+    return userRolePermissionService.queryUniqueRoleWithPermission(roleId);
   }
 
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_USER_ROLE_PERMISSION)")

@@ -1,17 +1,17 @@
 package com.zl.mjga.repository;
 
 import static org.jooq.generated.mjga.tables.Permission.PERMISSION;
+import static org.jooq.generated.mjga.tables.Role.ROLE;
+import static org.jooq.generated.mjga.tables.RolePermissionMap.ROLE_PERMISSION_MAP;
 import static org.jooq.impl.DSL.asterisk;
 import static org.jooq.impl.DSL.noCondition;
 
 import com.zl.mjga.dto.PageRequestDto;
 import com.zl.mjga.dto.urp.PermissionQueryDto;
 import java.util.List;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jooq.Configuration;
+import org.jooq.*;
 import org.jooq.Record;
-import org.jooq.Result;
 import org.jooq.generated.mjga.tables.daos.PermissionDao;
 import org.jooq.generated.mjga.tables.pojos.Permission;
 import org.jooq.impl.DSL;
@@ -32,9 +32,11 @@ public class PermissionRepository extends PermissionDao {
         .select(asterisk(), DSL.count().over().as("total_permission"))
         .from(PERMISSION)
         .where(
-            CollectionUtils.isEmpty(permissionQueryDto.getPermissionIdList())
-                ? noCondition()
-                : PERMISSION.ID.in(permissionQueryDto.getPermissionIdList()))
+            switch (permissionQueryDto.getBindState()) {
+              case BIND -> PERMISSION.ID.in(selectRolesPermissionIds(permissionQueryDto));
+              case UNBIND -> ROLE.ID.notIn(selectRolesPermissionIds(permissionQueryDto));
+              case ALL -> noCondition();
+            })
         .and(
             permissionQueryDto.getPermissionId() == null
                 ? noCondition()
@@ -51,6 +53,14 @@ public class PermissionRepository extends PermissionDao {
         .limit(pageRequestDto.getSize())
         .offset(pageRequestDto.getOffset())
         .fetch();
+  }
+
+  private SelectConditionStep<Record1<Long>> selectRolesPermissionIds(
+      PermissionQueryDto permissionQueryDto) {
+    return ctx()
+        .select(ROLE_PERMISSION_MAP.ROLE_ID)
+        .from(ROLE_PERMISSION_MAP)
+        .where(ROLE_PERMISSION_MAP.ROLE_ID.eq(permissionQueryDto.getRoleId()));
   }
 
   public List<Permission> selectByPermissionIdIn(List<Long> permissionIdList) {

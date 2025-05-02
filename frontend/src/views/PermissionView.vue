@@ -54,12 +54,6 @@
       <button @click="handleUpsertPermissionClick(undefined)"
         class="flex items-center block gap-x-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 absolute right-5 bottom-2"
         type="button">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd"
-            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-            clip-rule="evenodd">
-          </path>
-        </svg>
         新增权限
       </button>
     </div>
@@ -177,7 +171,7 @@ import { RoutePath } from "@/router/constants";
 import type { Permission } from "@/types/permission";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
-import usePermissionsPaginationQuery from "../composables/permission/usePermissionQuery";
+import usePermissionsQuery from "../composables/permission/usePermissionQuery";
 
 const permissionName = ref<string>("");
 const selectedPermission = ref<Permission>();
@@ -197,7 +191,7 @@ const {
 	total,
 	permissions,
 	fetchPermissionsWith,
-} = usePermissionsPaginationQuery(1, 10);
+} = usePermissionsQuery(1, 10);
 
 const { deletePermission } = usePermissionDelete();
 

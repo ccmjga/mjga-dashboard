@@ -92,7 +92,7 @@
         "tags": [
           "user-role-permission-controller"
         ],
-        "operationId": "user",
+        "operationId": "queryUserWithRolePermission",
         "parameters": [
           {
             "name": "userId",
@@ -238,6 +238,35 @@
       }
     },
     "/urp/role": {
+      "get": {
+        "tags": [
+          "user-role-permission-controller"
+        ],
+        "operationId": "queryRoleWithPermission",
+        "parameters": [
+          {
+            "name": "roleId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleDto"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "user-role-permission-controller"

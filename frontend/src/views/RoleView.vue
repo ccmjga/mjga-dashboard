@@ -54,12 +54,6 @@
       <button @click="handleUpsertRoleClick(undefined)"
         class="flex items-center block gap-x-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 absolute right-5 bottom-2"
         type="button">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd"
-            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-            clip-rule="evenodd">
-          </path>
-        </svg>
         新增角色
       </button>
     </div>
@@ -95,9 +89,9 @@
           <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
             {{ role.name }}
           </td>
-          <td class="px-6 py-4 flex items-center">
+          <td class="px-6 py-4 flex items-center gap-x-2">
             <button @click="handleUpsertRoleClick(role)"
-              class="flex items-center block gap-x-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 me-2"
+              class="flex items-center block gap-x-1  text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 "
               type="button">
               <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                 fill="none" viewBox="0 0 24 24">
@@ -105,6 +99,18 @@
                   d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
               </svg>
               编辑
+            </button>
+            <button
+              class="flex items-center block gap-x-1
+              bg-yellow-600 hover:bg-yellow-700 focus:outline-none dark:bg-yellow-600 dark:hover:bg-yellow-700
+              focus:ring-yellow-500 block text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              @click="handleBindPermissionClick(role)" type="button">
+              <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M10 14v3m4-6V7a3 3 0 1 1 6 0v4M5 11h10a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1Z" />
+              </svg>
+              分配权限
             </button>
             <button
               class="flex items-center block gap-x-1
@@ -116,7 +122,6 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M5 12h14" />
               </svg>
-
               删除
             </button>
           </td>
@@ -175,11 +180,12 @@
 import RoleDeleteModal from "@/components/PopupModal.vue";
 import RoleUpsertModal from "@/components/RoleUpsertModal.vue";
 import useRoleDelete from "@/composables/role/useRoleDelete";
-import { useRolesPaginationQuery } from "@/composables/role/useRolesQuery";
-import { RoutePath } from "@/router/constants";
+import { useRolesQuery } from "@/composables/role/useRolesQuery";
+import { RouteName, RoutePath } from "@/router/constants";
 import type { Role } from "@/types/role";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
 const roleName = ref<string>("");
 const selectedRole = ref<Role>();
@@ -199,9 +205,10 @@ const {
 	total,
 	roles,
 	fetchRolesWith,
-} = useRolesPaginationQuery(1, 10);
+} = useRolesQuery(1, 10);
 
 const { deleteRole } = useRoleDelete();
+const router = useRouter();
 
 onMounted(async () => {
 	await fetchRolesWith(currentPage.value, pageSize.value, {
@@ -254,6 +261,12 @@ const handleDeleteRoleClick = async (role: Role) => {
 	});
 };
 
+const handleBindPermissionClick = async (role: Role) => {
+	router.push({
+		name: RouteName.BINDPERMISSIONVIEW,
+		params: { roleId: role.id },
+	});
+};
 const handleSearch = async () => {
 	await fetchRolesWith(currentPage.value, pageSize.value, {
 		name: roleName.value,

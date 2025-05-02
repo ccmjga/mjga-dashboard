@@ -13,7 +13,7 @@ export const useUserQuery = () => {
 	const users = ref<UserRolePermission[]>([]);
 	const user = ref<UserRolePermission>();
 
-	const getUserInfo = async (userId: number) => {
+	const getUserWithDetail = async (userId: number) => {
 		const { data } = await client.GET("/urp/user", {
 			params: {
 				query: {
@@ -66,6 +66,6 @@ export const useUserQuery = () => {
 		users,
 		user,
 		fetchUsersWith,
-		getUserInfo,
+		getUserWithDetail,
 	};
 };

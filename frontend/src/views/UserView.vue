@@ -54,12 +54,6 @@
       <button @click="handleUpsertUserClick(undefined)"
         class="flex items-center block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 absolute right-5 bottom-2"
         type="button">
-        <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-          <path fill-rule="evenodd"
-            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-            clip-rule="evenodd">
-          </path>
-        </svg>
         新增用户
       </button>
     </div>
@@ -187,8 +181,8 @@
 
   <UserDeleteModal :id="'user-delete-modal'" :closeModal="() => {
     userDeleteModal!.hide();
-  }" :onSubmit="deleteSelectedUser" title="确定删除该用户吗" content="删除用户"></UserDeleteModal>
-  <UserUpsertModal :id="'user-upsert-modal'" :onSubmit="handleUpsertModalSubmit" :closeModal="() => {
+  }" :onSubmit="handleDeleteUserSubmit" title="确定删除该用户吗" content="删除用户"></UserDeleteModal>
+  <UserUpsertModal :id="'user-upsert-modal'" :onSubmit="handleUpsertUserSubmit" :closeModal="() => {
     userUpsertModal!.hide();
   }" mode="edit" :user="selectedUser">
   </UserUpsertModal>
@@ -204,6 +198,7 @@ import type { UserRolePermission } from "@/types/user";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import useAlertStore from "../composables/store/useAlertStore";
 
 const username = ref<string>("");
 const selectedUser = ref<UserRolePermission>();
@@ -227,6 +222,8 @@ const {
 } = useUserQuery();
 
 const { deleteUser } = useUserDelete();
+
+const alertStore = useAlertStore();
 
 onMounted(async () => {
 	await fetchUsersWith(currentPage.value, pageSize.value, {
@@ -253,10 +250,14 @@ onMounted(async () => {
 	);
 });
 
-const handleUpsertModalSubmit = async () => {
+const handleUpsertUserSubmit = async () => {
 	userUpsertModal.value?.hide();
 	await fetchUsersWith(currentPage.value, pageSize.value, {
 		username: username.value,
+	});
+	alertStore.showAlert({
+		content: "操作成功",
+		level: "success",
 	});
 };
 
@@ -276,13 +277,17 @@ const handleBindRoleClick = async (user: UserRolePermission) => {
 	});
 };
 
-const deleteSelectedUser = async () => {
+const handleDeleteUserSubmit = async () => {
 	if (!selectedUser?.value?.id) return;
 	await deleteUser(selectedUser.value.id);
 	await fetchUsersWith(currentPage.value, pageSize.value, {
 		username: username.value,
 	});
 	userDeleteModal.value?.hide();
+	alertStore.showAlert({
+		content: "删除成功",
+		level: "success",
+	});
 };
 
 const handleDeleteUserClick = async (user: UserRolePermission) => {

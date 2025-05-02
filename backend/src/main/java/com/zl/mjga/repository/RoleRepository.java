@@ -11,9 +11,8 @@ import com.zl.mjga.dto.PageRequestDto;
 import com.zl.mjga.dto.urp.RoleQueryDto;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.jooq.Configuration;
+import org.jooq.*;
 import org.jooq.Record;
-import org.jooq.Result;
 import org.jooq.generated.mjga.tables.daos.RoleDao;
 import org.jooq.generated.mjga.tables.pojos.Role;
 import org.jooq.impl.DSL;
@@ -42,13 +41,8 @@ public class RoleRepository extends RoleDao {
         .from(ROLE)
         .where(
             switch (roleQueryDto.getBindState()) {
-              case BIND -> ROLE.ID.in(ctx().select(USER_ROLE_MAP.ROLE_ID).from(USER_ROLE_MAP));
-              case UNBIND ->
-                  ROLE.ID.notIn(
-                      ctx()
-                          .select(USER_ROLE_MAP.ROLE_ID)
-                          .from(USER_ROLE_MAP)
-                          .where(USER_ROLE_MAP.USER_ID.eq(roleQueryDto.getUserId())));
+              case BIND -> ROLE.ID.in(selectUsersRoleIds(roleQueryDto));
+              case UNBIND -> ROLE.ID.notIn(selectUsersRoleIds(roleQueryDto));
               case ALL -> noCondition();
             })
         .and(
@@ -65,6 +59,13 @@ public class RoleRepository extends RoleDao {
         .limit(pageRequestDto.getSize())
         .offset(pageRequestDto.getOffset())
         .fetch();
+  }
+
+  private SelectConditionStep<Record1<Long>> selectUsersRoleIds(RoleQueryDto roleQueryDto) {
+    return ctx()
+        .select(USER_ROLE_MAP.ROLE_ID)
+        .from(USER_ROLE_MAP)
+        .where(USER_ROLE_MAP.USER_ID.eq(roleQueryDto.getUserId()));
   }
 
   public Result<Record> fetchUniqueRoleWithPermission(Long roleId) {

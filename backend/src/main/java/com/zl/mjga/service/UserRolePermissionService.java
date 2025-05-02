@@ -121,17 +121,6 @@ public class UserRolePermissionService {
 
   public PageResponseDto<List<PermissionDto>> pageQueryPermission(
       PageRequestDto pageRequestDto, PermissionQueryDto permissionQueryDto) {
-    if (permissionQueryDto.getRoleId() != null) {
-      List<Long> permissionIdList =
-          rolePermissionMapRepository.fetchByRoleId(permissionQueryDto.getRoleId()).stream()
-              .map(RolePermissionMap::getPermissionId)
-              .toList();
-      if (permissionIdList.isEmpty()) {
-        return PageResponseDto.empty();
-      } else {
-        permissionQueryDto.setPermissionIdList(permissionIdList);
-      }
-    }
     Result<Record> permissionRecords =
         permissionRepository.pageFetchBy(pageRequestDto, permissionQueryDto);
     if (permissionRecords.isEmpty()) {

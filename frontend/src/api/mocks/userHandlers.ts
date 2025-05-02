@@ -5,7 +5,7 @@ import { ROLE } from "../../router/constants";
 export default [
 	http.get("/urp/user", () => {
 		const generatePermission = () => ({
-			id: faker.number.int({ min: 1, max: 1000 }),
+			id: faker.number.int({ min: 1, max: 100 }),
 			code: `perm_${faker.lorem.word()}`,
 			name: faker.lorem.words({ min: 1, max: 3 }),
 		});
@@ -42,7 +42,7 @@ export default [
 	}),
 	http.get("/urp/users", () => {
 		const generatePermission = () => ({
-			id: faker.number.int({ min: 1, max: 1000 }),
+			id: faker.number.int({ min: 1, max: 100 }),
 			code: `perm_${faker.lorem.word()}`,
 			name: faker.lorem.words({ min: 1, max: 3 }),
 		});
@@ -71,8 +71,8 @@ export default [
 		});
 
 		const mockData = {
-			data: faker.helpers.multiple(generateUser, { count: 20 }),
-			total: 20,
+			data: faker.helpers.multiple(generateUser, { count: 10 }),
+			total: 30,
 		};
 		return HttpResponse.json(mockData);
 	}),

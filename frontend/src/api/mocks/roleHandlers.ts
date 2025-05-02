@@ -4,7 +4,7 @@ import { http, HttpResponse } from "msw";
 export default [
 	http.get("/urp/roles", () => {
 		const generatePermission = () => ({
-			id: faker.number.int({ min: 1, max: 1000 }),
+			id: faker.number.int({ min: 1, max: 100 }),
 			code: `perm_${faker.lorem.word()}`,
 			name: faker.lorem.words({ min: 1, max: 3 }),
 		});
@@ -24,11 +24,34 @@ export default [
 		});
 
 		const mockData = {
-			data: faker.helpers.multiple(generateRole, { count: 20 }),
+			data: faker.helpers.multiple(generateRole, { count: 10 }),
 			total: 20,
 		};
 
 		return HttpResponse.json(mockData);
+	}),
+	http.get("/urp/role", ({ params }) => {
+		const generatePermission = () => ({
+			id: faker.number.int({ min: 1, max: 10 }),
+			code: `perm_${faker.lorem.word()}`,
+			name: faker.lorem.words({ min: 1, max: 3 }),
+		});
+
+		const generateRole = () => ({
+			id: faker.number.int({ min: 1, max: 100 }),
+			code: faker.helpers.arrayElement([
+				"admin",
+				"editor",
+				"viewer",
+				"manager",
+			]),
+			name: faker.person.jobTitle(),
+			permissions: faker.helpers.multiple(generatePermission, {
+				count: { min: 1, max: 5 },
+			}),
+		});
+
+		return HttpResponse.json(generateRole());
 	}),
 
 	http.post("/urp/role", async ({ request }) => {

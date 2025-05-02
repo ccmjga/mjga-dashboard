@@ -30,6 +30,15 @@ const userManagementRoutes: RouteRecordRaw[] = [
 		},
 	},
 	{
+		path: RoutePath.BINDPERMISSIONVIEW,
+		name: RouteName.BINDPERMISSIONVIEW,
+		component: () => import("@/views/BindPermissionView.vue"),
+		meta: {
+			requiresAuth: true,
+			hasRole: ROLE.ADMIN,
+		},
+	},
+	{
 		path: RoutePath.PERMISSIONVIEW,
 		name: RouteName.PERMISSIONVIEW,
 		component: () => import("@/views/PermissionView.vue"),

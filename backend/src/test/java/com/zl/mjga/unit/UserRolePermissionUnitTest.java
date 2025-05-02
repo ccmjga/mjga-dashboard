@@ -320,8 +320,6 @@ class UserRolePermissionUnitTest {
     stubRolePermissionMap2.setRoleId(1L);
     stubRolePermissionMap2.setPermissionId(2L);
 
-    when(rolePermissionMapRepository.fetchByRoleId(any(Long.class)))
-        .thenReturn(List.of(stubRolePermissionMap, stubRolePermissionMap2));
     Result<Record> mockRoleResult =
         dslContext.newResult(
             List.of(
@@ -374,7 +372,6 @@ class UserRolePermissionUnitTest {
 
     assertThat(pageResult.getTotal()).isEqualTo(0L);
     permissionQueryDto.setRoleId(1L);
-    when(rolePermissionMapRepository.fetchByRoleId(any(Long.class))).thenReturn(new ArrayList<>());
     PageResponseDto<List<PermissionDto>> pageResult2 =
         userRolePermissionService.pageQueryPermission(PageRequestDto.of(0, 5), permissionQueryDto);
     assertThat(pageResult2.getTotal()).isEqualTo(0);
