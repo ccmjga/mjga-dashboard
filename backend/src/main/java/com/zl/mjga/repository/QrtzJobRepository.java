@@ -99,6 +99,7 @@ public class QrtzJobRepository extends QrtzJobDetailsDao {
               jobTriggerNestedDto.setGroup(record.getValue(QRTZ_JOB_DETAILS.JOB_GROUP));
               jobTriggerNestedDto.setClassName(record.getValue(QRTZ_JOB_DETAILS.JOB_CLASS_NAME));
               jobTriggerNestedDto.setJobs(record.getValue("triggers", List.class));
+              // TODO 差一个 total 的设置
               return jobTriggerNestedDto;
             });
   }

@@ -1,6 +1,8 @@
 package com.zl.mjga.model.urp;
 
 public enum EPermission {
+  READ_DEPARTMENT_PERMISSION,
+  WRITE_DEPARTMENT_PERMISSION,
   WRITE_USER_ROLE_PERMISSION,
   READ_USER_ROLE_PERMISSION
 }
