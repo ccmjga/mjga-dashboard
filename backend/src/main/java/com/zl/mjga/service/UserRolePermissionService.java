@@ -38,43 +38,19 @@ public class UserRolePermissionService {
   public void upsertUser(UserUpsertDto userUpsertDto) {
     User user = new User();
     BeanUtils.copyProperties(userUpsertDto, user);
-    if (user.getId() == null) {
-      if (isUsernameDuplicate(user.getUsername())) {
-        throw new BusinessException(
-            String.format("username %s already exist", userUpsertDto.getUsername()));
-      }
-      userRepository.insert(user);
-    } else {
-      userRepository.update(user);
-    }
+    userRepository.merge(user);
   }
 
   public void upsertRole(RoleUpsertDto roleUpsertDto) {
     Role role = new Role();
     BeanUtils.copyProperties(roleUpsertDto, role);
-    if (role.getId() == null) {
-      if (isRoleDuplicate(roleUpsertDto.getCode(), roleUpsertDto.getName())) {
-        throw new BusinessException(
-            String.format("role %s already exist", roleUpsertDto.getName()));
-      }
-      roleRepository.insert(role);
-    } else {
-      roleRepository.update(role);
-    }
+    roleRepository.merge(role);
   }
 
   public void upsertPermission(PermissionUpsertDto permissionUpsertDto) {
     Permission permission = new Permission();
     BeanUtils.copyProperties(permissionUpsertDto, permission);
-    if (permission.getId() == null) {
-      if (isPermissionDuplicate(permissionUpsertDto.getCode(), permissionUpsertDto.getName())) {
-        throw new BusinessException(
-            String.format("permission %s already exist", permissionUpsertDto.getName()));
-      }
-      permissionRepository.insert(permission);
-    } else {
-      permissionRepository.update(permission);
-    }
+    permissionRepository.merge(permission);
   }
 
   public PageResponseDto<List<UserRolePermissionDto>> pageQueryUser(

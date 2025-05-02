@@ -37,11 +37,11 @@ CREATE TABLE mjga.user_role_map (
 );
 
 CREATE TABLE mjga.department (
-                            id BIGSERIAL PRIMARY KEY,
-                            name VARCHAR(255) NOT NULL UNIQUE,
-                            parent_id BIGINT,
-                            enable BOOLEAN NOT NULL DEFAULT TRUE,
-                            FOREIGN KEY (parent_id)
-                                REFERENCES department(id)
-                                ON DELETE RESTRICT
+                                 id BIGSERIAL PRIMARY KEY,
+                                 name VARCHAR(255) NOT NULL UNIQUE,
+                                 parent_id BIGINT,
+                                 enable BOOLEAN NOT NULL DEFAULT TRUE,
+                                 FOREIGN KEY (parent_id)
+                                     REFERENCES mjga.department(id)
+                                     ON DELETE RESTRICT
 );

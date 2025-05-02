@@ -11,9 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 public class DepartmentUpsertDto {
   private Long id;
-  @NotEmpty
-  private String name;
+  @NotEmpty private String name;
   private Long parentId;
-  @NotNull
-  private Boolean enable;
+  @NotNull private Boolean enable;
 }

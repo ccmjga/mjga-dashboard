@@ -482,10 +482,8 @@ class UserRolePermissionUnitTest {
     userUpsertDto.setEnable(true);
     User mockUser = new User();
     BeanUtils.copyProperties(userUpsertDto, mockUser);
-    when(userRolePermissionService.isUsernameDuplicate(userUpsertDto.getUsername()))
-        .thenReturn(false);
     userRolePermissionService.upsertUser(userUpsertDto);
-    verify(userRepository, times(1)).insert(mockUser);
+    verify(userRepository, times(1)).merge(mockUser);
   }
 
   @Test
@@ -498,19 +496,7 @@ class UserRolePermissionUnitTest {
     User mockUser = new User();
     BeanUtils.copyProperties(userUpsertDto, mockUser);
     userRolePermissionService.upsertUser(userUpsertDto);
-    verify(userRepository, times(1)).update(mockUser);
-  }
-
-  @Test
-  void upsertUser_whenGivenUserDtoWithDuplicateUsername_shouldRunError() {
-    UserUpsertDto userUpsertDto = new UserUpsertDto();
-    userUpsertDto.setUsername("username");
-    userUpsertDto.setPassword("password");
-    userUpsertDto.setEnable(true);
-    when(userRolePermissionService.isUsernameDuplicate(userUpsertDto.getUsername()))
-        .thenReturn(true);
-    assertThatThrownBy(() -> userRolePermissionService.upsertUser(userUpsertDto))
-        .isInstanceOf(BusinessException.class);
+    verify(userRepository, times(1)).merge(mockUser);
   }
 
   @Test
@@ -522,13 +508,9 @@ class UserRolePermissionUnitTest {
     Role mockRole = new Role();
     BeanUtils.copyProperties(roleUpsertDto, mockRole);
 
-    when(userRolePermissionService.isRoleDuplicate(
-            roleUpsertDto.getCode(), roleUpsertDto.getName()))
-        .thenReturn(false);
-
     userRolePermissionService.upsertRole(roleUpsertDto);
 
-    verify(roleRepository, times(1)).insert(mockRole);
+    verify(roleRepository, times(1)).merge(mockRole);
   }
 
   @Test
@@ -543,21 +525,7 @@ class UserRolePermissionUnitTest {
 
     userRolePermissionService.upsertRole(roleUpsertDto);
 
-    verify(roleRepository, times(1)).update(mockRole);
-  }
-
-  @Test
-  void upsertRole_whenGivenRoleDtoWithDuplicateCodeOrName_shouldRunError() {
-    RoleUpsertDto roleUpsertDto = new RoleUpsertDto();
-    roleUpsertDto.setCode("ROLE_ADMIN");
-    roleUpsertDto.setName("Admin Role");
-
-    when(userRolePermissionService.isRoleDuplicate(
-            roleUpsertDto.getCode(), roleUpsertDto.getName()))
-        .thenReturn(true);
-
-    assertThatThrownBy(() -> userRolePermissionService.upsertRole(roleUpsertDto))
-        .isInstanceOf(BusinessException.class);
+    verify(roleRepository, times(1)).merge(mockRole);
   }
 
   @Test
@@ -569,13 +537,9 @@ class UserRolePermissionUnitTest {
     Permission mockPermission = new Permission();
     BeanUtils.copyProperties(permissionUpsertDto, mockPermission);
 
-    when(userRolePermissionService.isPermissionDuplicate(
-            permissionUpsertDto.getCode(), permissionUpsertDto.getName()))
-        .thenReturn(false);
-
     userRolePermissionService.upsertPermission(permissionUpsertDto);
 
-    verify(permissionRepository, times(1)).insert(mockPermission);
+    verify(permissionRepository, times(1)).merge(mockPermission);
   }
 
   @Test
@@ -590,20 +554,6 @@ class UserRolePermissionUnitTest {
 
     userRolePermissionService.upsertPermission(permissionUpsertDto);
 
-    verify(permissionRepository, times(1)).update(mockPermission);
-  }
-
-  @Test
-  void upsertPermission_whenGivenPermissionDtoWithDuplicateCodeOrName_shouldRunError() {
-    PermissionUpsertDto permissionUpsertDto = new PermissionUpsertDto();
-    permissionUpsertDto.setCode("PERM_READ");
-    permissionUpsertDto.setName("Read Permission");
-
-    when(userRolePermissionService.isPermissionDuplicate(
-            permissionUpsertDto.getCode(), permissionUpsertDto.getName()))
-        .thenReturn(true);
-
-    assertThatThrownBy(() -> userRolePermissionService.upsertPermission(permissionUpsertDto))
-        .isInstanceOf(BusinessException.class);
+    verify(permissionRepository, times(1)).merge(mockPermission);
   }
 }

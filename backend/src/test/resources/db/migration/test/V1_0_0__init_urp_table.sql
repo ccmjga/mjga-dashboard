@@ -42,6 +42,6 @@ CREATE TABLE mjga.department (
                                  parent_id BIGINT,
                                  enable BOOLEAN NOT NULL DEFAULT TRUE,
                                  FOREIGN KEY (parent_id)
-                                     REFERENCES department(id)
+                                     REFERENCES mjga.department(id)
                                      ON DELETE RESTRICT
 );

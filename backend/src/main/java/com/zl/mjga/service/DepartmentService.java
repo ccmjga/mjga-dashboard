@@ -34,8 +34,8 @@ public class DepartmentService {
   }
 
   public void upsertDepartment(DepartmentUpsertDto departmentUpsertDto) {
-      Department department = new Department();
-      BeanUtils.copyProperties(departmentUpsertDto, department);
-      departmentRepository.merge(department);
+    Department department = new Department();
+    BeanUtils.copyProperties(departmentUpsertDto, department);
+    departmentRepository.merge(department);
   }
 }
