@@ -42,4 +42,6 @@ public class DepartmentService {
     BeanUtils.copyProperties(departmentUpsertDto, department);
     departmentRepository.merge(department);
   }
+
+  // TODO 递归子部门
 }

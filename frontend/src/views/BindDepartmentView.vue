@@ -28,7 +28,7 @@
           </li>
         </ol>
       </nav>
-      <h1 class="text-xl mb-2 font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ user?.username }} 部门</h1>
+      <h1 class="text-xl mb-2 font-semibold text-gray-900 sm:text-2xl dark:text-white">绑定部门</h1>
     </div>
     <div class="relative">
       <form class="max-w-sm mb-4 grid grid-cols-5 gap-y-4">
@@ -175,7 +175,6 @@ import { useRoute } from "vue-router";
 import { useDepartmentBind } from "../composables/department/useDepartmentBind";
 import useAlertStore from "../composables/store/useAlertStore";
 import { useDepartmentQuery } from "@/composables/department/useDepartmentQuery";
-import { useUserQuery } from "@/composables/user/useUserQuery";
 
 const departmentName = ref<string>("");
 const checkedDepartmentIds = ref<number[]>([]);
@@ -199,26 +198,22 @@ const {
 	},
 	total,
 	departments,
-	allDepartments: userDepartments,
 	fetchDepartmentWith,
-	fetchAllDepartments,
 } = useDepartmentQuery();
-
-const { user, getUserWithDetail } = useUserQuery();
 
 const { bindDepartment, unbindDepartment } = useDepartmentBind();
 
 const handleBindDepartmentSubmit = async () => {
-	await bindDepartment(Number($route.params.userId), checkedDepartmentIds.value);
+	await bindDepartment(
+		Number($route.params.userId),
+		checkedDepartmentIds.value,
+	);
 	departmentBindModal.value?.hide();
 	alertStore.showAlert({
 		content: "操作成功",
 		level: "success",
 	});
-  await fetchAllDepartments({
-		userId: Number($route.params.userId),
-	});
-  await fetchDepartmentWith(currentPage.value, pageSize.value, {
+	await fetchDepartmentWith(currentPage.value, pageSize.value, {
 		name: departmentName.value,
 		userId: Number($route.params.userId),
 		bindState: bindState.value,
@@ -226,50 +221,40 @@ const handleBindDepartmentSubmit = async () => {
 };
 
 const handleUnbindDepartmentSubmit = async () => {
-	await unbindDepartment(Number($route.params.userId), checkedDepartmentIds.value);
+	await unbindDepartment(
+		Number($route.params.userId),
+		checkedDepartmentIds.value,
+	);
 	departmentUnbindModal.value?.hide();
 	alertStore.showAlert({
 		content: "操作成功",
 		level: "success",
-	});
-	await fetchAllDepartments({
-		userId: Number($route.params.userId),
-	});
-  await fetchDepartmentWith(currentPage.value, pageSize.value, {
-		name: departmentName.value,
-		userId: Number($route.params.userId),
-		bindState: bindState.value,
-	});
-};
-
-watch(departments, async () => {
-	for (const department of departments.value ?? []) {
-		if (userDepartments.value?.some((userDepartment) => userDepartment.id === department.id)) {
-			checkedDepartmentIds.value.push(department.id!);
-		}
-	}
-});
-
-onMounted(async () => {
-  await getUserWithDetail(Number($route.params.userId));
-	await fetchAllDepartments({
-		userId: Number($route.params.userId),
 	});
 	await fetchDepartmentWith(currentPage.value, pageSize.value, {
 		name: departmentName.value,
 		userId: Number($route.params.userId),
 		bindState: bindState.value,
 	});
+};
+
+onMounted(async () => {
+	await fetchDepartmentWith(currentPage.value, pageSize.value, {
+		name: departmentName.value,
+		userId: Number($route.params.userId),
+		bindState: bindState.value,
+	});
 	initFlowbite();
-	const $bindModalElement: HTMLElement | null =
-		document.querySelector("#department-bind-modal");
+	const $bindModalElement: HTMLElement | null = document.querySelector(
+		"#department-bind-modal",
+	);
 	departmentBindModal.value = new Modal(
 		$bindModalElement,
 		{},
 		{ id: "department-bind-modal" },
 	);
-	const $unbindModalElement: HTMLElement | null =
-		document.querySelector("#department-unbind-modal");
+	const $unbindModalElement: HTMLElement | null = document.querySelector(
+		"#department-unbind-modal",
+	);
 	departmentUnbindModal.value = new Modal(
 		$unbindModalElement,
 		{},

@@ -234,7 +234,9 @@ const handleUpsertModalSubmit = async (data: PermissionUpsertModel) => {
 	});
 };
 
-const handleUpsertPermissionClick = async (permission?: components["schemas"]["PermissionDto"]) => {
+const handleUpsertPermissionClick = async (
+	permission?: components["schemas"]["PermissionDto"],
+) => {
 	selectedPermission.value = permission;
 	await nextTick(() => {
 		permissionUpsertModal.value?.show();
@@ -254,7 +256,9 @@ const deleteSelectedPermission = async (event: Event) => {
 	});
 };
 
-const handleDeletePermissionClick = async (permission: components["schemas"]["PermissionDto"]) => {
+const handleDeletePermissionClick = async (
+	permission: components["schemas"]["PermissionDto"],
+) => {
 	selectedPermission.value = permission;
 	await nextTick(() => {
 		permissionDeleteModal.value?.show();

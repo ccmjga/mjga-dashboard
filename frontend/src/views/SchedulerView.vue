@@ -218,28 +218,31 @@ const {
 
 const alertStore = useAlertStore();
 
-const {
-	resumeTrigger,
-	pauseTrigger,
-} = useJobControl();
+const { resumeTrigger, pauseTrigger } = useJobControl();
 
 const { updateCron } = useJobUpdate();
 
-const handleResumeJobClick = async (currentJob: components["schemas"]["JobTriggerDto"]) => {
+const handleResumeJobClick = async (
+	currentJob: components["schemas"]["JobTriggerDto"],
+) => {
 	selectedJob.value = currentJob;
 	await nextTick(() => {
 		jobResumeModal.value?.show();
 	});
 };
 
-const handleCronUpdateClick = async (currentJob: components["schemas"]["JobTriggerDto"]) => {
+const handleCronUpdateClick = async (
+	currentJob: components["schemas"]["JobTriggerDto"],
+) => {
 	selectedJob.value = currentJob;
 	await nextTick(() => {
 		jobUpdateModal.value?.show();
 	});
 };
 
-const handlePauseJobClick = async (currentJob: components["schemas"]["JobTriggerDto"]) => {
+const handlePauseJobClick = async (
+	currentJob: components["schemas"]["JobTriggerDto"],
+) => {
 	selectedJob.value = currentJob;
 	await nextTick(() => {
 		jobPauseModal.value?.show();
@@ -247,7 +250,7 @@ const handlePauseJobClick = async (currentJob: components["schemas"]["JobTrigger
 };
 
 const handleResumeModalConfirmClick = async () => {
-	if (selectedJob.value?.triggerState !== "PAUSE" ) {
+	if (selectedJob.value?.triggerState !== "PAUSE") {
 		return;
 	}
 	await resumeTrigger({

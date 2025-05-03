@@ -47,7 +47,7 @@ import type { PermissionUpsertModel } from "@/types/permission";
 import { computed, ref, watch } from "vue";
 import { z } from "zod";
 import type { components } from "../api/types/schema";
-  
+
 const { permission, onSubmit, closeModal } = defineProps<{
 	permission?: components["schemas"]["PermissionDto"];
 	closeModal: () => void;

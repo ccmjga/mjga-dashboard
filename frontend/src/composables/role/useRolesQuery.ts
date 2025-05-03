@@ -1,5 +1,5 @@
 import client from "@/api/client";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import type { components } from "../../api/types/schema";
 import { usePagination } from "../page";
 

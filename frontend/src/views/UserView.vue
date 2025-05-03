@@ -277,14 +277,18 @@ const handleUpsertUserSubmit = async (data: UserUpsertSubmitModel) => {
 	});
 };
 
-const handleUpsertUserClick = async (user?: components["schemas"]["UserRolePermissionDto"]) => {
+const handleUpsertUserClick = async (
+	user?: components["schemas"]["UserRolePermissionDto"],
+) => {
 	selectedUser.value = user;
 	await nextTick(() => {
 		userUpsertModal.value?.show();
 	});
 };
 
-const handleBindRoleClick = async (user: components["schemas"]["UserRolePermissionDto"]) => {
+const handleBindRoleClick = async (
+	user: components["schemas"]["UserRolePermissionDto"],
+) => {
 	router.push({
 		name: RouteName.BINDROLEVIEW,
 		params: {
@@ -293,7 +297,9 @@ const handleBindRoleClick = async (user: components["schemas"]["UserRolePermissi
 	});
 };
 
-const handleBindDepartmentClick = async (user: components["schemas"]["UserRolePermissionDto"]) => {
+const handleBindDepartmentClick = async (
+	user: components["schemas"]["UserRolePermissionDto"],
+) => {
 	router.push({
 		name: RouteName.BINDDEPARTMENTVIEW,
 		params: {
@@ -315,7 +321,9 @@ const handleDeleteUserSubmit = async () => {
 	});
 };
 
-const handleDeleteUserClick = async (user: components["schemas"]["UserRolePermissionDto"]) => {
+const handleDeleteUserClick = async (
+	user: components["schemas"]["UserRolePermissionDto"],
+) => {
 	selectedUser.value = user;
 	await nextTick(() => {
 		userDeleteModal.value?.show();

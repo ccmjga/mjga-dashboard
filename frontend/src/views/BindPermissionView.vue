@@ -28,8 +28,8 @@
           </li>
         </ol>
       </nav>
-      <h1 class="text-xl mb-2 font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ roleWithDetail?.name }}
-        的权限</h1>
+      <h1 class="text-xl mb-2 font-semibold text-gray-900 sm:text-2xl dark:text-white">
+        绑定权限</h1>
     </div>
     <div class="relative">
       <form class="max-w-sm mb-4 grid grid-cols-5 gap-y-4">
@@ -83,8 +83,8 @@
               <label for="checkbox-all-search" class="sr-only">checkbox</label>
             </div>
           </th>
-          <th scope="col" class="px-6 py-3">角色编码</th>
-          <th scope="col" class="px-6 py-3">角色名称</th>
+          <th scope="col" class="px-6 py-3">权限编码</th>
+          <th scope="col" class="px-6 py-3">权限名称</th>
         </tr>
       </thead>
       <tbody>
@@ -157,7 +157,6 @@
 <script setup lang="ts">
 import BindModal from "@/components/PopupModal.vue";
 import UnModal from "@/components/PopupModal.vue";
-import { useRolesQuery } from "@/composables/role/useRolesQuery";
 import { RouteName } from "@/router/constants";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { onMounted, ref, watch } from "vue";
@@ -189,7 +188,6 @@ const {
 	permissions,
 	fetchPermissionsWith,
 } = usePermissionsQuery();
-const { getRoleWithDetail, roleWithDetail } = useRolesQuery();
 const { bindPermission, unbindPermission } = usePermissionBind();
 
 const handleBindPermissionSubmit = async () => {
@@ -197,7 +195,6 @@ const handleBindPermissionSubmit = async () => {
 		Number($route.params.roleId),
 		checkedPermissionIds.value,
 	);
-	await getRoleWithDetail(Number($route.params.roleId));
 	permissionBindModal.value?.hide();
 	alertStore.showAlert({
 		content: "操作成功",
@@ -210,7 +207,6 @@ const handleUnbindPermissionSubmit = async () => {
 		Number($route.params.roleId),
 		checkedPermissionIds.value,
 	);
-	await getRoleWithDetail(Number($route.params.roleId));
 	permissionUnbindModal.value?.hide();
 	alertStore.showAlert({
 		content: "操作成功",
@@ -218,20 +214,7 @@ const handleUnbindPermissionSubmit = async () => {
 	});
 };
 
-watch(permissions, async () => {
-	for (const permission of permissions.value ?? []) {
-		if (
-			roleWithDetail.value?.permissions?.some(
-				(rolePermission) => rolePermission.id === permission.id,
-			)
-		) {
-			checkedPermissionIds.value.push(permission.id!);
-		}
-	}
-});
-
 onMounted(async () => {
-	await getRoleWithDetail(Number($route.params.roleId));
 	await fetchPermissionsWith(currentPage.value, pageSize.value, {
 		name: permissionName.value,
 		roleId: Number($route.params.roleId),

@@ -28,7 +28,7 @@
           </li>
         </ol>
       </nav>
-      <h1 class="text-xl mb-2 font-semibold text-gray-900 sm:text-2xl dark:text-white">{{ user?.username }} 的角色</h1>
+      <h1 class="text-xl mb-2 font-semibold text-gray-900 sm:text-2xl dark:text-white">绑定角色</h1>
     </div>
     <div class="relative">
       <form class="max-w-sm mb-4 grid grid-cols-5 gap-y-4">
@@ -156,7 +156,6 @@
 import BindModal from "@/components/PopupModal.vue";
 import UnModal from "@/components/PopupModal.vue";
 import { useRolesQuery } from "@/composables/role/useRolesQuery";
-import { useUserQuery } from "@/composables/user/useUserQuery";
 import { RouteName } from "@/router/constants";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { onMounted, ref, watch } from "vue";
@@ -173,7 +172,6 @@ const $route = useRoute();
 const bindState = ref<"BIND" | "ALL" | "UNBIND">("BIND");
 
 const alertStore = useAlertStore();
-const { getUserWithDetail, user } = useUserQuery();
 const {
 	pagination: {
 		pageSize,
@@ -187,12 +185,11 @@ const {
 	total,
 	roles,
 	fetchRolesWith,
-} = useRolesQuery(1, 10);
+} = useRolesQuery();
 const { bindRole, unbindRole } = useRoleBind();
 
 const handleBindRoleSubmit = async () => {
 	await bindRole(Number($route.params.userId), checkedRoleIds.value);
-	await getUserWithDetail(Number($route.params.userId));
 	roleBindModal.value?.hide();
 	alertStore.showAlert({
 		content: "操作成功",
@@ -202,7 +199,6 @@ const handleBindRoleSubmit = async () => {
 
 const handleUnbindRoleSubmit = async () => {
 	await unbindRole(Number($route.params.userId), checkedRoleIds.value);
-	await getUserWithDetail(Number($route.params.userId));
 	roleUnbindModal.value?.hide();
 	alertStore.showAlert({
 		content: "操作成功",
@@ -210,16 +206,7 @@ const handleUnbindRoleSubmit = async () => {
 	});
 };
 
-watch(roles, async () => {
-	for (const role of roles.value ?? []) {
-		if (user.value?.roles?.some((userRole) => userRole.id === role.id)) {
-			checkedRoleIds.value.push(role.id!);
-		}
-	}
-});
-
 onMounted(async () => {
-	await getUserWithDetail(Number($route.params.userId));
 	await fetchRolesWith(currentPage.value, pageSize.value, {
 		name: roleName.value,
 		userId: Number($route.params.userId),
@@ -252,7 +239,7 @@ const handleSearch = async () => {
 
 const handlePageChange = async (page: number) => {
 	if (page < 1 || page > totalPages.value) return;
-	await fetchRolesWith(currentPage.value, pageSize.value, {
+	await fetchRolesWith(page, pageSize.value, {
 		name: roleName.value,
 		userId: Number($route.params.userId),
 		bindState: bindState.value,

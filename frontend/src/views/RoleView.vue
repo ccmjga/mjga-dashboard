@@ -247,7 +247,9 @@ const handleUpsertModalSubmit = async (data: RoleUpsertModel) => {
 	});
 };
 
-const handleUpsertRoleClick = async (role?: components["schemas"]["RoleDto"]) => {
+const handleUpsertRoleClick = async (
+	role?: components["schemas"]["RoleDto"],
+) => {
 	selectedRole.value = role;
 	await nextTick(() => {
 		roleUpsertModal.value?.show();
@@ -267,14 +269,18 @@ const handleDeletedModalSubmit = async () => {
 	});
 };
 
-const handleDeleteRoleClick = async (role: components["schemas"]["RoleDto"]) => {
+const handleDeleteRoleClick = async (
+	role: components["schemas"]["RoleDto"],
+) => {
 	selectedRole.value = role;
 	await nextTick(() => {
 		roleDeleteModal.value?.show();
 	});
 };
 
-const handleBindPermissionClick = async (role: components["schemas"]["RoleDto"]) => {
+const handleBindPermissionClick = async (
+	role: components["schemas"]["RoleDto"],
+) => {
 	router.push({
 		name: RouteName.BINDPERMISSIONVIEW,
 		params: { roleId: role.id },
