@@ -24,6 +24,14 @@ export default [
 			}),
 		});
 
+		const generateDepartment = () => ({
+			id: faker.number.int({ min: 1, max: 100 }),
+			code: `dept_${faker.lorem.word()}`,
+			name: faker.company.name(),
+			parentId: faker.number.int({ min: 1, max: 30 }),
+			enable: faker.datatype.boolean(),
+		});
+
 		const generateUser = () => ({
 			id: faker.number.int({ min: 1, max: 100 }),
 			username: faker.internet.email(),
@@ -35,6 +43,9 @@ export default [
 			createTime: faker.date.recent({ days: 30 }).toISOString(),
 			permissions: faker.helpers.multiple(generatePermission, {
 				count: { min: 1, max: 5 },
+			}),
+			departments: faker.helpers.multiple(generateDepartment, {
+				count: { min: 0, max: 3 },
 			}),
 		});
 
@@ -56,6 +67,14 @@ export default [
 			}),
 		});
 
+		const generateDepartment = () => ({
+			id: faker.number.int({ min: 1, max: 100 }),
+			code: `dept_${faker.lorem.word()}`,
+			name: faker.company.name(),
+			parentId: faker.number.int({ min: 1, max: 30 }),
+			enable: faker.datatype.boolean(),
+		});
+
 		const generateUser = () => ({
 			id: faker.number.int({ min: 1, max: 100 }),
 			username: faker.internet.email(),
@@ -68,6 +87,9 @@ export default [
 			permissions: faker.helpers.multiple(generatePermission, {
 				count: { min: 1, max: 5 },
 			}),
+			departments: faker.helpers.multiple(generateDepartment, {
+				count: { min: 0, max: 3 },
+			}),
 		});
 
 		const mockData = {
@@ -75,6 +97,14 @@ export default [
 			total: 30,
 		};
 		return HttpResponse.json(mockData);
+	}),
+	http.post("/api/users/:userId/departments", () => {
+		console.log('Captured a "POST /api/users/:userId/departments" request');
+		return HttpResponse.json({ success: true });
+	}),
+	http.delete("/api/users/:userId/departments", () => {
+		console.log('Captured a "DELETE /api/users/:userId/departments" request');
+		return HttpResponse.json({ success: true });
 	}),
 	http.post("/urp/user", () => {
 		console.log('Captured a "POST /posts" request');
@@ -104,6 +134,14 @@ export default [
 			}),
 		});
 
+		const generateDepartment = () => ({
+			id: faker.number.int({ min: 1, max: 100 }),
+			code: `dept_${faker.lorem.word()}`,
+			name: faker.company.name(),
+			parentId: faker.number.int({ min: 1, max: 30 }),
+			enable: faker.datatype.boolean(),
+		});
+
 		const generateUser = () => ({
 			id: faker.number.int({ min: 1, max: 100 }),
 			username: faker.internet.email(),
@@ -116,8 +154,19 @@ export default [
 			permissions: faker.helpers.multiple(generatePermission, {
 				count: { min: 1, max: 5 },
 			}),
+			departments: faker.helpers.multiple(generateDepartment, {
+				count: { min: 0, max: 3 },
+			}),
 		});
 		const mockData = generateUser();
 		return HttpResponse.json(mockData);
+	}),
+	http.post("/department/unbind", () => {
+		console.log("Captured a 'POST /department/unbind' request");
+		return HttpResponse.json();
+	}),
+	http.post("/department/bind", () => {
+		console.log("Captured a 'POST /department/bind' request");
+		return HttpResponse.json();
 	}),
 ];

@@ -397,6 +397,52 @@
         }
       }
     },
+    "/urp/department/unbind": {
+      "post": {
+        "tags": [
+          "user-role-permission-controller"
+        ],
+        "operationId": "unBindDepartmentBy",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DepartmentBindDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/urp/department/bind": {
+      "post": {
+        "tags": [
+          "user-role-permission-controller"
+        ],
+        "operationId": "bindDepartmentBy",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DepartmentBindDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/scheduler/trigger/resume": {
       "post": {
         "tags": [
@@ -758,7 +804,40 @@
         }
       }
     },
-    "/department/list": {
+    "/department/query": {
+      "get": {
+        "tags": [
+          "department-controller"
+        ],
+        "operationId": "queryDepartments",
+        "parameters": [
+          {
+            "name": "departmentQueryDto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/DepartmentQueryDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Department"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/department/page-query": {
       "get": {
         "tags": [
           "department-controller"
@@ -789,29 +868,6 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/PageResponseDtoListDepartment"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/department/all": {
-      "get": {
-        "tags": [
-          "department-controller"
-        ],
-        "operationId": "queryAllDepartments",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Department"
-                  }
                 }
               }
             }
@@ -880,6 +936,26 @@
           },
           "name": {
             "type": "string"
+          }
+        }
+      },
+      "DepartmentBindDto": {
+        "required": [
+          "departmentIds",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "departmentIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
           }
         }
       },
@@ -1275,11 +1351,23 @@
       "DepartmentQueryDto": {
         "type": "object",
         "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
           "name": {
             "type": "string"
           },
           "enable": {
             "type": "boolean"
+          },
+          "bindState": {
+            "type": "string",
+            "enum": [
+              "BIND",
+              "UNBIND",
+              "ALL"
+            ]
           }
         }
       },

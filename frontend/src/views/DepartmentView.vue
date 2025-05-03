@@ -208,7 +208,7 @@ const {
 	total,
 	departments,
 	allDepartments,
-	fetchDepartmentsWith,
+	fetchDepartmentWith,
 	fetchAllDepartments,
 } = useDepartmentQuery();
 
@@ -219,8 +219,8 @@ const { upsertDepartment } = useDepartmentUpsert();
 const alertStore = useAlertStore();
 
 onMounted(async () => {
-	await fetchAllDepartments();
-	await fetchDepartmentsWith(currentPage.value, pageSize.value, {
+	await fetchAllDepartments({});
+	await fetchDepartmentWith(currentPage.value, pageSize.value, {
 		name: name.value,
 	});
 	initFlowbite();
@@ -256,10 +256,10 @@ const handleUpsertDepartmentSubmit = async (
 		parentId: department.parentId,
 		enable: department.enable,
 	});
-	await fetchDepartmentsWith(currentPage.value, pageSize.value, {
+	await fetchDepartmentWith(currentPage.value, pageSize.value, {
 		name: name.value,
 	});
-	fetchAllDepartments();
+	fetchAllDepartments({});
 	alertStore.showAlert({
 		content: "操作成功",
 		level: "success",
@@ -278,10 +278,10 @@ const handleUpsertDepartmentClick = async (
 const handleDeleteDepartmentSubmit = async () => {
 	if (!selectedDepartment?.value?.id) return;
 	await deleteDepartment(selectedDepartment.value.id);
-	await fetchDepartmentsWith(currentPage.value, pageSize.value, {
+	await fetchDepartmentWith(currentPage.value, pageSize.value, {
 		name: name.value,
 	});
-	fetchAllDepartments();
+	fetchAllDepartments({});
 	departmentDeleteModal.value?.hide();
 	alertStore.showAlert({
 		content: "删除成功",
@@ -299,14 +299,14 @@ const handleDeleteDepartmentClick = async (
 };
 
 const handleSearch = async () => {
-	await fetchDepartmentsWith(currentPage.value, pageSize.value, {
+	await fetchDepartmentWith(currentPage.value, pageSize.value, {
 		name: name.value,
 	});
 };
 
 const handlePageChange = async (page: number) => {
 	if (page < 1 || page > totalPages.value) return;
-	await fetchDepartmentsWith(page, pageSize.value, { name: name.value });
+	await fetchDepartmentWith(page, pageSize.value, { name: name.value });
 };
 </script>
 

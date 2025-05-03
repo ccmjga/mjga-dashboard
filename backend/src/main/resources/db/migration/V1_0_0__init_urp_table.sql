@@ -45,3 +45,11 @@ CREATE TABLE mjga.department (
                                      REFERENCES mjga.department(id)
                                      ON DELETE RESTRICT
 );
+
+CREATE TABLE mjga.user_department_map (
+                                          user_id BIGINT NOT NULL,
+                                          department_id BIGINT NOT NULL,
+                                          PRIMARY KEY (user_id, department_id),
+                                          FOREIGN KEY (user_id) REFERENCES mjga.user(id) ON UPDATE NO ACTION ON DELETE RESTRICT,
+                                          FOREIGN KEY (department_id) REFERENCES mjga.department(id) ON UPDATE NO ACTION ON DELETE RESTRICT
+);

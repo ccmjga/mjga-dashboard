@@ -13,20 +13,32 @@ export const useDepartmentQuery = () => {
 	const departments = ref<components["schemas"]["Department"][]>([]);
 	const allDepartments = ref<components["schemas"]["Department"][]>([]);
 
-	const fetchAllDepartments = async () => {
-		const { data } = await client.GET("/department/all", {});
+	const fetchAllDepartments = async (param: {
+		name?: string;
+		enable?: boolean;
+		userId?: number;
+		bindState?: "ALL" | "BIND" | "UNBIND";
+	}) => {
+		const { data } = await client.GET("/department/query", {
+			params: {
+				query: {
+					departmentQueryDto: param,
+				},
+			},
+		});
 		allDepartments.value = data ?? [];
 	};
-
-	const fetchDepartmentsWith = async (
+	const fetchDepartmentWith = async (
 		page: number,
 		size: number,
 		param: {
 			name?: string;
 			enable?: boolean;
+			userId?: number;
+			bindState?: "ALL" | "BIND" | "UNBIND";
 		},
 	) => {
-		const { data } = await client.GET("/department/list", {
+		const { data } = await client.GET("/department/page-query", {
 			params: {
 				query: {
 					pageRequestDto: {
@@ -46,7 +58,6 @@ export const useDepartmentQuery = () => {
 			total: total.value,
 		});
 	};
-
 	return {
 		pagination: {
 			pageSize: paginationHooks.pageSize,
@@ -60,7 +71,7 @@ export const useDepartmentQuery = () => {
 		total,
 		departments,
 		allDepartments,
-		fetchDepartmentsWith,
+		fetchDepartmentWith,
 		fetchAllDepartments,
 	};
 };

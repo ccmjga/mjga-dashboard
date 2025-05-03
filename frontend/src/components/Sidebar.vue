@@ -106,20 +106,10 @@
         <li>
           <RouterLink :to="`${RoutePath.DASHBOARD}/${RoutePath.SCHEDULERVIEW}`"
             class="flex items-center p-2 gap-x-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="lucide lucide-user-cog-icon lucide-user-cog shrink-0 text-gray-700 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white">
-              <circle cx="18" cy="15" r="3" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M10 15H6a4 4 0 0 0-4 4v2" />
-              <path d="m21.7 16.4-.9-.3" />
-              <path d="m15.2 13.9-.9-.3" />
-              <path d="m16.6 18.7.3-.9" />
-              <path d="m19.1 12.2.3-.9" />
-              <path d="m19.6 18.7-.4-1" />
-              <path d="m16.8 12.3-.4-1" />
-              <path d="m14.3 16.6 1-.4" />
-              <path d="m20.7 13.8 1-.4" />
+            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+              width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
             <span>
               定时任务

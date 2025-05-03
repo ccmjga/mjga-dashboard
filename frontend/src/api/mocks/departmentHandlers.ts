@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 import { http, HttpResponse } from "msw";
 
 export default [
-	http.get("/department/list", () => {
+	http.get("/department/page-query", () => {
 		const generateDepartment = () => ({
 			id: faker.number.int({ min: 1, max: 100 }),
 			name: faker.company.name(),
@@ -15,7 +15,7 @@ export default [
 		};
 		return HttpResponse.json(mockData);
 	}),
-	http.get("/department/all", () => {
+	http.get("/department/query", () => {
 		const generateDepartment = () => ({
 			id: faker.number.int({ min: 1, max: 30 }),
 			name: faker.company.name(),

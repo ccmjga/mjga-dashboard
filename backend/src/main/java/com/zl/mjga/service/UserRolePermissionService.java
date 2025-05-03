@@ -6,6 +6,7 @@ import static org.jooq.generated.mjga.tables.User.USER;
 
 import com.zl.mjga.dto.PageRequestDto;
 import com.zl.mjga.dto.PageResponseDto;
+import com.zl.mjga.dto.department.DepartmentBindDto;
 import com.zl.mjga.dto.urp.*;
 import com.zl.mjga.exception.BusinessException;
 import com.zl.mjga.model.urp.ERole;
@@ -34,6 +35,7 @@ public class UserRolePermissionService {
   private final UserRoleMapRepository userRoleMapRepository;
   private final PermissionRepository permissionRepository;
   private final RolePermissionMapRepository rolePermissionMapRepository;
+  private final UserDepartmentMapRepository userDepartmentMapRepository;
 
   public void upsertUser(UserUpsertDto userUpsertDto) {
     User user = new User();
@@ -235,5 +237,25 @@ public class UserRolePermissionService {
   public boolean isPermissionDuplicate(String code, String name) {
     return permissionRepository.fetchOneByCode(code) != null
         || permissionRepository.fetchOneByName(name) != null;
+  }
+
+  @Transactional(rollbackFor = Throwable.class)
+  public void bindDepartmentBy(DepartmentBindDto departmentBindDto) {
+    for (Long departmentId : departmentBindDto.departmentIds()) {
+      UserDepartmentMap userDepartmentMap = new UserDepartmentMap();
+      userDepartmentMap.setUserId(departmentBindDto.userId());
+      userDepartmentMap.setDepartmentId(departmentId);
+      userDepartmentMapRepository.insert(userDepartmentMap);
+    }
+  }
+
+  @Transactional(rollbackFor = Throwable.class)
+  public void unBindDepartmentBy(DepartmentBindDto departmentBindDto) {
+    for (Long departmentId : departmentBindDto.departmentIds()) {
+      UserDepartmentMap userDepartmentMap = new UserDepartmentMap();
+      userDepartmentMap.setUserId(departmentBindDto.userId());
+      userDepartmentMap.setDepartmentId(departmentId);
+      userDepartmentMapRepository.delete(userDepartmentMap);
+    }
   }
 }

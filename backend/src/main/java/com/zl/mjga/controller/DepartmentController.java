@@ -21,7 +21,7 @@ public class DepartmentController {
   private final DepartmentService departmentService;
 
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).READ_DEPARTMENT_PERMISSION)")
-  @GetMapping("/list")
+  @GetMapping("/page-query")
   @ResponseStatus(HttpStatus.OK)
   PageResponseDto<List<Department>> pageQueryDepartments(
       @ModelAttribute PageRequestDto pageRequestDto,
@@ -30,13 +30,13 @@ public class DepartmentController {
   }
 
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).READ_DEPARTMENT_PERMISSION)")
-  @GetMapping("/all")
-  List<Department> queryAllDepartments() {
-    return departmentService.queryAllDepartment();
+  @GetMapping("/query")
+  List<Department> queryDepartments(DepartmentQueryDto departmentQueryDto) {
+    return departmentService.queryDepartment(departmentQueryDto);
   }
 
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_DEPARTMENT_PERMISSION)")
-  @DeleteMapping("")
+  @DeleteMapping()
   void deleteDepartment(@RequestParam Long id) {
     departmentService.deleteDepartment(id);
   }

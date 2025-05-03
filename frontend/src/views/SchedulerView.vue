@@ -193,6 +193,7 @@ import useAlertStore from "@/composables/store/useAlertStore";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
 import type { components } from "../api/types/schema";
+import { RouteName } from "@/router/constants";
 
 const jobName = ref<string>("");
 const jobResumeModal = ref<ModalInterface>();
@@ -220,7 +221,6 @@ const alertStore = useAlertStore();
 const {
 	resumeTrigger,
 	pauseTrigger,
-	isLoading: controlLoading,
 } = useJobControl();
 
 const { updateCron } = useJobUpdate();
@@ -247,7 +247,7 @@ const handlePauseJobClick = async (currentJob: components["schemas"]["JobTrigger
 };
 
 const handleResumeModalConfirmClick = async () => {
-	if (selectedJob.value?.triggerState !== "PAUSE" || controlLoading.value) {
+	if (selectedJob.value?.triggerState !== "PAUSE" ) {
 		return;
 	}
 	await resumeTrigger({

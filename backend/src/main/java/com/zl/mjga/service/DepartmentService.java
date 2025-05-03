@@ -21,8 +21,8 @@ public class DepartmentService {
 
   private final DepartmentRepository departmentRepository;
 
-  public List<Department> queryAllDepartment() {
-    return departmentRepository.findAll();
+  public List<Department> queryDepartment(DepartmentQueryDto departmentQueryDto) {
+    return departmentRepository.fetchBy(departmentQueryDto);
   }
 
   public PageResponseDto<List<Department>> pageQueryDepartment(
