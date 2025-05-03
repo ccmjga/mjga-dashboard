@@ -1,7 +1,7 @@
 import client from "@/api/client";
 import { computed, ref } from "vue";
 import type { components } from "../../api/types/schema";
-import type { Role } from "../../types/role";
+import type { RoleModel } from "../../types/role";
 import { usePagination } from "../page";
 
 export const useRolesQuery = (page = 1, size = 10) => {
@@ -11,7 +11,7 @@ export const useRolesQuery = (page = 1, size = 10) => {
 	});
 
 	const total = ref<number>(0);
-	const roles = ref<Role[]>();
+	const roles = ref<RoleModel[]>();
 	const roleWithDetail = ref<components["schemas"]["RoleDto"]>();
 
 	const getRoleWithDetail = async (roleId: number) => {

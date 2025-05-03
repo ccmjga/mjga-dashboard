@@ -4,7 +4,7 @@
       <nav class="flex mb-5" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
           <li class="inline-flex items-center">
-            <a href="#"
+            <RouterLink :to="{name: RouteName.USERVIEW}"
               class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
               <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -12,7 +12,7 @@
                 </path>
               </svg>
               首页
-            </a>
+            </RouterLink>
           </li>
           <li>
             <div class="flex items-center">
@@ -67,21 +67,22 @@
         <form action="#">
           <div class="grid grid-cols-6 gap-6">
             <div class="col-span-6 ">
-              <label for="current-username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">用户名</label>
+              <label for="current-username"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">用户名</label>
               <input type="text" name="current-username" id="current-username" v-model="userForm.username"
                 class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 required>
             </div>
             <div class="col-span-6 ">
-              <label for="current-password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">密码</label>
+              <label for="current-password"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">密码</label>
               <input type="password" name="current-password" id="current-password" v-model="userForm.password"
                 class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 placeholder="••••••••" required>
             </div>
             <div class="col-span-6 ">
               <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">确认密码</label>
-              <input type="password"
-                id="password" v-model="userForm.confirmPassword"
+              <input type="password" id="password" v-model="userForm.confirmPassword"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="••••••••" required>
             </div>
@@ -90,13 +91,13 @@
               <select id="category" v-model="userForm.enable"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                 <option :value=true>启用</option>
-                <option :value=false >关闭</option>
+                <option :value=false>关闭</option>
               </select>
             </div>
             <div class="col-span-6 sm:col-full">
               <button
-                class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" @click.prevent="handleUpdateClick"
-                type="submit">保存</button>
+                class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                @click.prevent="handleUpdateClick" type="submit">保存</button>
             </div>
           </div>
         </form>
@@ -113,10 +114,11 @@ import { initFlowbite } from "flowbite";
 import { onMounted, ref } from "vue";
 import { z } from "zod";
 import useAlertStore from "../composables/store/useAlertStore";
+import { RouteName } from "../router/constants";
 
 const { user } = useUserStore();
 const { upsertCurrentUser } = useUserAuth();
-const { showAlert } = useAlertStore();
+const alertStore = useAlertStore();
 
 const userForm = ref({
 	username: user.username,
@@ -130,21 +132,32 @@ onMounted(() => {
 });
 
 const handleUpdateClick = async () => {
-	const validatedData = z
-		.object({
-			username: z.string().min(1, "用户名长度不正确"),
-			password: z.string().min(1, "密码过短"),
-			confirmPassword: z.string(),
-			enable: z.boolean(),
-		})
-		.refine((data) => data.password === data.confirmPassword, {
-			message: "您的密码输入不一致。",
-		})
-		.parse(userForm.value);
-	await upsertCurrentUser(validatedData);
-	showAlert({
-		content: "用户信息更新成功",
-		level: "success",
-	});
+	let validatedData = undefined;
+	try {
+		validatedData = z
+			.object({
+				username: z.string().min(4, "用户名长度不能小于4个字符"),
+				password: z.string().min(5, "密码长度不能小于5个字符"),
+				confirmPassword: z.string(),
+				enable: z.boolean(),
+			})
+			.refine((data) => data.password === data.confirmPassword, {
+				message: "密码输入不一致。",
+			})
+			.parse(userForm.value);
+		await upsertCurrentUser(validatedData);
+		alertStore.showAlert({
+			content: "操作成功",
+			level: "success",
+		});
+	} catch (error) {
+		if (error instanceof z.ZodError) {
+			console.error("表单验证错误:", error.errors);
+			alertStore.showAlert({
+				level: "error",
+				content: `请检查您填写的字段：${error.errors[0].path}`,
+			});
+		}
+	}
 };
 </script>

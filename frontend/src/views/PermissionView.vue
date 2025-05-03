@@ -4,7 +4,7 @@
       <nav class="flex mb-5" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
           <li class="inline-flex items-center">
-            <RouterLink :to="`${RoutePath.DASHBOARD}`"
+            <RouterLink :to="{name: RouteName.USERVIEW}"
               class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
               <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -158,7 +158,7 @@
   }" :onSubmit="deleteSelectedPermission" title="确定删除该权限吗" content="删除权限"></PermissionDeleteModal>
   <PermissionUpsertModal :onSubmit="handleUpsertModalSubmit" :closeModal="() => {
     permissionUpsertModal!.hide();
-  }" mode="edit" :permission="selectedPermission">
+  }" :permission="selectedPermission">
   </PermissionUpsertModal>
 </template>
 
@@ -167,11 +167,13 @@ import PermissionUpsertModal from "@/components/PermissionUpsertModal.vue";
 import PermissionDeleteModal from "@/components/PopupModal.vue";
 import usePermissionDelete from "@/composables/permission/usePermissionDelete";
 
-import { RoutePath } from "@/router/constants";
-import type { Permission } from "@/types/permission";
+import { RouteName, RoutePath } from "@/router/constants";
+import type { Permission, PermissionUpsertModel } from "@/types/permission";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
 import usePermissionsQuery from "../composables/permission/usePermissionQuery";
+import useAlertStore from "../composables/store/useAlertStore";
+import usePermissionUpsert from "../composables/permission/usePermissionUpsert";
 
 const permissionName = ref<string>("");
 const selectedPermission = ref<Permission>();
@@ -194,6 +196,8 @@ const {
 } = usePermissionsQuery(1, 10);
 
 const { deletePermission } = usePermissionDelete();
+const permissionUpsert = usePermissionUpsert();
+const alertStore = useAlertStore();
 
 onMounted(async () => {
 	await fetchPermissionsWith(currentPage.value, pageSize.value, {
@@ -218,10 +222,14 @@ onMounted(async () => {
 	);
 });
 
-const handleUpsertModalSubmit = async () => {
-	permissionUpsertModal.value?.hide();
+const handleUpsertModalSubmit = async (data: PermissionUpsertModel) => {
+	await permissionUpsert.upsertPermission(data);
 	await fetchPermissionsWith(currentPage.value, pageSize.value, {
 		name: permissionName.value,
+	});
+	alertStore.showAlert({
+		content: "操作成功",
+		level: "success",
 	});
 };
 
@@ -239,6 +247,10 @@ const deleteSelectedPermission = async (event: Event) => {
 		name: permissionName.value,
 	});
 	permissionDeleteModal.value?.hide();
+	alertStore.showAlert({
+		content: "删除成功",
+		level: "success",
+	});
 };
 
 const handleDeletePermissionClick = async (permission: Permission) => {

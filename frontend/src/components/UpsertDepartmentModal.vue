@@ -10,7 +10,7 @@
         <div
           class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-            {{ mode === 'edit' ? '编辑用户' : '新增用户' }}
+            部门管理
           </h3>
           <button type="button" @click="closeModal"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
@@ -28,17 +28,20 @@
               <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">部门名称</label>
               <input type="text" id="name" v-model="formData.name"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="•••••••••" required />
+                required />
             </div>
-            <div class="col-span-2 sm:col-span-1">
-              <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">状态</label>
+            <div class="col-span-2">
+              <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">上级部门</label>
               <select id="category" v-model="formData.parentId"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option selected>选择上级部门</option>
-                <option v-for="department in departments" :key="department.id" :value="department.id">{{
+                <option v-for="department in allDepartments" :key="department.id" :value="department.id"
+                  :selected="department.id === formData.parentId">{{
                   department.name
                   }}</option>
               </select>
+            </div>
+            <div class="col-span-1">
+              <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">状态</label>
               <select id="category" v-model="formData.enable"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                 <option :value=true>启用</option>
@@ -66,49 +69,47 @@ import type { DepartmentUpsertRow } from "../types/department";
 
 const alertStore = useAlertStore();
 
-const { mode, department, onSubmit } = defineProps<{
-	mode: "edit" | "create";
+const { department, allDepartments, onSubmit } = defineProps<{
 	department: components["schemas"]["DepartmentUpsertDto"] | undefined;
+	allDepartments: components["schemas"]["Department"][] | undefined;
 	closeModal: () => void;
 	onSubmit: (department: DepartmentUpsertRow) => void;
 }>();
 
 const formData = ref({
-	...department ?? {
-    id: undefined,
+	...(department ?? {
+		id: undefined,
 		name: undefined,
 		parentId: undefined,
 		enable: undefined,
-	},
+	}),
 });
 
 watch(
 	() => department,
 	(newDepartment) => {
 		formData.value = {
-			...newDepartment ?? {
-    id: undefined,
-		name: undefined,
-		parentId: undefined,
-		enable: undefined,
-	},
-};
+			...(newDepartment ?? {
+				id: undefined,
+				name: undefined,
+				parentId: undefined,
+				enable: undefined,
+			}),
+		};
 	},
 );
 
 const handleSubmit = () => {
-	const userSchema = z
-		.object({
-			name: z.string().min(1, "部门名称至少1个字符"),
-			enable: z.boolean(),
-		})
+	const userSchema = z.object({
+		name: z.string().min(1, "部门名称至少1个字符"),
+		enable: z.boolean(),
+	});
 
 	try {
 		userSchema.parse(formData.value);
 		onSubmit(formData.value as DepartmentUpsertRow);
 	} catch (error) {
 		if (error instanceof z.ZodError) {
-			console.error("表单验证错误:", error.errors);
 			alertStore.showAlert({
 				level: "error",
 				content: `请检查您填写的字段：${error.errors[0].path}`,

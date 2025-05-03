@@ -1,6 +1,6 @@
 import client from "@/api/client";
 import { ref } from "vue";
-import type { UserRolePermission } from "../../types/user";
+import type { UserRolePermissionModel } from "../../types/user";
 import { usePagination } from "../page";
 
 export const useUserQuery = () => {
@@ -10,8 +10,8 @@ export const useUserQuery = () => {
 	});
 
 	const total = ref<number>(0);
-	const users = ref<UserRolePermission[]>([]);
-	const user = ref<UserRolePermission>();
+	const users = ref<UserRolePermissionModel[]>([]);
+	const user = ref<UserRolePermissionModel>();
 
 	const getUserWithDetail = async (userId: number) => {
 		const { data } = await client.GET("/urp/user", {

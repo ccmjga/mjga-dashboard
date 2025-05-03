@@ -511,42 +511,6 @@
       }
     },
     "/department": {
-      "get": {
-        "tags": [
-          "department-controller"
-        ],
-        "operationId": "pageQueryDepartments",
-        "parameters": [
-          {
-            "name": "pageRequestDto",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/PageRequestDto"
-            }
-          },
-          {
-            "name": "departmentQueryDto",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/DepartmentQueryDto"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/PageResponseDtoListDepartment"
-                }
-              }
-            }
-          }
-        }
-      },
       "post": {
         "tags": [
           "department-controller"
@@ -787,6 +751,67 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/PageResponseDtoListJobTriggerDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/department/list": {
+      "get": {
+        "tags": [
+          "department-controller"
+        ],
+        "operationId": "pageQueryDepartments",
+        "parameters": [
+          {
+            "name": "pageRequestDto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/PageRequestDto"
+            }
+          },
+          {
+            "name": "departmentQueryDto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/DepartmentQueryDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseDtoListDepartment"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/department/all": {
+      "get": {
+        "tags": [
+          "department-controller"
+        ],
+        "operationId": "queryAllDepartments",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Department"
+                  }
                 }
               }
             }

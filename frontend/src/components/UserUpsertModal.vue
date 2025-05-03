@@ -10,7 +10,7 @@
         <div
           class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-            {{ mode === 'edit' ? '编辑用户' : '新增用户' }}
+            用户管理
           </h3>
           <button type="button" @click="closeModal"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
@@ -28,20 +28,20 @@
               <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">用户名</label>
               <input type="text" name="用户名" id="name" v-model="formData.username"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                placeholder="Type product name" required="true">
+                required="true">
             </div>
             <div class="col-span-2">
               <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">密码</label>
               <input type="password" id="password" v-model="formData.password"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="•••••••••" required />
+                required />
             </div>
             <div class="col-span-2">
               <label for="confirm_password"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">确认密码</label>
               <input type="password" id="confirm_password" v-model="formData.confirmPassword"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="•••••••••" required />
+                required />
             </div>
             <div class="col-span-2 sm:col-span-1">
               <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">状态</label>
@@ -64,25 +64,24 @@
 </template>
 <script setup lang="ts">
 import useAlertStore from "@/composables/store/useAlertStore";
-import { useUserUpsert } from "@/composables/user/useUserUpsert";
-import type { UserRolePermission } from "@/types/user";
-import { en } from "@faker-js/faker";
+import type { UserRolePermissionModel, UserUpsertSubmitModel } from "@/types/user";
 import { initFlowbite } from "flowbite";
 import { onMounted, ref, watch } from "vue";
 import { z } from "zod";
 
-const userUpsert = useUserUpsert();
 const alertStore = useAlertStore();
 
-const { mode, user, onSubmit } = defineProps<{
-	mode: "edit" | "create";
-	user?: UserRolePermission;
+const { user, onSubmit } = defineProps<{
+	user?: UserRolePermissionModel;
 	closeModal: () => void;
-	onSubmit: (event: Event) => void;
+	onSubmit: (data: UserUpsertSubmitModel) => void;
 }>();
 
-const formData = ref<UserRolePermission & { confirmPassword?: string }>({
-	...user,
+const formData = ref({
+	id: user?.id,
+	username: user?.username,
+	password: user?.password,
+	enable: user?.enable,
 	confirmPassword: user?.password,
 });
 
@@ -90,17 +89,20 @@ watch(
 	() => user,
 	(newUser) => {
 		formData.value = {
-			...newUser,
-			confirmPassword: user?.password,
+			id: newUser?.id,
+			username: newUser?.username,
+			password: newUser?.password,
+			enable: newUser?.enable,
+			confirmPassword: newUser?.password,
 		};
 	},
 );
 
-const handleSubmit = (event: Event) => {
+const handleSubmit = () => {
 	const userSchema = z
 		.object({
-			username: z.string().min(1, "用户名至少1个字符"),
-			password: z.string().min(1, "密码至少1个字符"),
+			username: z.string().min(4, "用户名至少4个字符"),
+			password: z.string().min(5, "密码至少5个字符"),
 			confirmPassword: z.string(),
 			enable: z.boolean(),
 		})
@@ -110,11 +112,9 @@ const handleSubmit = (event: Event) => {
 
 	try {
 		const validatedData = userSchema.parse(formData.value);
-		userUpsert.upsertUser(validatedData);
-		onSubmit(event);
+		onSubmit(validatedData);
 	} catch (error) {
 		if (error instanceof z.ZodError) {
-			console.error("表单验证错误:", error.errors);
 			alertStore.showAlert({
 				level: "error",
 				content: `请检查您填写的字段：${error.errors[0].path}`,

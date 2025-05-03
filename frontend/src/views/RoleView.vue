@@ -4,7 +4,7 @@
       <nav class="flex mb-5" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
           <li class="inline-flex items-center">
-            <RouterLink :to="`${RoutePath.DASHBOARD}`"
+            <RouterLink :to="{name: RouteName.USERVIEW}"
               class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
               <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -169,10 +169,10 @@
 
   <RoleDeleteModal :id="'role-delete-modal'" :closeModal="() => {
     roleDeleteModal!.hide();
-  }" :onSubmit="deleteSelectedRole" title="确定删除该角色吗" content="删除角色"></RoleDeleteModal>
+  }" :onSubmit="handleDeletedModalSubmit" title="确定删除该角色吗" content="删除角色"></RoleDeleteModal>
   <RoleUpsertModal :onSubmit="handleUpsertModalSubmit" :closeModal="() => {
     roleUpsertModal!.hide();
-  }" mode="edit" :role="selectedRole">
+  }" :role="selectedRole">
   </RoleUpsertModal>
 </template>
 
@@ -181,14 +181,16 @@ import RoleDeleteModal from "@/components/PopupModal.vue";
 import RoleUpsertModal from "@/components/RoleUpsertModal.vue";
 import useRoleDelete from "@/composables/role/useRoleDelete";
 import { useRolesQuery } from "@/composables/role/useRolesQuery";
-import { RouteName, RoutePath } from "@/router/constants";
-import type { Role } from "@/types/role";
+import { RouteName } from "@/router/constants";
+import type { RoleModel, RoleUpsertModel } from "@/types/role";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import useAlertStore from "../composables/store/useAlertStore";
+import { useRoleUpsert } from "../composables/role/useRoleUpsert";
 
 const roleName = ref<string>("");
-const selectedRole = ref<Role>();
+const selectedRole = ref<RoleModel>();
 const roleUpsertModal = ref<ModalInterface>();
 const roleDeleteModal = ref<ModalInterface>();
 
@@ -208,8 +210,9 @@ const {
 } = useRolesQuery(1, 10);
 
 const { deleteRole } = useRoleDelete();
+const alertStore = useAlertStore();
 const router = useRouter();
-
+const roleUpsert = useRoleUpsert();
 onMounted(async () => {
 	await fetchRolesWith(currentPage.value, pageSize.value, {
 		name: roleName.value,
@@ -231,37 +234,46 @@ onMounted(async () => {
 	);
 });
 
-const handleUpsertModalSubmit = async () => {
-	roleUpsertModal.value?.hide();
+const handleUpsertModalSubmit = async (data: RoleUpsertModel) => {
+	await roleUpsert.upsertRole(data);
 	await fetchRolesWith(currentPage.value, pageSize.value, {
 		name: roleName.value,
 	});
+	roleUpsertModal.value?.hide();
+	alertStore.showAlert({
+		content: "操作成功",
+		level: "success",
+	});
 };
 
-const handleUpsertRoleClick = async (role?: Role) => {
+const handleUpsertRoleClick = async (role?: RoleModel) => {
 	selectedRole.value = role;
 	await nextTick(() => {
 		roleUpsertModal.value?.show();
 	});
 };
 
-const deleteSelectedRole = async (event: Event) => {
+const handleDeletedModalSubmit = async () => {
 	if (!selectedRole?.value?.id) return;
 	await deleteRole(selectedRole.value.id);
 	await fetchRolesWith(currentPage.value, pageSize.value, {
 		name: roleName.value,
 	});
 	roleDeleteModal.value?.hide();
+	alertStore.showAlert({
+		content: "删除成功",
+		level: "success",
+	});
 };
 
-const handleDeleteRoleClick = async (role: Role) => {
+const handleDeleteRoleClick = async (role: RoleModel) => {
 	selectedRole.value = role;
 	await nextTick(() => {
 		roleDeleteModal.value?.show();
 	});
 };
 
-const handleBindPermissionClick = async (role: Role) => {
+const handleBindPermissionClick = async (role: RoleModel) => {
 	router.push({
 		name: RouteName.BINDPERMISSIONVIEW,
 		params: { roleId: role.id },

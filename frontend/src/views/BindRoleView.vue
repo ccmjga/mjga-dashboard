@@ -4,7 +4,7 @@
       <nav class="flex mb-5" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
           <li class="inline-flex items-center">
-            <RouterLink :to="{name: RouteName.OVERVIEW}"
+            <RouterLink :to="{name: RouteName.USERVIEW}"
               class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
               <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -213,7 +213,6 @@ const handleUnbindRoleSubmit = async () => {
 watch(roles, async () => {
 	for (const role of roles.value ?? []) {
 		if (user.value?.roles?.some((userRole) => userRole.id === role.id)) {
-			// biome-ignore lint/style/noNonNullAssertion: <explanation>
 			checkedRoleIds.value.push(role.id!);
 		}
 	}
@@ -262,7 +261,6 @@ const handlePageChange = async (page: number) => {
 
 watch(allChecked, async () => {
 	if (allChecked.value) {
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		checkedRoleIds.value = roles.value?.map((r) => r.id!) ?? [];
 	} else {
 		checkedRoleIds.value = [];

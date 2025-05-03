@@ -3,9 +3,10 @@
     class="bg-gray-900/50 dark:bg-gray-900/80 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-md max-h-full">
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+        <div
+          class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-            {{ mode === 'create' ? '新增权限' : '编辑权限' }}
+            权限管理
           </h3>
           <button @click="closeModal" type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
@@ -41,32 +42,56 @@
 </template>
 
 <script setup lang="ts">
-import type { Permission } from "@/types/permission";
+import useAlertStore from "@/composables/store/useAlertStore";
+import type {
+	PermissionModel,
+	PermissionUpsertModel,
+} from "@/types/permission";
 import { computed, ref, watch } from "vue";
+import { z } from "zod";
 
-const props = defineProps<{
-	mode: "create" | "edit";
-	permission?: Permission;
+const { permission, onSubmit, closeModal } = defineProps<{
+	permission?: PermissionModel;
 	closeModal: () => void;
-	onSubmit: (data: Partial<Permission>) => void;
+	onSubmit: (data: PermissionUpsertModel) => void;
 }>();
 
-const formData = ref<Partial<Permission>>({
-	name: "",
-	code: "",
+const alertStore = useAlertStore();
+
+const formData = ref<PermissionUpsertModel>({
+	id: permission?.id,
+	name: permission?.name,
+	code: permission?.code,
 });
 
 watch(
-	() => props.permission,
+	() => permission,
 	(newVal) => {
 		if (newVal) {
-			formData.value = { ...newVal };
+			formData.value.id = newVal.id;
+			formData.value.name = newVal.name;
+			formData.value.code = newVal.code;
 		}
 	},
 	{ immediate: true },
 );
 
 const handleSubmit = () => {
-	props.onSubmit(formData.value);
+	const permissionSchema = z.object({
+		name: z.string().min(3, "权限名称至少3个字符"),
+		code: z.string().min(3, "权限代码至少3个字符"),
+	});
+
+	try {
+		permissionSchema.parse(formData.value);
+		onSubmit(formData.value);
+	} catch (error) {
+		if (error instanceof z.ZodError) {
+			alertStore.showAlert({
+				level: "error",
+				content: `请检查您填写的字段：${error.errors[0].path}`,
+			});
+		}
+	}
 };
 </script>

@@ -4,7 +4,7 @@
       <nav class="flex mb-5" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
           <li class="inline-flex items-center">
-            <RouterLink :to="`${RouteName.OVERVIEW}`"
+            <RouterLink :to="{name: RouteName.USERVIEW}"
               class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
               <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -184,7 +184,7 @@
   }" :onSubmit="handleDeleteUserSubmit" title="确定删除该用户吗" content="删除用户"></UserDeleteModal>
   <UserUpsertModal :id="'user-upsert-modal'" :onSubmit="handleUpsertUserSubmit" :closeModal="() => {
     userUpsertModal!.hide();
-  }" mode="edit" :user="selectedUser">
+  }" :user="selectedUser">
   </UserUpsertModal>
 </template>
 
@@ -194,14 +194,15 @@ import UserUpsertModal from "@/components/UserUpsertModal.vue";
 import useUserDelete from "@/composables/user/useUserDelete";
 import { useUserQuery } from "@/composables/user/useUserQuery";
 import { RouteName } from "@/router/constants";
-import type { UserRolePermission } from "@/types/user";
+import type { UserRolePermissionModel, UserUpsertSubmitModel } from "@/types/user";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import useAlertStore from "../composables/store/useAlertStore";
+import { useUserUpsert } from "../composables/user/useUserUpsert";
 
 const username = ref<string>("");
-const selectedUser = ref<UserRolePermission>();
+const selectedUser = ref<UserRolePermissionModel>();
 const userUpsertModal = ref<ModalInterface>();
 const userDeleteModal = ref<ModalInterface>();
 const router = useRouter();
@@ -222,6 +223,7 @@ const {
 } = useUserQuery();
 
 const { deleteUser } = useUserDelete();
+const userUpsert = useUserUpsert();
 
 const alertStore = useAlertStore();
 
@@ -250,25 +252,26 @@ onMounted(async () => {
 	);
 });
 
-const handleUpsertUserSubmit = async () => {
-	userUpsertModal.value?.hide();
+const handleUpsertUserSubmit = async (data: UserUpsertSubmitModel) => {
+	await userUpsert.upsertUser(data);
 	await fetchUsersWith(currentPage.value, pageSize.value, {
 		username: username.value,
 	});
+	userUpsertModal.value?.hide();
 	alertStore.showAlert({
 		content: "操作成功",
 		level: "success",
 	});
 };
 
-const handleUpsertUserClick = async (user?: UserRolePermission) => {
+const handleUpsertUserClick = async (user?: UserRolePermissionModel) => {
 	selectedUser.value = user;
 	await nextTick(() => {
 		userUpsertModal.value?.show();
 	});
 };
 
-const handleBindRoleClick = async (user: UserRolePermission) => {
+const handleBindRoleClick = async (user: UserRolePermissionModel) => {
 	router.push({
 		name: RouteName.BINDROLEVIEW,
 		params: {
@@ -290,7 +293,7 @@ const handleDeleteUserSubmit = async () => {
 	});
 };
 
-const handleDeleteUserClick = async (user: UserRolePermission) => {
+const handleDeleteUserClick = async (user: UserRolePermissionModel) => {
 	selectedUser.value = user;
 	await nextTick(() => {
 		userDeleteModal.value?.show();

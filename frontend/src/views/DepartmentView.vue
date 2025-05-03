@@ -4,7 +4,7 @@
       <nav class="flex mb-5" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
           <li class="inline-flex items-center">
-            <RouterLink :to="`${RouteName.OVERVIEW}`"
+            <RouterLink :to="{name: RouteName.USERVIEW}"
               class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
               <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -69,8 +69,8 @@
             </div>
           </th>
           <th scope="col" class="px-6 py-3">部门编号</th>
-          <th scope="col" class="px-6 py-3">部门名称</th>
           <th scope="col" class="px-6 py-3">上级部门编号</th>
+          <th scope="col" class="px-6 py-3">部门名称</th>
           <th scope="col" class="px-6 py-3">状态</th>
           <th scope="col" class="px-6 py-3">操作</th>
         </tr>
@@ -89,10 +89,10 @@
             {{ department.id }}
           </td>
           <td class="px-6 py-4">
-            {{ department.name }}
+            {{ department.parentId }}
           </td>
           <td class="px-6 py-4">
-            {{ department.parentId }}
+            {{ department.name }}
           </td>
           <td class="px-6 py-4">
             <div class="flex items-center">
@@ -113,17 +113,6 @@
                   d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
               </svg>
               编辑
-            </button>
-            <button
-              class="flex items-center block gap-x-1
-              bg-yellow-600 hover:bg-yellow-700 focus:outline-none dark:bg-yellow-600 dark:hover:bg-yellow-700
-              focus:ring-yellow-500 block text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              @click="handleDeleteDepartmentClick(department as SelectedDepartmentRow)" type="button">
-              <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                height="24" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-              </svg>
             </button>
             <button
               class="flex items-center block gap-x-1
@@ -184,7 +173,7 @@
   }" :onSubmit="handleDeleteDepartmentSubmit" title="确定删除该部门吗" content="删除部门"></DepartmentDeleteModal>
   <DepartmentUpsertModal :id="'department-upsert-modal'" :onSubmit="handleUpsertDepartmentSubmit" :closeModal="() => {
     departmentUpsertModal!.hide();
-  }" mode="edit" :department="selectedDepartment">
+  }" :department="selectedDepartment" :allDepartments="allDepartments">
   </DepartmentUpsertModal>
 </template>
 
@@ -199,7 +188,7 @@ import useDepartmentDelete from "../composables/department/useDepartmentDelete";
 import { useDepartmentQuery } from "../composables/department/useDepartmentQuery";
 import { useDepartmentUpsert } from "../composables/department/useDepartmentUpsert";
 import useAlertStore from "../composables/store/useAlertStore";
-import type { DepartmentUpsertRow, SelectedDepartmentRow } from "../types/department";
+import type { SelectedDepartmentRow } from "../types/department";
 
 const name = ref<string>("");
 const selectedDepartment = ref<SelectedDepartmentRow>();
@@ -218,7 +207,9 @@ const {
 	},
 	total,
 	departments,
+	allDepartments,
 	fetchDepartmentsWith,
+	fetchAllDepartments,
 } = useDepartmentQuery();
 
 const { deleteDepartment } = useDepartmentDelete();
@@ -228,14 +219,17 @@ const { upsertDepartment } = useDepartmentUpsert();
 const alertStore = useAlertStore();
 
 onMounted(async () => {
+	await fetchAllDepartments();
 	await fetchDepartmentsWith(currentPage.value, pageSize.value, {
 		name: name.value,
 	});
 	initFlowbite();
-	const $upsertModalElement: HTMLElement | null =
-		document.querySelector("#department-upsert-modal");
-	const $deleteModalElement: HTMLElement | null =
-		document.querySelector("#department-delete-modal");
+	const $upsertModalElement: HTMLElement | null = document.querySelector(
+		"#department-upsert-modal",
+	);
+	const $deleteModalElement: HTMLElement | null = document.querySelector(
+		"#department-delete-modal",
+	);
 	departmentUpsertModal.value = new Modal(
 		$upsertModalElement,
 		{},
@@ -252,30 +246,34 @@ onMounted(async () => {
 	);
 });
 
-const handleUpsertDepartmentSubmit = async (department: components["schemas"]["DepartmentUpsertDto"]) => {
+const handleUpsertDepartmentSubmit = async (
+	department: components["schemas"]["DepartmentUpsertDto"],
+) => {
 	departmentUpsertModal.value?.hide();
-  await upsertDepartment({
-    id: department.id,
-    name: department.name,
-    parentId: department.parentId,
-    enable: department.enable
-  });
+	await upsertDepartment({
+		id: department.id,
+		name: department.name,
+		parentId: department.parentId,
+		enable: department.enable,
+	});
 	await fetchDepartmentsWith(currentPage.value, pageSize.value, {
 		name: name.value,
 	});
+	fetchAllDepartments();
 	alertStore.showAlert({
 		content: "操作成功",
 		level: "success",
 	});
 };
 
-const handleUpsertDepartmentClick = async (department?: SelectedDepartmentRow) => {
+const handleUpsertDepartmentClick = async (
+	department?: SelectedDepartmentRow,
+) => {
 	selectedDepartment.value = department;
 	await nextTick(() => {
 		departmentUpsertModal.value?.show();
 	});
 };
-
 
 const handleDeleteDepartmentSubmit = async () => {
 	if (!selectedDepartment?.value?.id) return;
@@ -283,6 +281,7 @@ const handleDeleteDepartmentSubmit = async () => {
 	await fetchDepartmentsWith(currentPage.value, pageSize.value, {
 		name: name.value,
 	});
+	fetchAllDepartments();
 	departmentDeleteModal.value?.hide();
 	alertStore.showAlert({
 		content: "删除成功",
@@ -290,7 +289,9 @@ const handleDeleteDepartmentSubmit = async () => {
 	});
 };
 
-const handleDeleteDepartmentClick = async (department: SelectedDepartmentRow) => {
+const handleDeleteDepartmentClick = async (
+	department: SelectedDepartmentRow,
+) => {
 	selectedDepartment.value = department;
 	await nextTick(() => {
 		departmentDeleteModal.value?.show();

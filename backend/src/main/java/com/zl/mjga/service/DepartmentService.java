@@ -21,6 +21,10 @@ public class DepartmentService {
 
   private final DepartmentRepository departmentRepository;
 
+  public List<Department> queryAllDepartment() {
+    return departmentRepository.findAll();
+  }
+
   public PageResponseDto<List<Department>> pageQueryDepartment(
       PageRequestDto pageRequestDto, DepartmentQueryDto departmentQueryDto) {
     Result<Record> records = departmentRepository.pageFetchBy(pageRequestDto, departmentQueryDto);

@@ -1,4 +1,4 @@
-export interface UserRolePermission {
+export interface UserRolePermissionModel {
 	id?: number;
 	username?: string;
 	password?: string;
@@ -16,4 +16,12 @@ export interface UserRolePermission {
 	createTime?: string;
 }
 
-export type User = UserRolePermission | null;
+export interface UserUpsertSubmitModel {
+	id?: number;
+	username: string;
+	password: string;
+	enable: boolean;
+	confirmPassword?: string;
+}
+
+export type User = UserRolePermissionModel | null;

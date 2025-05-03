@@ -6,8 +6,8 @@ export default [
 	http.get("/urp/user", () => {
 		const generatePermission = () => ({
 			id: faker.number.int({ min: 1, max: 100 }),
-			code: `perm_${faker.lorem.word()}`,
-			name: faker.lorem.words({ min: 1, max: 3 }),
+			code: `perm_${faker.lorem.words({ min: 1, max: 1 })}`,
+			name: faker.lorem.words({ min: 1, max: 1 }),
 		});
 
 		const generateRole = () => ({

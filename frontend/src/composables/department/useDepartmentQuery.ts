@@ -11,6 +11,12 @@ export const useDepartmentQuery = () => {
 
 	const total = ref<number>(0);
 	const departments = ref<components["schemas"]["Department"][]>([]);
+	const allDepartments = ref<components["schemas"]["Department"][]>([]);
+
+	const fetchAllDepartments = async () => {
+		const { data } = await client.GET("/department/all", {});
+		allDepartments.value = data ?? [];
+	};
 
 	const fetchDepartmentsWith = async (
 		page: number,
@@ -20,7 +26,7 @@ export const useDepartmentQuery = () => {
 			enable?: boolean;
 		},
 	) => {
-		const { data } = await client.GET("/department", {
+		const { data } = await client.GET("/department/list", {
 			params: {
 				query: {
 					pageRequestDto: {
@@ -53,6 +59,8 @@ export const useDepartmentQuery = () => {
 		},
 		total,
 		departments,
+		allDepartments,
 		fetchDepartmentsWith,
+		fetchAllDepartments,
 	};
 };

@@ -15,7 +15,7 @@ const dashboardRoutes: RouteRecordRaw = {
 		{
 			path: RoutePath.OVERVIEW,
 			name: RouteName.OVERVIEW,
-			component: OverView,
+			component: () => import("@/views/OverView.vue"),
 			meta: {
 				requiresAuth: true,
 			},
@@ -38,6 +38,15 @@ const dashboardRoutes: RouteRecordRaw = {
 			path: RoutePath.SCHEDULERVIEW,
 			name: RouteName.SCHEDULERVIEW,
 			component: () => import("@/views/SchedulerView.vue"),
+			meta: {
+				requiresAuth: true,
+				hasRole: ROLE.ADMIN,
+			},
+		},
+		{
+			path: RoutePath.DEPARTMENTVIEW,
+			name: RouteName.DEPARTMENTVIEW,
+			component: () => import("@/views/DepartmentView.vue"),
 			meta: {
 				requiresAuth: true,
 				hasRole: ROLE.ADMIN,

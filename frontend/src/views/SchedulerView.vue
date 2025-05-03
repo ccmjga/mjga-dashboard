@@ -4,7 +4,7 @@
       <nav class="flex mb-5" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 text-sm font-medium md:space-x-2">
           <li class="inline-flex items-center">
-            <RouterLink :to="`${RoutePath.DASHBOARD}`"
+            <RouterLink :to="{name: RouteName.USERVIEW}"
               class="inline-flex items-center text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-white">
               <svg class="w-5 h-5 mr-2.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -177,10 +177,10 @@
   }" :onSubmit="handleResumeModalConfirmClick" title="确定恢复该任务吗？" content="恢复任务"></PopupModal>
   <PopupModal :id="'job-pause-modal'" :closeModal="() => {
     jobPauseModal!.hide();
-  }" :onSubmit="handlePauseModalConfirmClick" title="确定暂停该任务吗" content="暂停任务"></PopupModal>
+  }" :onSubmit="handlePauseModalSubmit" title="确定暂停该任务吗" content="暂停任务"></PopupModal>
   <JobUpdateModal :job="selectedJob" :id="'job-update-modal'" :closeModal="() => {
     jobUpdateModal!.hide();
-  }" :onSubmit="handleJobUpdateModalConfirmClick"></JobUpdateModal>
+  }" :onSubmit="handleJobUpdateModalSubmit"></JobUpdateModal>
 </template>
 
 <script setup lang="ts">
@@ -190,7 +190,7 @@ import { useJobControl } from "@/composables/job/useJobControl";
 import { useJobsPaginationQuery } from "@/composables/job/useJobQuery";
 import { useJobUpdate } from "@/composables/job/useJobUpdate";
 import useAlertStore from "@/composables/store/useAlertStore";
-import { RoutePath } from "@/router/constants";
+import { RouteName, RoutePath } from "@/router/constants";
 import type { JobTriggerDto } from "@/types/jobs";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
@@ -252,9 +252,7 @@ const handleResumeModalConfirmClick = async () => {
 		return;
 	}
 	await resumeTrigger({
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		triggerName: selectedJob.value.triggerName!,
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		triggerGroup: selectedJob.value.group!,
 	});
 	await fetchJobsWith(currentPage.value, pageSize.value, {
@@ -267,13 +265,10 @@ const handleResumeModalConfirmClick = async () => {
 	});
 };
 
-const handleJobUpdateModalConfirmClick = async () => {
+const handleJobUpdateModalSubmit = async () => {
 	await updateCron({
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		triggerName: selectedJob.value!.triggerName!,
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		triggerGroup: selectedJob.value!.group!,
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		cron: selectedJob.value!.cronExpression!,
 	});
 	await fetchJobsWith(currentPage.value, pageSize.value, {
@@ -286,14 +281,12 @@ const handleJobUpdateModalConfirmClick = async () => {
 	});
 };
 
-const handlePauseModalConfirmClick = async () => {
+const handlePauseModalSubmit = async () => {
 	if (selectedJob.value?.triggerState === "PAUSE" || controlLoading.value) {
 		return;
 	}
 	await pauseTrigger({
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		triggerName: selectedJob!.value!.triggerName!,
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
 		triggerGroup: selectedJob!.value!.group!,
 	});
 	await fetchJobsWith(currentPage.value, pageSize.value, {
