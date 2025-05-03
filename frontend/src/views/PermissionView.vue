@@ -115,42 +115,7 @@
       </tbody>
     </table>
 
-    <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4 px-5 pb-5"
-      aria-label="Table navigation">
-      <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
-        显示
-        <span class="font-semibold text-gray-900 dark:text-white">
-          {{ displayRange.start }}-{{ displayRange.end }}
-        </span>
-        共
-        <span class="font-semibold text-gray-900 dark:text-white">{{ total }}</span> 条
-      </span>
-
-      <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-        <li>
-          <a href="#" @click.prevent="handlePageChange(currentPage - 1)" :class="[
-              'flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-              { 'opacity-50 cursor-not-allowed': isFirstPage }
-            ]">上一页</a>
-        </li>
-
-        <li v-for="page in pageNumbers" :key="page">
-          <a href="#" @click.prevent="handlePageChange(page)" :class="[
-              'flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 dark:hover:text-white',
-              currentPage === page 
-                ? 'text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
-                : 'text-gray-500 bg-white dark:text-gray-400'
-            ]">{{ page }}</a>
-        </li>
-
-        <li>
-          <a href="#" @click.prevent="handlePageChange(currentPage + 1)" :class="[
-              'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-              { 'opacity-50 cursor-not-allowed': isLastPage }
-            ]">下一页</a>
-        </li>
-      </ul>
-    </nav>
+    <TablePagination :pageChange="handlePageChange" :total="total" />
   </div>
 
   <PermissionDeleteModal :id="'permission-delete-modal'" :closeModal="() => {
@@ -175,33 +140,21 @@ import usePermissionsQuery from "../composables/permission/usePermissionQuery";
 import useAlertStore from "../composables/store/useAlertStore";
 import usePermissionUpsert from "../composables/permission/usePermissionUpsert";
 import type { PermissionUpsertModel } from "../types/permission";
+import TablePagination from "@/components/TablePagination.vue";
 
 const permissionName = ref<string>("");
 const selectedPermission = ref<components["schemas"]["PermissionDto"]>();
 const permissionUpsertModal = ref<ModalInterface>();
 const permissionDeleteModal = ref<ModalInterface>();
 
-const {
-	pagination: {
-		pageSize,
-		currentPage,
-		totalPages,
-		pageNumbers,
-		displayRange,
-		isFirstPage,
-		isLastPage,
-	},
-	total,
-	permissions,
-	fetchPermissionsWith,
-} = usePermissionsQuery(1, 10);
+const { total, permissions, fetchPermissionsWith } = usePermissionsQuery();
 
 const { deletePermission } = usePermissionDelete();
 const permissionUpsert = usePermissionUpsert();
 const alertStore = useAlertStore();
 
 onMounted(async () => {
-	await fetchPermissionsWith(currentPage.value, pageSize.value, {
+	await fetchPermissionsWith({
 		name: permissionName.value,
 	});
 	initFlowbite();
@@ -225,9 +178,6 @@ onMounted(async () => {
 
 const handleUpsertModalSubmit = async (data: PermissionUpsertModel) => {
 	await permissionUpsert.upsertPermission(data);
-	await fetchPermissionsWith(currentPage.value, pageSize.value, {
-		name: permissionName.value,
-	});
 	alertStore.showAlert({
 		content: "操作成功",
 		level: "success",
@@ -246,9 +196,6 @@ const handleUpsertPermissionClick = async (
 const deleteSelectedPermission = async (event: Event) => {
 	if (!selectedPermission?.value?.id) return;
 	await deletePermission(selectedPermission.value.id);
-	await fetchPermissionsWith(currentPage.value, pageSize.value, {
-		name: permissionName.value,
-	});
 	permissionDeleteModal.value?.hide();
 	alertStore.showAlert({
 		content: "删除成功",
@@ -266,16 +213,19 @@ const handleDeletePermissionClick = async (
 };
 
 const handleSearch = async () => {
-	await fetchPermissionsWith(currentPage.value, pageSize.value, {
+	await fetchPermissionsWith({
 		name: permissionName.value,
 	});
 };
 
-const handlePageChange = async (page: number) => {
-	if (page < 1 || page > totalPages.value) return;
-	await fetchPermissionsWith(page, pageSize.value, {
-		name: permissionName.value,
-	});
+const handlePageChange = async (page: number, pageSize: number) => {
+	await fetchPermissionsWith(
+		{
+			name: permissionName.value,
+		},
+		page,
+		pageSize,
+	);
 };
 </script>
 

@@ -1,14 +1,8 @@
 import client from "@/api/client";
 import { ref } from "vue";
-import { usePagination } from "../page";
 import type { components } from "../../api/types/schema";
 
 export const useUserQuery = () => {
-	const paginationHooks = usePagination({
-		initialPage: 1,
-		initialPageSize: 10,
-	});
-
 	const total = ref<number>(0);
 	const users = ref<components["schemas"]["UserRolePermissionDto"][]>([]);
 	const user = ref<components["schemas"]["UserRolePermissionDto"]>();
@@ -25,11 +19,11 @@ export const useUserQuery = () => {
 	};
 
 	const fetchUsersWith = async (
-		page: number,
-		size: number,
 		param: {
 			username?: string;
 		},
+		page = 1,
+		size = 10,
 	) => {
 		const { data } = await client.GET("/urp/users", {
 			params: {
@@ -44,24 +38,9 @@ export const useUserQuery = () => {
 		});
 		total.value = !data || !data.total ? 0 : data.total;
 		users.value = data?.data ?? [];
-
-		paginationHooks.updatePaginationState({
-			currentPage: page,
-			pageSize: size,
-			total: total.value,
-		});
 	};
 
 	return {
-		pagination: {
-			pageSize: paginationHooks.pageSize,
-			currentPage: paginationHooks.currentPage,
-			totalPages: paginationHooks.totalPages,
-			pageNumbers: paginationHooks.pageNumbers,
-			displayRange: paginationHooks.displayRange,
-			isFirstPage: paginationHooks.isFirstPage,
-			isLastPage: paginationHooks.isLastPage,
-		},
 		total,
 		users,
 		user,

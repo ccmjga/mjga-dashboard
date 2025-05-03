@@ -108,42 +108,7 @@
       </tbody>
     </table>
 
-    <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4 px-5 pb-5"
-      aria-label="Table navigation">
-      <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
-        显示
-        <span class="font-semibold text-gray-900 dark:text-white">
-          {{ displayRange.start }}-{{ displayRange.end }}
-        </span>
-        共
-        <span class="font-semibold text-gray-900 dark:text-white">{{ total }}</span> 条
-      </span>
-
-      <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-        <li>
-          <a href="#" @click.prevent="handlePageChange(currentPage - 1)" :class="[
-              'flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-              { 'opacity-50 cursor-not-allowed': isFirstPage }
-            ]">上一页</a>
-        </li>
-
-        <li v-for="page in pageNumbers" :key="page">
-          <a href="#" @click.prevent="handlePageChange(page)" :class="[
-              'flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 dark:hover:text-white',
-              currentPage === page 
-                ? 'text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
-                : 'text-gray-500 bg-white dark:text-gray-400'
-            ]">{{ page }}</a>
-        </li>
-
-        <li>
-          <a href="#" @click.prevent="handlePageChange(currentPage + 1)" :class="[
-              'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-              { 'opacity-50 cursor-not-allowed': isLastPage }
-            ]">下一页</a>
-        </li>
-      </ul>
-    </nav>
+    <TablePagination :pageChange="handlePageChange" :total="total" />
   </div>
 
   <BindModal :id="'permission-bind-modal'" :closeModal="() => {
@@ -164,6 +129,7 @@ import { useRoute } from "vue-router";
 import { usePermissionBind } from "../composables/permission/usePermissionBind";
 import usePermissionsQuery from "../composables/permission/usePermissionQuery";
 import useAlertStore from "../composables/store/useAlertStore";
+import TablePagination from "@/components/TablePagination.vue";
 
 const permissionName = ref<string>("");
 const checkedPermissionIds = ref<number[]>([]);
@@ -174,20 +140,7 @@ const $route = useRoute();
 const bindState = ref<"BIND" | "ALL" | "UNBIND">("BIND");
 
 const alertStore = useAlertStore();
-const {
-	pagination: {
-		pageSize,
-		currentPage,
-		totalPages,
-		pageNumbers,
-		displayRange,
-		isFirstPage,
-		isLastPage,
-	},
-	total,
-	permissions,
-	fetchPermissionsWith,
-} = usePermissionsQuery();
+const { total, permissions, fetchPermissionsWith } = usePermissionsQuery();
 const { bindPermission, unbindPermission } = usePermissionBind();
 
 const handleBindPermissionSubmit = async () => {
@@ -215,7 +168,7 @@ const handleUnbindPermissionSubmit = async () => {
 };
 
 onMounted(async () => {
-	await fetchPermissionsWith(currentPage.value, pageSize.value, {
+	await fetchPermissionsWith({
 		name: permissionName.value,
 		roleId: Number($route.params.roleId),
 		bindState: bindState.value,
@@ -240,20 +193,23 @@ onMounted(async () => {
 });
 
 const handleSearch = async () => {
-	await fetchPermissionsWith(currentPage.value, pageSize.value, {
+	await fetchPermissionsWith({
 		name: permissionName.value,
 		roleId: Number($route.params.roleId),
 		bindState: bindState.value,
 	});
 };
 
-const handlePageChange = async (page: number) => {
-	if (page < 1 || page > totalPages.value) return;
-	await fetchPermissionsWith(page, pageSize.value, {
-		name: permissionName.value,
-		roleId: Number($route.params.roleId),
-		bindState: bindState.value,
-	});
+const handlePageChange = async (page: number, pageSize: number) => {
+	await fetchPermissionsWith(
+		{
+			name: permissionName.value,
+			roleId: Number($route.params.roleId),
+			bindState: bindState.value,
+		},
+		page,
+		pageSize,
+	);
 };
 
 watch(allChecked, async () => {

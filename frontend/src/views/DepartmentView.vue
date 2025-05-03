@@ -255,9 +255,13 @@ const handleSearch = async () => {
 };
 
 const handlePageChange = async (page: number, size: number) => {
-	await fetchDepartmentWith({
-		name: name.value,
-	}, page, size);
+	await fetchDepartmentWith(
+		{
+			name: name.value,
+		},
+		page,
+		size,
+	);
 };
 </script>
 

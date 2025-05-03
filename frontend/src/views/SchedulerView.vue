@@ -134,47 +134,12 @@
         </tr>
       </tbody>
     </table>
-    <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4 px-5 pb-5"
-      aria-label="Table navigation">
-      <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
-        显示
-        <span class="font-semibold text-gray-900 dark:text-white">
-          {{ displayRange.start }}-{{ displayRange.end }}
-        </span>
-        共
-        <span class="font-semibold text-gray-900 dark:text-white">{{ total }}</span> 条
-      </span>
-
-      <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-        <li>
-          <a href="#" @click.prevent="handlePageChange(currentPage - 1)" :class="[
-              'flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-              { 'opacity-50 cursor-not-allowed': isFirstPage }
-            ]">上一页</a>
-        </li>
-
-        <li v-for="page in pageNumbers" :key="page">
-          <a href="#" @click.prevent="handlePageChange(page)" :class="[
-              'flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 dark:hover:text-white',
-              currentPage === page 
-                ? 'text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
-                : 'text-gray-500 bg-white dark:text-gray-400'
-            ]">{{ page }}</a>
-        </li>
-
-        <li>
-          <a href="#" @click.prevent="handlePageChange(currentPage + 1)" :class="[
-              'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-              { 'opacity-50 cursor-not-allowed': isLastPage }
-            ]">下一页</a>
-        </li>
-      </ul>
-    </nav>
+    <TablePagination :pageChange="handlePageChange" :total="total" />
   </div>
 
   <PopupModal :id="'job-resume-modal'" :closeModal="() => {
     jobResumeModal!.hide();
-  }" :onSubmit="handleResumeModalConfirmClick" title="确定恢复该任务吗？" content="恢复任务"></PopupModal>
+  }" :onSubmit="handleResumeModalSubmit" title="确定恢复该任务吗？" content="恢复任务"></PopupModal>
   <PopupModal :id="'job-pause-modal'" :closeModal="() => {
     jobPauseModal!.hide();
   }" :onSubmit="handlePauseModalSubmit" title="确定暂停该任务吗" content="暂停任务"></PopupModal>
@@ -194,6 +159,7 @@ import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
 import type { components } from "../api/types/schema";
 import { RouteName } from "@/router/constants";
+import TablePagination from "@/components/TablePagination.vue";
 
 const jobName = ref<string>("");
 const jobResumeModal = ref<ModalInterface>();
@@ -201,20 +167,7 @@ const jobPauseModal = ref<ModalInterface>();
 const jobUpdateModal = ref<ModalInterface>();
 const selectedJob = ref<components["schemas"]["JobTriggerDto"]>();
 
-const {
-	pagination: {
-		pageSize,
-		currentPage,
-		totalPages,
-		pageNumbers,
-		displayRange,
-		isFirstPage,
-		isLastPage,
-	},
-	jobs,
-	total,
-	fetchJobsWith,
-} = useJobsPaginationQuery(1, 10);
+const { jobs, total, fetchJobsWith } = useJobsPaginationQuery();
 
 const alertStore = useAlertStore();
 
@@ -249,7 +202,7 @@ const handlePauseJobClick = async (
 	});
 };
 
-const handleResumeModalConfirmClick = async () => {
+const handleResumeModalSubmit = async () => {
 	if (selectedJob.value?.triggerState !== "PAUSE") {
 		return;
 	}
@@ -257,13 +210,13 @@ const handleResumeModalConfirmClick = async () => {
 		triggerName: selectedJob.value.triggerName!,
 		triggerGroup: selectedJob.value.group!,
 	});
-	await fetchJobsWith(currentPage.value, pageSize.value, {
-		name: jobName.value,
-	});
 	jobResumeModal.value?.hide();
 	alertStore.showAlert({
 		level: "success",
 		content: "操作成功",
+	});
+	await fetchJobsWith({
+		name: jobName.value,
 	});
 };
 
@@ -273,49 +226,52 @@ const handleJobUpdateModalSubmit = async () => {
 		triggerGroup: selectedJob.value!.group!,
 		cron: selectedJob.value!.cronExpression!,
 	});
-	await fetchJobsWith(currentPage.value, pageSize.value, {
-		name: jobName.value,
-	});
 	jobUpdateModal.value?.hide();
 	alertStore.showAlert({
 		level: "success",
 		content: "操作成功",
 	});
+	await fetchJobsWith({
+		name: jobName.value,
+	});
 };
 
 const handlePauseModalSubmit = async () => {
-	if (selectedJob.value?.triggerState === "PAUSE" || controlLoading.value) {
+	if (selectedJob.value?.triggerState === "PAUSE") {
 		return;
 	}
 	await pauseTrigger({
 		triggerName: selectedJob!.value!.triggerName!,
 		triggerGroup: selectedJob!.value!.group!,
 	});
-	await fetchJobsWith(currentPage.value, pageSize.value, {
-		name: jobName.value,
-	});
 	jobPauseModal.value?.hide();
 	alertStore.showAlert({
 		level: "success",
 		content: "操作成功",
 	});
+	await fetchJobsWith({
+		name: jobName.value,
+	});
 };
 
 const handleSearch = async () => {
-	await fetchJobsWith(currentPage.value, pageSize.value, {
+	await fetchJobsWith({
 		name: jobName.value,
 	});
 };
 
-const handlePageChange = async (page: number) => {
-	if (page < 1 || page > totalPages.value) return;
-	await fetchJobsWith(page, pageSize.value, {
-		name: jobName.value,
-	});
+const handlePageChange = async (page: number, pageSize: number) => {
+	await fetchJobsWith(
+		{
+			name: jobName.value,
+		},
+		page,
+		pageSize,
+	);
 };
 
 onMounted(async () => {
-	await fetchJobsWith(currentPage.value, pageSize.value, {
+	await fetchJobsWith({
 		name: jobName.value,
 	});
 	initFlowbite();
