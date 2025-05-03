@@ -182,15 +182,16 @@ import RoleUpsertModal from "@/components/RoleUpsertModal.vue";
 import useRoleDelete from "@/composables/role/useRoleDelete";
 import { useRolesQuery } from "@/composables/role/useRolesQuery";
 import { RouteName } from "@/router/constants";
-import type { RoleModel, RoleUpsertModel } from "@/types/role";
+import type { RoleUpsertModel } from "@/types/role";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import useAlertStore from "../composables/store/useAlertStore";
 import { useRoleUpsert } from "../composables/role/useRoleUpsert";
+import type { components } from "../api/types/schema";
 
 const roleName = ref<string>("");
-const selectedRole = ref<RoleModel>();
+const selectedRole = ref<components["schemas"]["RoleDto"]>();
 const roleUpsertModal = ref<ModalInterface>();
 const roleDeleteModal = ref<ModalInterface>();
 
@@ -246,7 +247,7 @@ const handleUpsertModalSubmit = async (data: RoleUpsertModel) => {
 	});
 };
 
-const handleUpsertRoleClick = async (role?: RoleModel) => {
+const handleUpsertRoleClick = async (role?: components["schemas"]["RoleDto"]) => {
 	selectedRole.value = role;
 	await nextTick(() => {
 		roleUpsertModal.value?.show();
@@ -266,14 +267,14 @@ const handleDeletedModalSubmit = async () => {
 	});
 };
 
-const handleDeleteRoleClick = async (role: RoleModel) => {
+const handleDeleteRoleClick = async (role: components["schemas"]["RoleDto"]) => {
 	selectedRole.value = role;
 	await nextTick(() => {
 		roleDeleteModal.value?.show();
 	});
 };
 
-const handleBindPermissionClick = async (role: RoleModel) => {
+const handleBindPermissionClick = async (role: components["schemas"]["RoleDto"]) => {
 	router.push({
 		name: RouteName.BINDPERMISSIONVIEW,
 		params: { roleId: role.id },

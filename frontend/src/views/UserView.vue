@@ -194,15 +194,16 @@ import UserUpsertModal from "@/components/UserUpsertModal.vue";
 import useUserDelete from "@/composables/user/useUserDelete";
 import { useUserQuery } from "@/composables/user/useUserQuery";
 import { RouteName } from "@/router/constants";
-import type { UserRolePermissionModel, UserUpsertSubmitModel } from "@/types/user";
+import type { UserUpsertSubmitModel } from "@/types/user";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import useAlertStore from "../composables/store/useAlertStore";
 import { useUserUpsert } from "../composables/user/useUserUpsert";
+import type { components } from "../api/types/schema";
 
 const username = ref<string>("");
-const selectedUser = ref<UserRolePermissionModel>();
+const selectedUser = ref<components["schemas"]["UserRolePermissionDto"]>();
 const userUpsertModal = ref<ModalInterface>();
 const userDeleteModal = ref<ModalInterface>();
 const router = useRouter();
@@ -264,14 +265,14 @@ const handleUpsertUserSubmit = async (data: UserUpsertSubmitModel) => {
 	});
 };
 
-const handleUpsertUserClick = async (user?: UserRolePermissionModel) => {
+const handleUpsertUserClick = async (user?: components["schemas"]["UserRolePermissionDto"]) => {
 	selectedUser.value = user;
 	await nextTick(() => {
 		userUpsertModal.value?.show();
 	});
 };
 
-const handleBindRoleClick = async (user: UserRolePermissionModel) => {
+const handleBindRoleClick = async (user: components["schemas"]["UserRolePermissionDto"]) => {
 	router.push({
 		name: RouteName.BINDROLEVIEW,
 		params: {
@@ -293,7 +294,7 @@ const handleDeleteUserSubmit = async () => {
 	});
 };
 
-const handleDeleteUserClick = async (user: UserRolePermissionModel) => {
+const handleDeleteUserClick = async (user: components["schemas"]["UserRolePermissionDto"]) => {
 	selectedUser.value = user;
 	await nextTick(() => {
 		userDeleteModal.value?.show();

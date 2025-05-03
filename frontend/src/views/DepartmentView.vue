@@ -104,7 +104,7 @@
           </td>
           <td class="px-6 py-4 flex items-center gap-x-2">
             <!-- Edit Modal toggle -->
-            <button @click="handleUpsertDepartmentClick(department as SelectedDepartmentRow)"
+            <button @click="handleUpsertDepartmentClick(department as components['schemas']['DepartmentUpsertDto'])"
               class="flex items-center block gap-x-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button">
               <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -118,7 +118,8 @@
               class="flex items-center block gap-x-1
               bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700
               dark:focus:ring-red-900 block text-white focus:ring-4 focus:outline-nonefont-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              @click="handleDeleteDepartmentClick(department as SelectedDepartmentRow)" type="button">
+              @click="handleDeleteDepartmentClick(department as components['schemas']['DepartmentUpsertDto'])"
+              type="button">
               <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                 height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -188,10 +189,9 @@ import useDepartmentDelete from "../composables/department/useDepartmentDelete";
 import { useDepartmentQuery } from "../composables/department/useDepartmentQuery";
 import { useDepartmentUpsert } from "../composables/department/useDepartmentUpsert";
 import useAlertStore from "../composables/store/useAlertStore";
-import type { SelectedDepartmentRow } from "../types/department";
 
 const name = ref<string>("");
-const selectedDepartment = ref<SelectedDepartmentRow>();
+const selectedDepartment = ref<components["schemas"]["Department"]>();
 const departmentUpsertModal = ref<ModalInterface>();
 const departmentDeleteModal = ref<ModalInterface>();
 
@@ -267,7 +267,7 @@ const handleUpsertDepartmentSubmit = async (
 };
 
 const handleUpsertDepartmentClick = async (
-	department?: SelectedDepartmentRow,
+	department?: components["schemas"]["DepartmentUpsertDto"],
 ) => {
 	selectedDepartment.value = department;
 	await nextTick(() => {
@@ -290,7 +290,7 @@ const handleDeleteDepartmentSubmit = async () => {
 };
 
 const handleDeleteDepartmentClick = async (
-	department: SelectedDepartmentRow,
+	department: components["schemas"]["DepartmentUpsertDto"],
 ) => {
 	selectedDepartment.value = department;
 	await nextTick(() => {

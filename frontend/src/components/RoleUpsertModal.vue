@@ -43,30 +43,34 @@
 </template>
 
 <script setup lang="ts">
-import { useRoleUpsert } from "@/composables/role/useRoleUpsert";
+import useAlertStore from "@/composables/store/useAlertStore";
+import type { RoleUpsertModel } from "@/types/role";
 import { initFlowbite } from "flowbite";
 import { onMounted, ref, watch } from "vue";
 import { z } from "zod";
-import type { RoleModel, RoleUpsertModel } from "../types/role";
-import useAlertStore from "@/composables/store/useAlertStore";
+import type { components } from "../api/types/schema";
 
 const alertStore = useAlertStore();
 
 const { role, onSubmit } = defineProps<{
-	role?: RoleModel;
+	role?: components["schemas"]["RoleDto"];
 	closeModal: () => void;
 	onSubmit: (data: RoleUpsertModel) => void;
 }>();
 
-const formData = ref<RoleModel>({
-	...role,
+const formData = ref({
+	id: role?.id,
+	name: role?.name,
+	code: role?.code,
 });
 
 watch(
 	() => role,
 	(newRole) => {
 		formData.value = {
-			...newRole,
+			id: newRole?.id,
+			name: newRole?.name,
+			code: newRole?.code,
 		};
 	},
 );

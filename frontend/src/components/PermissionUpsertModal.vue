@@ -43,22 +43,20 @@
 
 <script setup lang="ts">
 import useAlertStore from "@/composables/store/useAlertStore";
-import type {
-	PermissionModel,
-	PermissionUpsertModel,
-} from "@/types/permission";
+import type { PermissionUpsertModel } from "@/types/permission";
 import { computed, ref, watch } from "vue";
 import { z } from "zod";
-
+import type { components } from "../api/types/schema";
+  
 const { permission, onSubmit, closeModal } = defineProps<{
-	permission?: PermissionModel;
+	permission?: components["schemas"]["PermissionDto"];
 	closeModal: () => void;
 	onSubmit: (data: PermissionUpsertModel) => void;
 }>();
 
 const alertStore = useAlertStore();
 
-const formData = ref<PermissionUpsertModel>({
+const formData = ref({
 	id: permission?.id,
 	name: permission?.name,
 	code: permission?.code,
@@ -83,8 +81,8 @@ const handleSubmit = () => {
 	});
 
 	try {
-		permissionSchema.parse(formData.value);
-		onSubmit(formData.value);
+		const validatedData = permissionSchema.parse(formData.value);
+		onSubmit(validatedData);
 	} catch (error) {
 		if (error instanceof z.ZodError) {
 			alertStore.showAlert({

@@ -65,15 +65,15 @@ import { initFlowbite } from "flowbite";
 import { onMounted, ref, watch } from "vue";
 import { z } from "zod";
 import type { components } from "../api/types/schema";
-import type { DepartmentUpsertRow } from "../types/department";
+import type { DepartmentUpsertModel } from "../types/department";
 
 const alertStore = useAlertStore();
 
 const { department, allDepartments, onSubmit } = defineProps<{
-	department: components["schemas"]["DepartmentUpsertDto"] | undefined;
-	allDepartments: components["schemas"]["Department"][] | undefined;
+	department?: components["schemas"]["Department"];
+	allDepartments: components["schemas"]["Department"][];
 	closeModal: () => void;
-	onSubmit: (department: DepartmentUpsertRow) => void;
+	onSubmit: (department: DepartmentUpsertModel) => void;
 }>();
 
 const formData = ref({
@@ -106,8 +106,8 @@ const handleSubmit = () => {
 	});
 
 	try {
-		userSchema.parse(formData.value);
-		onSubmit(formData.value as DepartmentUpsertRow);
+		const validatedData = userSchema.parse(formData.value);
+		onSubmit(validatedData);
 	} catch (error) {
 		if (error instanceof z.ZodError) {
 			alertStore.showAlert({

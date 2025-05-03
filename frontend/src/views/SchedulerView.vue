@@ -190,16 +190,15 @@ import { useJobControl } from "@/composables/job/useJobControl";
 import { useJobsPaginationQuery } from "@/composables/job/useJobQuery";
 import { useJobUpdate } from "@/composables/job/useJobUpdate";
 import useAlertStore from "@/composables/store/useAlertStore";
-import { RouteName, RoutePath } from "@/router/constants";
-import type { JobTriggerDto } from "@/types/jobs";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
+import type { components } from "../api/types/schema";
 
 const jobName = ref<string>("");
 const jobResumeModal = ref<ModalInterface>();
 const jobPauseModal = ref<ModalInterface>();
 const jobUpdateModal = ref<ModalInterface>();
-const selectedJob = ref<JobTriggerDto>();
+const selectedJob = ref<components["schemas"]["JobTriggerDto"]>();
 
 const {
 	pagination: {
@@ -226,21 +225,21 @@ const {
 
 const { updateCron } = useJobUpdate();
 
-const handleResumeJobClick = async (currentJob: JobTriggerDto) => {
+const handleResumeJobClick = async (currentJob: components["schemas"]["JobTriggerDto"]) => {
 	selectedJob.value = currentJob;
 	await nextTick(() => {
 		jobResumeModal.value?.show();
 	});
 };
 
-const handleCronUpdateClick = async (currentJob: JobTriggerDto) => {
+const handleCronUpdateClick = async (currentJob: components["schemas"]["JobTriggerDto"]) => {
 	selectedJob.value = currentJob;
 	await nextTick(() => {
 		jobUpdateModal.value?.show();
 	});
 };
 
-const handlePauseJobClick = async (currentJob: JobTriggerDto) => {
+const handlePauseJobClick = async (currentJob: components["schemas"]["JobTriggerDto"]) => {
 	selectedJob.value = currentJob;
 	await nextTick(() => {
 		jobPauseModal.value?.show();

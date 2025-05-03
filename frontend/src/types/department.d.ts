@@ -1,13 +1,6 @@
-export type DepartmentUpsertRow = {
+export interface DepartmentUpsertModel {
 	id?: number;
 	name: string;
 	parentId?: number;
 	enable: boolean;
-};
-
-export type SelectedDepartmentRow = {
-	id: number;
-	name: string;
-	parentId?: number;
-	enable: boolean;
-};
+}
