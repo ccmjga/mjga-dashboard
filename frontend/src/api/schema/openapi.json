@@ -566,7 +566,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DepartmentUpsertDto"
+                "$ref": "#/components/schemas/Department"
               }
             }
           },
@@ -810,16 +810,6 @@
           "department-controller"
         ],
         "operationId": "queryDepartments",
-        "parameters": [
-          {
-            "name": "departmentQueryDto",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/DepartmentQueryDto"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -867,7 +857,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/PageResponseDtoListDepartment"
+                  "$ref": "#/components/schemas/PageResponseDtoListDepartmentRespDto"
                 }
               }
             }
@@ -981,11 +971,7 @@
           }
         }
       },
-      "DepartmentUpsertDto": {
-        "required": [
-          "enable",
-          "name"
-        ],
+      "Department": {
         "type": "object",
         "properties": {
           "id": {
@@ -998,9 +984,6 @@
           "parentId": {
             "type": "integer",
             "format": "int64"
-          },
-          "enable": {
-            "type": "boolean"
           }
         }
       },
@@ -1371,7 +1354,11 @@
           }
         }
       },
-      "Department": {
+      "DepartmentRespDto": {
+        "required": [
+          "id",
+          "name"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -1385,12 +1372,15 @@
             "type": "integer",
             "format": "int64"
           },
-          "enable": {
+          "parentName": {
+            "type": "string"
+          },
+          "isBound": {
             "type": "boolean"
           }
         }
       },
-      "PageResponseDtoListDepartment": {
+      "PageResponseDtoListDepartmentRespDto": {
         "type": "object",
         "properties": {
           "total": {
@@ -1400,7 +1390,7 @@
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Department"
+              "$ref": "#/components/schemas/DepartmentRespDto"
             }
           }
         }

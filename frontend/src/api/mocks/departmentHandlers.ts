@@ -7,7 +7,8 @@ export default [
 			id: faker.number.int({ min: 1, max: 100 }),
 			name: faker.company.name(),
 			parentId: faker.number.int({ min: 1, max: 100 }),
-			enable: faker.datatype.boolean(),
+			isBound: faker.datatype.boolean(),
+			parentName: faker.company.name(),
 		});
 		const mockData = {
 			data: faker.helpers.multiple(generateDepartment, { count: 10 }),
@@ -20,7 +21,7 @@ export default [
 			id: faker.number.int({ min: 1, max: 30 }),
 			name: faker.company.name(),
 			parentId: faker.number.int({ min: 1, max: 30 }),
-			enable: faker.datatype.boolean(),
+			parentName: faker.company.name(),
 		});
 		const mockData = faker.helpers.multiple(generateDepartment, { count: 30 });
 

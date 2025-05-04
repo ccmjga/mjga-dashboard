@@ -59,12 +59,30 @@
           @click.prevent="handleSearch">搜索</button>
       </form>
       <div class="flex items-center justify-end gap-2 absolute right-5 bottom-2">
-        <button @click="() => {departmentBindModal?.show();}"
+        <button @click="() => {
+          if (checkedDepartmentIds.length === 0) {
+            alertStore.showAlert({
+              content: '没有选择部门',
+              level: 'error',
+            });
+          } else {
+            departmentBindModal?.show();
+          }
+        }"
           class="flex items-center block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           type="button">
           绑定
         </button>
-        <button @click="() => {departmentUnbindModal?.show();}"
+        <button @click="() => {
+          if (checkedDepartmentIds.length === 0) {
+            alertStore.showAlert({
+              content: '没有选择部门',
+              level: 'error',
+            });
+          } else {
+            departmentUnbindModal?.show();
+          }
+        }"
           class="flex items-center block text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           type="button">
           解绑
@@ -82,10 +100,9 @@
               <label for="checkbox-all-search" class="sr-only">checkbox</label>
             </div>
           </th>
-          <th scope="col" class="px-6 py-3">部门编码</th>
           <th scope="col" class="px-6 py-3">上级部门</th>
           <th scope="col" class="px-6 py-3">部门名称</th>
-          <th scope="col" class="px-6 py-3">状态</th>
+          <th scope="col" class="px-6 py-3">绑定状态</th>
         </tr>
       </thead>
       <tbody>
@@ -100,19 +117,16 @@
             </div>
           </td>
           <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            {{ department.id }}
-          </td>
-          <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            {{ department.parentId }}
+            {{ department.parentName }}
           </td>
           <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
             {{ department.name }}
           </td>
           <td class="px-6 py-4">
             <div class="flex items-center">
-              <div class="h-2.5 w-2.5 rounded-full me-2" :class="department.enable ? 'bg-green-500' : 'bg-red-500'">
+              <div class="h-2.5 w-2.5 rounded-full me-2" :class="department.isBound ? 'bg-green-500' : 'bg-red-500'">
               </div> {{
-              department.enable === true ? "启用" : "关闭" }}
+              department.isBound === true ? "已绑定" : "未绑定" }}
             </div>
           </td>
         </tr>
@@ -166,6 +180,11 @@ const handleBindDepartmentSubmit = async () => {
 		content: "操作成功",
 		level: "success",
 	});
+  await fetchDepartmentWith({
+		name: departmentName.value,
+		userId: Number($route.params.userId),
+		bindState: bindState.value,
+	});
 };
 
 const handleUnbindDepartmentSubmit = async () => {
@@ -177,6 +196,11 @@ const handleUnbindDepartmentSubmit = async () => {
 	alertStore.showAlert({
 		content: "操作成功",
 		level: "success",
+	});
+	await fetchDepartmentWith({
+		name: departmentName.value,
+		userId: Number($route.params.userId),
+		bindState: bindState.value,
 	});
 };
 

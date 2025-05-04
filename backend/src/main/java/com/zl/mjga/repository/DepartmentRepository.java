@@ -5,6 +5,7 @@ import static org.jooq.generated.mjga.Tables.USER_DEPARTMENT_MAP;
 import static org.jooq.generated.mjga.tables.Permission.PERMISSION;
 import static org.jooq.generated.mjga.tables.Role.ROLE;
 import static org.jooq.impl.DSL.noCondition;
+import static org.jooq.impl.DSL.noField;
 
 import com.zl.mjga.dto.PageRequestDto;
 import com.zl.mjga.dto.department.DepartmentQueryDto;
@@ -32,17 +33,13 @@ public class DepartmentRepository extends DepartmentDao {
         .from(DEPARTMENT)
         .where(
             switch (departmentQueryDto.getBindState()) {
-              case BIND -> PERMISSION.ID.in(selectUsersDepartment(departmentQueryDto));
-              case UNBIND -> ROLE.ID.notIn(selectUsersDepartment(departmentQueryDto));
+              case BIND -> PERMISSION.ID.in(selectUsersDepartment(departmentQueryDto.getUserId()));
+              case UNBIND -> ROLE.ID.notIn(selectUsersDepartment(departmentQueryDto.getUserId()));
               case ALL -> noCondition();
             })
         .and(
             StringUtils.isNotEmpty(departmentQueryDto.getName())
                 ? DEPARTMENT.NAME.like("%" + departmentQueryDto.getName() + "%")
-                : noCondition())
-        .and(
-            departmentQueryDto.getEnable() != null
-                ? DEPARTMENT.ENABLE.eq(departmentQueryDto.getEnable())
                 : noCondition())
         .fetchInto(Department.class);
   }
@@ -52,21 +49,31 @@ public class DepartmentRepository extends DepartmentDao {
     return ctx()
         .select(
             DEPARTMENT.asterisk(),
+            departmentQueryDto.getUserId() != null
+                ? DSL.when(
+                        DEPARTMENT.ID.in(selectUsersDepartment(departmentQueryDto.getUserId())),
+                        true)
+                    .otherwise(false)
+                    .as("is_bound")
+                : noField(),
+            DSL.when(
+                    DEPARTMENT.PARENT_ID.isNotNull(),
+                    DSL.select(DEPARTMENT.NAME)
+                        .from(DEPARTMENT)
+                        .where(DEPARTMENT.ID.eq(DEPARTMENT.PARENT_ID))
+                        .asField("parent_name"))
+                .otherwise(noField()),
             DSL.count().over().as("total_department").convertFrom(Long::valueOf))
         .from(DEPARTMENT)
         .where(
             switch (departmentQueryDto.getBindState()) {
-              case BIND -> PERMISSION.ID.in(selectUsersDepartment(departmentQueryDto));
-              case UNBIND -> ROLE.ID.notIn(selectUsersDepartment(departmentQueryDto));
+              case BIND -> PERMISSION.ID.in(selectUsersDepartment(departmentQueryDto.getUserId()));
+              case UNBIND -> ROLE.ID.notIn(selectUsersDepartment(departmentQueryDto.getUserId()));
               case ALL -> noCondition();
             })
         .and(
             StringUtils.isNotEmpty(departmentQueryDto.getName())
                 ? DEPARTMENT.NAME.like("%" + departmentQueryDto.getName() + "%")
-                : noCondition())
-        .and(
-            departmentQueryDto.getEnable() != null
-                ? DEPARTMENT.ENABLE.eq(departmentQueryDto.getEnable())
                 : noCondition())
         .orderBy(pageRequestDto.getSortFields())
         .limit(pageRequestDto.getSize())
@@ -74,11 +81,10 @@ public class DepartmentRepository extends DepartmentDao {
         .fetch();
   }
 
-  private SelectConditionStep<Record1<Long>> selectUsersDepartment(
-      DepartmentQueryDto departmentQueryDto) {
+  private SelectConditionStep<Record1<Long>> selectUsersDepartment(Long userId) {
     return ctx()
         .select(USER_DEPARTMENT_MAP.DEPARTMENT_ID)
         .from(USER_DEPARTMENT_MAP)
-        .where(USER_DEPARTMENT_MAP.USER_ID.eq(departmentQueryDto.getUserId()));
+        .where(USER_DEPARTMENT_MAP.USER_ID.eq(userId));
   }
 }

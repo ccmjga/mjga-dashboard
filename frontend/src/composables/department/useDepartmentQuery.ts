@@ -4,22 +4,11 @@ import type { components } from "../../api/types/schema";
 
 export const useDepartmentQuery = () => {
 	const total = ref<number>(0);
-	const departments = ref<components["schemas"]["Department"][]>([]);
+	const departments = ref<components["schemas"]["DepartmentRespDto"][]>([]);
 	const allDepartments = ref<components["schemas"]["Department"][]>([]);
 
-	const fetchAllDepartments = async (param?: {
-		name?: string;
-		enable?: boolean;
-		userId?: number;
-		bindState?: "ALL" | "BIND" | "UNBIND";
-	}) => {
-		const { data } = await client.GET("/department/query", {
-			params: {
-				query: {
-					departmentQueryDto: param ?? {},
-				},
-			},
-		});
+	const fetchAllDepartments = async () => {
+		const { data } = await client.GET("/department/query");
 		allDepartments.value = data ?? [];
 	};
 	const fetchDepartmentWith = async (

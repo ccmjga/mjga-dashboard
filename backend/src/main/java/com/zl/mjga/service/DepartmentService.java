@@ -1,17 +1,17 @@
 package com.zl.mjga.service;
 
+import static org.jooq.generated.mjga.tables.Department.DEPARTMENT;
+
 import com.zl.mjga.dto.PageRequestDto;
 import com.zl.mjga.dto.PageResponseDto;
 import com.zl.mjga.dto.department.DepartmentQueryDto;
-import com.zl.mjga.dto.department.DepartmentUpsertDto;
+import com.zl.mjga.dto.department.DepartmentRespDto;
 import com.zl.mjga.repository.DepartmentRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.Record;
 import org.jooq.Result;
-import org.jooq.generated.mjga.tables.pojos.Department;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,27 +21,20 @@ public class DepartmentService {
 
   private final DepartmentRepository departmentRepository;
 
-  public List<Department> queryDepartment(DepartmentQueryDto departmentQueryDto) {
-    return departmentRepository.fetchBy(departmentQueryDto);
-  }
-
-  public PageResponseDto<List<Department>> pageQueryDepartment(
+  public PageResponseDto<List<DepartmentRespDto>> pageQueryDepartment(
       PageRequestDto pageRequestDto, DepartmentQueryDto departmentQueryDto) {
     Result<Record> records = departmentRepository.pageFetchBy(pageRequestDto, departmentQueryDto);
-    List<Department> departments = records.into(Department.class);
+    List<DepartmentRespDto> departments =
+        records.map(
+            record -> {
+              return DepartmentRespDto.builder()
+                  .name(record.getValue(DEPARTMENT.NAME))
+                  .parentId(record.getValue(DEPARTMENT.PARENT_ID))
+                  .isBound(record.getValue("is_bound", Boolean.class))
+                  .parentName(record.getValue("parent_name", String.class))
+                  .build();
+            });
     Long totalDepartment = records.get(0).getValue("total_department", Long.class);
     return new PageResponseDto<>(totalDepartment, departments);
   }
-
-  public void deleteDepartment(Long id) {
-    departmentRepository.deleteById(id);
-  }
-
-  public void upsertDepartment(DepartmentUpsertDto departmentUpsertDto) {
-    Department department = new Department();
-    BeanUtils.copyProperties(departmentUpsertDto, department);
-    departmentRepository.merge(department);
-  }
-
-  // TODO 递归子部门
 }
