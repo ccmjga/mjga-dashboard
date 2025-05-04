@@ -36,17 +36,17 @@
 </template>
 
 <script setup lang="ts">
-import type { JobTriggerDto } from "@/types/jobs";
+import type { components } from "@/api/types/schema";
 import { computed, ref, watch } from "vue";
 
 const props = defineProps<{
 	id: string;
-	job?: JobTriggerDto;
+	job?: components["schemas"]["JobTriggerDto"];
 	closeModal: () => void;
-	onSubmit: (data: Partial<JobTriggerDto>) => void;
+	onSubmit: (data: Partial<components["schemas"]["JobTriggerDto"]>) => void;
 }>();
 
-const formData = ref<Partial<JobTriggerDto>>({
+const formData = ref<Partial<components["schemas"]["JobTriggerDto"]>>({
 	cronExpression: "",
 });
 

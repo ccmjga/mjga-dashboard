@@ -143,7 +143,7 @@ import useAlertStore from "../composables/store/useAlertStore";
 import type { PermissionUpsertModel } from "../types/permission";
 
 const permissionName = ref<string>("");
-const selectedPermission = ref<components["schemas"]["PermissionDto"]>();
+const selectedPermission = ref<components["schemas"]["PermissionRespDto"]>();
 const permissionUpsertModal = ref<ModalInterface>();
 const permissionDeleteModal = ref<ModalInterface>();
 
@@ -185,7 +185,7 @@ const handleUpsertModalSubmit = async (data: PermissionUpsertModel) => {
 };
 
 const handleUpsertPermissionClick = async (
-	permission?: components["schemas"]["PermissionDto"],
+	permission?: components["schemas"]["PermissionRespDto"],
 ) => {
 	selectedPermission.value = permission;
 	await nextTick(() => {
@@ -204,7 +204,7 @@ const deleteSelectedPermission = async (event: Event) => {
 };
 
 const handleDeletePermissionClick = async (
-	permission: components["schemas"]["PermissionDto"],
+	permission: components["schemas"]["PermissionRespDto"],
 ) => {
 	selectedPermission.value = permission;
 	await nextTick(() => {

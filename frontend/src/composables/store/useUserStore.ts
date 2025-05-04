@@ -1,10 +1,9 @@
 import { StorageSerializers, useStorage } from "@vueuse/core";
 import { defineStore } from "pinia";
 import { computed } from "vue";
-import type { UserRolePermissionModel } from "../../types/user";
-
+import type { components } from "../../api/types/schema";
 const useUserStore = defineStore("userStore", () => {
-	const user = useStorage<UserRolePermissionModel>(
+	const user = useStorage<components["schemas"]["UserRolePermissionDto"]>(
 		"user-storage",
 		null,
 		localStorage,
@@ -13,7 +12,7 @@ const useUserStore = defineStore("userStore", () => {
 		},
 	);
 
-	const set: (userRolePermission?: UserRolePermissionModel) => void = (
+	const set: (userRolePermission?: components["schemas"]["UserRolePermissionDto"]) => void = (
 		userRolePermission,
 	) => {
 		user.value = userRolePermission;

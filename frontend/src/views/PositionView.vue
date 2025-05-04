@@ -51,7 +51,7 @@
         </div>
       </form>
       <!-- Create Modal toggle -->
-      <button @click="handleUpsertDepartmentClick()"
+      <button @click="handleUpsertPositionClick()"
         class="flex items-center block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 absolute right-5 bottom-2"
         type="button">
         新增岗位

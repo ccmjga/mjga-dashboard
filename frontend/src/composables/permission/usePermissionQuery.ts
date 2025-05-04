@@ -4,7 +4,7 @@ import type { components } from "../../api/types/schema";
 
 const usePermissionsQuery = () => {
 	const total = ref<number>(0);
-	const permissions = ref<components["schemas"]["PermissionDto"][]>([]);
+	const permissions = ref<components["schemas"]["PermissionRespDto"][]>([]);
 	const fetchPermissionsWith = async (
 		query: {
 			name?: string;

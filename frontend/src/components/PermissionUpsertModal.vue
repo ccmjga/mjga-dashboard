@@ -49,7 +49,7 @@ import { z } from "zod";
 import type { components } from "../api/types/schema";
 
 const { permission, onSubmit, closeModal } = defineProps<{
-	permission?: components["schemas"]["PermissionDto"];
+	permission?: components["schemas"]["PermissionRespDto"];
 	closeModal: () => void;
 	onSubmit: (data: PermissionUpsertModel) => void;
 }>();
