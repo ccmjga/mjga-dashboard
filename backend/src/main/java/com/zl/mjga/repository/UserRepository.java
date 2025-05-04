@@ -1,10 +1,7 @@
 package com.zl.mjga.repository;
 
-import static org.jooq.generated.mjga.tables.Permission.PERMISSION;
-import static org.jooq.generated.mjga.tables.Role.ROLE;
-import static org.jooq.generated.mjga.tables.RolePermissionMap.ROLE_PERMISSION_MAP;
+import static org.jooq.generated.mjga.Tables.*;
 import static org.jooq.generated.mjga.tables.User.USER;
-import static org.jooq.generated.mjga.tables.UserRoleMap.USER_ROLE_MAP;
 import static org.jooq.impl.DSL.*;
 
 import com.zl.mjga.dto.PageRequestDto;
@@ -48,20 +45,14 @@ public class UserRepository extends UserDao {
             USER.asterisk(),
             multiset(
                     select(
-                            ROLE.asterisk(),
+                            USER.role().asterisk(),
                             multiset(
-                                    select(PERMISSION.asterisk())
-                                        .from(ROLE_PERMISSION_MAP)
-                                        .leftJoin(PERMISSION)
-                                        .on(ROLE_PERMISSION_MAP.PERMISSION_ID.eq(PERMISSION.ID))
-                                        .where(ROLE_PERMISSION_MAP.ROLE_ID.eq(ROLE.ID)))
+                                    select(USER.role().permission().asterisk())
+                                        .from(USER.role().permission()))
                                 .convertFrom(
                                     r -> r.map((record) -> record.into(PermissionRespDto.class)))
                                 .as("permissions"))
-                        .from(USER_ROLE_MAP)
-                        .leftJoin(ROLE)
-                        .on(USER_ROLE_MAP.ROLE_ID.eq(ROLE.ID))
-                        .where(USER.ID.eq(USER_ROLE_MAP.USER_ID)))
+                        .from(USER.role()))
                 .convertFrom(r -> r.map((record) -> record.into(RoleDto.class)))
                 .as("roles"))
         .from(USER)
@@ -69,21 +60,57 @@ public class UserRepository extends UserDao {
         .fetchOneInto(UserRolePermissionDto.class);
   }
 
+  //  public UserRolePermissionDto fetchUniqueUserDtoWithNestedRolePermissionBy(Long userId) {
+  //    return ctx()
+  //        .select(
+  //            USER.asterisk(),
+  //            multiset(
+  //                    select(
+  //                            ROLE.asterisk(),
+  //                            multiset(
+  //                                    select(PERMISSION.asterisk())
+  //                                        .from(ROLE_PERMISSION_MAP)
+  //                                        .leftJoin(PERMISSION)
+  //                                        .on(ROLE_PERMISSION_MAP.PERMISSION_ID.eq(PERMISSION.ID))
+  //                                        .where(ROLE_PERMISSION_MAP.ROLE_ID.eq(ROLE.ID)))
+  //                                .convertFrom(
+  //                                    r -> r.map((record) ->
+  // record.into(PermissionRespDto.class)))
+  //                                .as("permissions"))
+  //                        .from(USER_ROLE_MAP)
+  //                        .leftJoin(ROLE)
+  //                        .on(USER_ROLE_MAP.ROLE_ID.eq(ROLE.ID))
+  //                        .where(USER.ID.eq(USER_ROLE_MAP.USER_ID)))
+  //                .convertFrom(r -> r.map((record) -> record.into(RoleDto.class)))
+  //                .as("roles"))
+  //        .from(USER)
+  //        .where(USER.ID.eq(userId))
+  //        .fetchOneInto(UserRolePermissionDto.class);
+  //  }
+
   public Result<Record> fetchUniqueUserWithRolePermissionBy(Long userId) {
     return ctx()
-        .select()
-        .from(USER)
-        .leftJoin(USER_ROLE_MAP)
-        .on(USER.ID.eq(USER_ROLE_MAP.USER_ID))
-        .leftJoin(ROLE)
-        .on(USER_ROLE_MAP.ROLE_ID.eq(ROLE.ID))
-        .leftJoin(ROLE_PERMISSION_MAP)
-        .on(ROLE.ID.eq(ROLE_PERMISSION_MAP.ROLE_ID))
-        .leftJoin(PERMISSION)
-        .on(ROLE_PERMISSION_MAP.PERMISSION_ID.eq(PERMISSION.ID))
+        .select(USER.asterisk(), USER.role().asterisk(), USER.role().permission().asterisk())
+        .from(USER, USER.role(), USER.role().permission())
         .where(USER.ID.eq(userId))
         .fetch();
   }
+
+  //    public Result<Record> fetchUniqueUserWithRolePermissionBy(Long userId) {
+  //      return ctx()
+  //          .select()
+  //          .from(USER)
+  //          .leftJoin(USER_ROLE_MAP)
+  //          .on(USER.ID.eq(USER_ROLE_MAP.USER_ID))
+  //          .leftJoin(ROLE)
+  //          .on(USER_ROLE_MAP.ROLE_ID.eq(ROLE.ID))
+  //          .leftJoin(ROLE_PERMISSION_MAP)
+  //          .on(ROLE.ID.eq(ROLE_PERMISSION_MAP.ROLE_ID))
+  //          .leftJoin(PERMISSION)
+  //          .on(ROLE_PERMISSION_MAP.PERMISSION_ID.eq(PERMISSION.ID))
+  //          .where(USER.ID.eq(userId))
+  //          .fetch();
+  //    }
 
   @Transactional
   public void deleteByUsername(String username) {
