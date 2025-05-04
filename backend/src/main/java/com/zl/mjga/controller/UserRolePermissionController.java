@@ -3,6 +3,7 @@ package com.zl.mjga.controller;
 import com.zl.mjga.dto.PageRequestDto;
 import com.zl.mjga.dto.PageResponseDto;
 import com.zl.mjga.dto.department.DepartmentBindDto;
+import com.zl.mjga.dto.position.PositionBindDto;
 import com.zl.mjga.dto.urp.*;
 import com.zl.mjga.repository.RoleRepository;
 import com.zl.mjga.repository.UserRepository;
@@ -162,5 +163,19 @@ public class UserRolePermissionController {
   @ResponseStatus(HttpStatus.OK)
   public void unBindDepartmentBy(@RequestBody DepartmentBindDto departmentBindDto) {
     userRolePermissionService.unBindDepartmentBy(departmentBindDto);
+  }
+
+  @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_DEPARTMENT_PERMISSION)")
+  @PostMapping("/position/bind")
+  @ResponseStatus(HttpStatus.OK)
+  public void bindPositionBy(@RequestBody PositionBindDto positionBindDto) {
+    userRolePermissionService.bindPositionBy(positionBindDto);
+  }
+
+  @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_DEPARTMENT_PERMISSION)")
+  @PostMapping("/position/unbind")
+  @ResponseStatus(HttpStatus.OK)
+  public void unBindPositionBy(@RequestBody PositionBindDto positionBindDto) {
+    userRolePermissionService.unBindPositionBy(positionBindDto);
   }
 }

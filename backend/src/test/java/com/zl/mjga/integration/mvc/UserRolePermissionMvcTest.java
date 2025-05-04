@@ -178,7 +178,8 @@ class UserRolePermissionMvcTest {
     stubRoleDto.setId(1L);
     stubRoleDto.setName(stubRoleName);
     stubRoleDto.setCode(stubRoleCode);
-    stubRoleDto.setPermissions(List.of(new PermissionRespDto(1L, "9VWU1nmU89zEVH", "9VWU1nmU89zEVH", false)));
+    stubRoleDto.setPermissions(
+        List.of(new PermissionRespDto(1L, "9VWU1nmU89zEVH", "9VWU1nmU89zEVH", false)));
     when(userRolePermissionService.pageQueryRole(PageRequestDto.of(0, 5), stubRoleQueryDto))
         .thenReturn(new PageResponseDto<>(1, List.of(stubRoleDto)));
 

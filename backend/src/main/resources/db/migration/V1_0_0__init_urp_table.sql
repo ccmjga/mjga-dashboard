@@ -52,3 +52,16 @@ CREATE TABLE mjga.user_department_map (
                                           FOREIGN KEY (user_id) REFERENCES mjga.user(id) ON UPDATE NO ACTION ON DELETE RESTRICT,
                                           FOREIGN KEY (department_id) REFERENCES mjga.department(id) ON UPDATE NO ACTION ON DELETE RESTRICT
 );
+
+CREATE TABLE mjga.position (
+                                 id BIGSERIAL PRIMARY KEY,
+                                 name VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE mjga.user_position_map (
+                                          user_id BIGINT NOT NULL,
+                                          position_id BIGINT NOT NULL,
+                                          PRIMARY KEY (user_id, position_id),
+                                          FOREIGN KEY (user_id) REFERENCES mjga.user(id) ON UPDATE NO ACTION ON DELETE RESTRICT,
+                                          FOREIGN KEY (position_id) REFERENCES mjga.position(id) ON UPDATE NO ACTION ON DELETE RESTRICT
+);

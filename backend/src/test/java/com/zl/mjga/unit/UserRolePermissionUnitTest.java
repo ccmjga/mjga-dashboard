@@ -210,7 +210,8 @@ class UserRolePermissionUnitTest {
                 stubRoleCode,
                 true,
                 List.of(
-                    new PermissionRespDto(stubPermissionId, stubPermissionName, stubPermissionCode, false),
+                    new PermissionRespDto(
+                        stubPermissionId, stubPermissionName, stubPermissionCode, false),
                     new PermissionRespDto(
                         stubPermissionId2, stubPermissionName2, stubPermissionCode2, false)))));
 

@@ -7,6 +7,7 @@ import static org.jooq.generated.mjga.tables.User.USER;
 import com.zl.mjga.dto.PageRequestDto;
 import com.zl.mjga.dto.PageResponseDto;
 import com.zl.mjga.dto.department.DepartmentBindDto;
+import com.zl.mjga.dto.position.PositionBindDto;
 import com.zl.mjga.dto.urp.*;
 import com.zl.mjga.exception.BusinessException;
 import com.zl.mjga.model.urp.ERole;
@@ -36,6 +37,7 @@ public class UserRolePermissionService {
   private final PermissionRepository permissionRepository;
   private final RolePermissionMapRepository rolePermissionMapRepository;
   private final UserDepartmentMapRepository userDepartmentMapRepository;
+  private final UserPositionMapRepository userPositionMapRepository;
 
   public void upsertUser(UserUpsertDto userUpsertDto) {
     User user = new User();
@@ -131,7 +133,8 @@ public class UserRolePermissionService {
                         .build())
             .toList();
     return new PageResponseDto<>(
-        permissionRecords.get(0).getValue("total_permission", Integer.class), permissionRespDtoList);
+        permissionRecords.get(0).getValue("total_permission", Integer.class),
+        permissionRespDtoList);
   }
 
   public void bindPermissionToRole(Long roleId, List<Long> permissionIdList) {
@@ -278,6 +281,26 @@ public class UserRolePermissionService {
       userDepartmentMap.setUserId(departmentBindDto.userId());
       userDepartmentMap.setDepartmentId(departmentId);
       userDepartmentMapRepository.delete(userDepartmentMap);
+    }
+  }
+
+  @Transactional(rollbackFor = Throwable.class)
+  public void bindPositionBy(PositionBindDto positionBindDto) {
+    for (Long positionId : positionBindDto.positionIds()) {
+      UserPositionMap userPositionMap = new UserPositionMap();
+      userPositionMap.setUserId(positionBindDto.userId());
+      userPositionMap.setPositionId(positionId);
+      userPositionMapRepository.insert(userPositionMap);
+    }
+  }
+
+  @Transactional(rollbackFor = Throwable.class)
+  public void unBindPositionBy(PositionBindDto positionBindDto) {
+    for (Long positionId : positionBindDto.positionIds()) {
+      UserPositionMap userPositionMap = new UserPositionMap();
+      userPositionMap.setUserId(positionBindDto.userId());
+      userPositionMap.setPositionId(positionId);
+      userPositionMapRepository.delete(userPositionMap);
     }
   }
 }
