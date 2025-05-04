@@ -30,8 +30,14 @@ public class DepartmentService {
               return DepartmentRespDto.builder()
                   .name(record.getValue(DEPARTMENT.NAME))
                   .parentId(record.getValue(DEPARTMENT.PARENT_ID))
-                  .isBound(record.getValue("is_bound", Boolean.class))
-                  .parentName(record.getValue("parent_name", String.class))
+                  .isBound(
+                      record.field("is_bound") != null
+                          ? record.get("is_bound", Boolean.class)
+                          : null)
+                  .parentName(
+                      record.field("parent_name") != null
+                          ? record.get("parent_name", String.class)
+                          : null)
                   .build();
             });
     Long totalDepartment = records.get(0).getValue("total_department", Long.class);

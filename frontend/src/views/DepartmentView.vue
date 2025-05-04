@@ -23,7 +23,7 @@
                   clip-rule="evenodd"></path>
               </svg>
               <span
-                class="ml-1 text-gray-400 hover:text-primary-600 md:ml-2 dark:text-gray-500 dark:hover:text-white">用户管理</span>
+                class="ml-1 text-gray-400 hover:text-primary-600 md:ml-2 dark:text-gray-500 dark:hover:text-white">部门管理</span>
             </div>
           </li>
         </ol>
@@ -68,10 +68,8 @@
               <label for="checkbox-all-search" class="sr-only">checkbox</label>
             </div>
           </th>
-          <th scope="col" class="px-6 py-3">部门编号</th>
-          <th scope="col" class="px-6 py-3">上级部门编号</th>
+          <th scope="col" class="px-6 py-3">上级部门</th>
           <th scope="col" class="px-6 py-3">部门名称</th>
-          <th scope="col" class="px-6 py-3">状态</th>
           <th scope="col" class="px-6 py-3">操作</th>
         </tr>
       </thead>
@@ -85,22 +83,11 @@
               <label :for="'checkbox-table-search-' + department.id" class="sr-only">checkbox</label>
             </div>
           </td>
-          <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            {{ department.id }}
-          </td>
           <td class="px-6 py-4">
-            {{ department.parentId }}
+            {{ department.parentName }}
           </td>
           <td class="px-6 py-4">
             {{ department.name }}
-          </td>
-          <td class="px-6 py-4">
-            <div class="flex items-center">
-              <div class="h-2.5 w-2.5 rounded-full me-2" :class="department.isBound ? 'bg-green-500' : 'bg-red-500'">
-              </div> {{
-              department.isBound === true ? "已绑定" : "未绑定" }}
-            </div>
-
           </td>
           <td class="px-6 py-4 flex items-center gap-x-2">
             <!-- Edit Modal toggle -->

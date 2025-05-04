@@ -12,5 +12,6 @@ public class RoleDto {
   private Long id;
   private String code;
   private String name;
+  private Boolean isBound;
   @Builder.Default List<PermissionDto> permissions = new LinkedList<>();
 }

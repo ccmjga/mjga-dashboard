@@ -28,7 +28,7 @@
           </li>
         </ol>
       </nav>
-      <h1 class="text-xl mb-2 font-semibold text-gray-900 sm:text-2xl dark:text-white">绑定部门</h1>
+      <h1 class="text-xl mb-2 font-semibold text-gray-900 sm:text-2xl dark:text-white">部门分配</h1>
     </div>
     <div class="relative">
       <form class="max-w-sm mb-4 grid grid-cols-5 gap-y-4">

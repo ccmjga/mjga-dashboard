@@ -23,12 +23,12 @@
                   clip-rule="evenodd"></path>
               </svg>
               <span
-                class="ml-1 text-gray-400 hover:text-primary-600 md:ml-2 dark:text-gray-500 dark:hover:text-white">绑定角色</span>
+                class="ml-1 text-gray-400 hover:text-primary-600 md:ml-2 dark:text-gray-500 dark:hover:text-white">角色分配</span>
             </div>
           </li>
         </ol>
       </nav>
-      <h1 class="text-xl mb-2 font-semibold text-gray-900 sm:text-2xl dark:text-white">绑定角色</h1>
+      <h1 class="text-xl mb-2 font-semibold text-gray-900 sm:text-2xl dark:text-white">角色分配</h1>
     </div>
     <div class="relative">
       <form class="max-w-sm mb-4 grid grid-cols-5 gap-y-4">
@@ -59,12 +59,30 @@
           @click.prevent="handleSearch">搜索</button>
       </form>
       <div class="flex items-center justify-end gap-2 absolute right-5 bottom-2">
-        <button @click="() => {roleBindModal?.show();}"
+        <button @click="() => {
+          if (checkedRoleIds.length === 0) {
+            alertStore.showAlert({
+              content: '没有选择角色',
+              level: 'error',
+            });
+          } else {
+            roleBindModal?.show();
+          }
+        }"
           class="flex items-center block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           type="button">
           绑定
         </button>
-        <button @click="() => {roleUnbindModal?.show();}"
+        <button @click="() => {
+          if (checkedRoleIds.length === 0) {
+            alertStore.showAlert({
+              content: '没有选择角色',
+              level: 'error',
+            });
+          } else {
+            roleUnbindModal?.show();
+          }
+        }"
           class="flex items-center block text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           type="button">
           解绑

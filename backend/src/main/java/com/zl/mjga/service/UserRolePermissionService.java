@@ -81,7 +81,15 @@ public class UserRolePermissionService {
     }
     List<RoleDto> roleDtoList =
         roleRecords.stream()
-            .map(record -> queryUniqueRoleWithPermission(record.getValue(ROLE.ID)))
+            .map(
+                record -> {
+                  RoleDto roleDto = queryUniqueRoleWithPermission(record.getValue(ROLE.ID));
+                  roleDto.setIsBound(
+                      record.field("is_bound", Boolean.class) != null
+                          ? record.getValue("is_bound", Boolean.class)
+                          : null);
+                  return roleDto;
+                })
             .toList();
     return new PageResponseDto<>(
         roleRecords.get(0).getValue("total_role", Integer.class), roleDtoList);

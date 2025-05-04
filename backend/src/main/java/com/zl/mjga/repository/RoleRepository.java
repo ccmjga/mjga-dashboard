@@ -1,11 +1,11 @@
 package com.zl.mjga.repository;
 
+import static org.jooq.generated.mjga.Tables.DEPARTMENT;
 import static org.jooq.generated.mjga.tables.Permission.PERMISSION;
 import static org.jooq.generated.mjga.tables.Role.ROLE;
 import static org.jooq.generated.mjga.tables.RolePermissionMap.ROLE_PERMISSION_MAP;
 import static org.jooq.generated.mjga.tables.UserRoleMap.USER_ROLE_MAP;
-import static org.jooq.impl.DSL.asterisk;
-import static org.jooq.impl.DSL.noCondition;
+import static org.jooq.impl.DSL.*;
 
 import com.zl.mjga.dto.PageRequestDto;
 import com.zl.mjga.dto.urp.RoleQueryDto;
@@ -37,12 +37,19 @@ public class RoleRepository extends RoleDao {
 
   public Result<Record> pageFetchBy(PageRequestDto pageRequestDto, RoleQueryDto roleQueryDto) {
     return ctx()
-        .select(asterisk(), DSL.count(ROLE.ID).over().as("total_role"))
+        .select(
+            asterisk(),
+            roleQueryDto.getUserId() != null
+                ? DSL.when(DEPARTMENT.ID.in(selectUsersRoleIds(roleQueryDto.getUserId())), true)
+                    .otherwise(false)
+                    .as("is_bound")
+                : noField(),
+            DSL.count(ROLE.ID).over().as("total_role"))
         .from(ROLE)
         .where(
             switch (roleQueryDto.getBindState()) {
-              case BIND -> ROLE.ID.in(selectUsersRoleIds(roleQueryDto));
-              case UNBIND -> ROLE.ID.notIn(selectUsersRoleIds(roleQueryDto));
+              case BIND -> ROLE.ID.in(selectUsersRoleIds(roleQueryDto.getUserId()));
+              case UNBIND -> ROLE.ID.notIn(selectUsersRoleIds(roleQueryDto.getUserId()));
               case ALL -> noCondition();
             })
         .and(
@@ -61,11 +68,11 @@ public class RoleRepository extends RoleDao {
         .fetch();
   }
 
-  private SelectConditionStep<Record1<Long>> selectUsersRoleIds(RoleQueryDto roleQueryDto) {
+  private SelectConditionStep<Record1<Long>> selectUsersRoleIds(Long userId) {
     return ctx()
         .select(USER_ROLE_MAP.ROLE_ID)
         .from(USER_ROLE_MAP)
-        .where(USER_ROLE_MAP.USER_ID.eq(roleQueryDto.getUserId()));
+        .where(USER_ROLE_MAP.USER_ID.eq(userId));
   }
 
   public Result<Record> fetchUniqueRoleWithPermission(Long roleId) {
