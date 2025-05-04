@@ -23,15 +23,15 @@
                   clip-rule="evenodd"></path>
               </svg>
               <span
-                class="ml-1 text-gray-400 hover:text-primary-600 md:ml-2 dark:text-gray-500 dark:hover:text-white">角色管理</span>
+                class="ml-1 text-gray-400 hover:text-primary-600 md:ml-2 dark:text-gray-500 dark:hover:text-white">岗位管理</span>
             </div>
           </li>
         </ol>
       </nav>
-      <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">角色管理</h1>
+      <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">岗位管理</h1>
     </div>
     <div class="relative">
-      <form class="max-w-sm mb-4">
+      <form class="max-w-sm mb-4 ">
         <label for="default-search"
           class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
         <div class="relative">
@@ -42,19 +42,19 @@
                 d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
             </svg>
           </div>
-          <input type="search" id="default-search" v-model="roleName"
+          <input type="search" id="default-search" v-model="name"
             class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="角色名" required />
+            placeholder="岗位名称" required />
           <button type="submit"
             class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             @click.prevent="handleSearch">搜索</button>
         </div>
       </form>
       <!-- Create Modal toggle -->
-      <button @click="handleUpsertRoleClick(undefined)"
-        class="flex items-center block gap-x-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 absolute right-5 bottom-2"
+      <button @click="handleUpsertDepartmentClick()"
+        class="flex items-center block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 absolute right-5 bottom-2"
         type="button">
-        新增角色
+        新增岗位
       </button>
     </div>
 
@@ -68,30 +68,27 @@
               <label for="checkbox-all-search" class="sr-only">checkbox</label>
             </div>
           </th>
-          <th scope="col" class="px-6 py-3">角色编码</th>
-          <th scope="col" class="px-6 py-3">角色名称</th>
+          <th scope="col" class="px-6 py-3">岗位名称</th>
           <th scope="col" class="px-6 py-3">操作</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="role in roles" :key="role.id"
+        <tr v-for="position in positions" :key="position.id"
           class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
           <td class="w-4 p-4">
             <div class="flex items-center">
-              <input :id="'checkbox-table-search-' + role.id" type="checkbox" disabled
+              <input :id="'checkbox-table-search-' + position.id" type="checkbox" disabled
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-              <label :for="'checkbox-table-search-' + role.id" class="sr-only">checkbox</label>
+              <label :for="'checkbox-table-search-' + position.id" class="sr-only">checkbox</label>
             </div>
           </td>
-          <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            {{ role.code }}
-          </td>
-          <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            {{ role.name }}
+          <td class="px-6 py-4">
+            {{ position.name }}
           </td>
           <td class="px-6 py-4 flex items-center gap-x-2">
-            <button @click="handleUpsertRoleClick(role)"
-              class="flex items-center block gap-x-1  text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5  text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 "
+            <!-- Edit Modal toggle -->
+            <button @click="handleUpsertPositionClick(position)"
+              class="flex items-center block gap-x-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button">
               <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                 fill="none" viewBox="0 0 24 24">
@@ -102,21 +99,9 @@
             </button>
             <button
               class="flex items-center block gap-x-1
-              bg-yellow-600 hover:bg-yellow-700 focus:outline-none dark:bg-yellow-600 dark:hover:bg-yellow-700
-              focus:ring-yellow-500 block text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              @click="handleBindPermissionClick(role)" type="button">
-              <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                height="24" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M10 14v3m4-6V7a3 3 0 1 1 6 0v4M5 11h10a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1Z" />
-              </svg>
-              分配权限
-            </button>
-            <button
-              class="flex items-center block gap-x-1
-              bg-red-700 hover:bg-red-800 focus:outline-none dark:bg-red-600 dark:hover:bg-red-700
-              focus:ring-red-500 block text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-              @click="handleDeleteRoleClick(role)" type="button">
+              bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700
+              dark:focus:ring-red-900 block text-white focus:ring-4 focus:outline-nonefont-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              @click="handleDeletePositionClick(position)" type="button">
               <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                 height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -128,130 +113,131 @@
         </tr>
       </tbody>
     </table>
-
-    <TablePagination :pageChange="handlePageChange" :total="total" />
+    <TablePagination :total="total" :pageChange="handlePageChange" />
   </div>
 
-  <RoleDeleteModal :id="'role-delete-modal'" :closeModal="() => {
-    roleDeleteModal!.hide();
-  }" :onSubmit="handleDeletedModalSubmit" title="确定删除该角色吗" content="删除角色"></RoleDeleteModal>
-  <RoleUpsertModal :onSubmit="handleUpsertModalSubmit" :closeModal="() => {
-    roleUpsertModal!.hide();
-  }" :role="selectedRole">
-  </RoleUpsertModal>
+  <PositionDeleteModal :id="'position-delete-modal'" :closeModal="() => {
+    positionDeleteModal!.hide();
+  }" :onSubmit="handleDeletePositionSubmit" title="确定删除该岗位吗" content="删除岗位"></PositionDeleteModal>
+  <UpsertPositionModal :id="'position-upsert-modal'" :onSubmit="handleUpsertPositionSubmit" :closeModal="() => {
+    positionUpsertModal!.hide();
+  }" :position="selectedPosition" :allPositions="allPositions">
+  </UpsertPositionModal>
 </template>
 
 <script setup lang="ts">
-import RoleDeleteModal from "@/components/PopupModal.vue";
-import RoleUpsertModal from "@/components/RoleUpsertModal.vue";
+import PositionDeleteModal from "@/components/PopupModal.vue";
 import TablePagination from "@/components/TablePagination.vue";
-import useRoleDelete from "@/composables/role/useRoleDelete";
-import { useRolesQuery } from "@/composables/role/useRolesQuery";
+import UpsertPositionModal from "@/components/UpsertPositionModal.vue";
+import usePositionDelete from "@/composables/position/useDepartmentDelete";
+import { usePositionQuery } from "@/composables/position/useDepartmentQuery";
+import { usePositionUpsert } from "@/composables/position/useDepartmentUpsert";
 import { RouteName } from "@/router/constants";
-import type { RoleUpsertModel } from "@/types/role";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
 import type { components } from "../api/types/schema";
-import { useRoleUpsert } from "../composables/role/useRoleUpsert";
 import useAlertStore from "../composables/store/useAlertStore";
 
-const roleName = ref<string>("");
-const selectedRole = ref<components["schemas"]["RoleDto"]>();
-const roleUpsertModal = ref<ModalInterface>();
-const roleDeleteModal = ref<ModalInterface>();
+const name = ref<string>("");
+const selectedPosition = ref<components["schemas"]["Position"]>();
+const positionUpsertModal = ref<ModalInterface>();
+const positionDeleteModal = ref<ModalInterface>();
 
-const { total, roles, fetchRolesWith } = useRolesQuery();
+const {
+	positions,
+	allPositions,
+	fetchPositionWith,
+	fetchAllPositions,
+	total,
+} = usePositionQuery();
 
-const { deleteRole } = useRoleDelete();
+const { deletePosition } = usePositionDelete();
+const { upsertPosition } = usePositionUpsert();
+
 const alertStore = useAlertStore();
-const router = useRouter();
-const roleUpsert = useRoleUpsert();
+
 onMounted(async () => {
-	await fetchRolesWith({
-		name: roleName.value,
+	await fetchAllPositions();
+	await fetchPositionWith({
+		name: name.value,
 	});
 	initFlowbite();
-	const $upsertModalElement: HTMLElement | null =
-		document.querySelector("#role-upsert-modal");
-	const $deleteModalElement: HTMLElement | null =
-		document.querySelector("#role-delete-modal");
-	roleUpsertModal.value = new Modal(
+	const $upsertModalElement: HTMLElement | null = document.querySelector(
+		"#department-upsert-modal",
+	);
+	const $deleteModalElement: HTMLElement | null = document.querySelector(
+		"#department-delete-modal",
+	);
+	positionUpsertModal.value = new Modal(
 		$upsertModalElement,
 		{},
-		{ id: "role-upsert-modal" },
+		{
+			id: "department-upsert-modal",
+		},
 	);
-	roleDeleteModal.value = new Modal(
+	positionDeleteModal.value = new Modal(
 		$deleteModalElement,
 		{},
-		{ id: "role-delete-modal" },
+		{
+			id: "department-delete-modal",
+		},
 	);
 });
 
-const handleUpsertModalSubmit = async (data: RoleUpsertModel) => {
-	await roleUpsert.upsertRole(data);
-	await fetchRolesWith({
-		name: roleName.value,
-	});
-	roleUpsertModal.value?.hide();
+const handleUpsertPositionSubmit = async (
+	position: components["schemas"]["Position"],
+) => {
+	positionUpsertModal.value?.hide();
+	await upsertPosition(position);
+	fetchAllPositions();
 	alertStore.showAlert({
 		content: "操作成功",
 		level: "success",
 	});
 };
 
-const handleUpsertRoleClick = async (
-	role?: components["schemas"]["RoleDto"],
+const handleUpsertPositionClick = async (
+	position?: components["schemas"]["Position"],
 ) => {
-	selectedRole.value = role;
+	selectedPosition.value = position;
 	await nextTick(() => {
-		roleUpsertModal.value?.show();
+		positionUpsertModal.value?.show();
 	});
 };
 
-const handleDeletedModalSubmit = async () => {
-	if (!selectedRole?.value?.id) return;
-	await deleteRole(selectedRole.value.id);
-	await fetchRolesWith({
-		name: roleName.value,
-	});
-	roleDeleteModal.value?.hide();
+const handleDeletePositionSubmit = async () => {
+	if (!selectedPosition?.value?.id) return;
+	await deletePosition(selectedPosition.value.id);
+	fetchAllPositions();
+	positionDeleteModal.value?.hide();
 	alertStore.showAlert({
 		content: "删除成功",
 		level: "success",
 	});
 };
 
-const handleDeleteRoleClick = async (
-	role: components["schemas"]["RoleDto"],
+const handleDeletePositionClick = async (
+	position: components["schemas"]["Position"],
 ) => {
-	selectedRole.value = role;
+	selectedPosition.value = position;
 	await nextTick(() => {
-		roleDeleteModal.value?.show();
+		positionDeleteModal.value?.show();
 	});
 };
 
-const handleBindPermissionClick = async (
-	role: components["schemas"]["RoleDto"],
-) => {
-	router.push({
-		name: RouteName.BINDPERMISSIONVIEW,
-		params: { roleId: role.id },
-	});
-};
 const handleSearch = async () => {
-	await fetchRolesWith({
-		name: roleName.value,
+	await fetchPositionWith({
+		name: name.value,
 	});
 };
 
-const handlePageChange = async (page: number, pageSize: number) => {
-	await fetchRolesWith(
+const handlePageChange = async (page: number, size: number) => {
+	await fetchPositionWith(
 		{
-			name: roleName.value,
+			name: name.value,
 		},
 		page,
-		pageSize,
+		size,
 	);
 };
 </script>

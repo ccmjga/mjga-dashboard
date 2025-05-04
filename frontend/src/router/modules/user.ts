@@ -56,6 +56,15 @@ const userManagementRoutes: RouteRecordRaw[] = [
 			hasRole: ROLE.ADMIN,
 		},
 	},
+	{
+		path: RoutePath.BINDPOSITIONVIEW,
+		name: RouteName.BINDPOSITIONVIEW,
+		component: () => import("@/views/BindPositionView.vue"),
+		meta: {
+			requiresAuth: true,
+			hasRole: ROLE.ADMIN,
+		},
+	},
 ];
 
 export default userManagementRoutes;

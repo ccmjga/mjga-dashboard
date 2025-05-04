@@ -52,6 +52,15 @@ const dashboardRoutes: RouteRecordRaw = {
 				hasRole: ROLE.ADMIN,
 			},
 		},
+		{
+			path: RoutePath.POSITIONVIEW,
+			name: RouteName.POSITIONVIEW,
+			component: () => import("@/views/PositionView.vue"),
+			meta: {
+				requiresAuth: true,
+				hasRole: ROLE.ADMIN,
+			},
+		},
 	],
 };
 

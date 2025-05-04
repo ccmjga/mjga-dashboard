@@ -146,6 +146,7 @@
 <script setup lang="ts">
 import BindModal from "@/components/PopupModal.vue";
 import UnModal from "@/components/PopupModal.vue";
+import TablePagination from "@/components/TablePagination.vue";
 import { useRolesQuery } from "@/composables/role/useRolesQuery";
 import { RouteName } from "@/router/constants";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
@@ -153,7 +154,6 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useRoleBind } from "../composables/role/useRoleBind";
 import useAlertStore from "../composables/store/useAlertStore";
-import TablePagination from "@/components/TablePagination.vue";
 
 const roleName = ref<string>("");
 const checkedRoleIds = ref<number[]>([]);

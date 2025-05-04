@@ -148,6 +148,7 @@
 <script setup lang="ts">
 import BindModal from "@/components/PopupModal.vue";
 import UnModal from "@/components/PopupModal.vue";
+import TablePagination from "@/components/TablePagination.vue";
 import { RouteName } from "@/router/constants";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { onMounted, ref, watch } from "vue";
@@ -155,7 +156,6 @@ import { useRoute } from "vue-router";
 import { usePermissionBind } from "../composables/permission/usePermissionBind";
 import usePermissionsQuery from "../composables/permission/usePermissionQuery";
 import useAlertStore from "../composables/store/useAlertStore";
-import TablePagination from "@/components/TablePagination.vue";
 
 const permissionName = ref<string>("");
 const checkedPermissionIds = ref<number[]>([]);

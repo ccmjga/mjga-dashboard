@@ -311,6 +311,52 @@
         }
       }
     },
+    "/urp/position/unbind": {
+      "post": {
+        "tags": [
+          "user-role-permission-controller"
+        ],
+        "operationId": "unBindPositionBy",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PositionBindDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/urp/position/bind": {
+      "post": {
+        "tags": [
+          "user-role-permission-controller"
+        ],
+        "operationId": "bindPositionBy",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PositionBindDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/urp/permission": {
       "post": {
         "tags": [
@@ -549,6 +595,51 @@
           },
           "required": true
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/position": {
+      "post": {
+        "tags": [
+          "position-controller"
+        ],
+        "operationId": "upsertPosition",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Position"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "position-controller"
+        ],
+        "operationId": "deletePosition",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -804,6 +895,67 @@
         }
       }
     },
+    "/position/query": {
+      "get": {
+        "tags": [
+          "position-controller"
+        ],
+        "operationId": "queryPositions",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Position"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/position/page-query": {
+      "get": {
+        "tags": [
+          "position-controller"
+        ],
+        "operationId": "pageQueryPositions",
+        "parameters": [
+          {
+            "name": "pageRequestDto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/PageRequestDto"
+            }
+          },
+          {
+            "name": "positionQueryDto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/PositionQueryDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseDtoListPositionRespDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/department/query": {
       "get": {
         "tags": [
@@ -910,6 +1062,26 @@
           }
         }
       },
+      "PositionBindDto": {
+        "required": [
+          "positionIds",
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "positionIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
       "PermissionUpsertDto": {
         "required": [
           "code",
@@ -967,6 +1139,18 @@
             "type": "string"
           },
           "group": {
+            "type": "string"
+          }
+        }
+      },
+      "Position": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
             "type": "string"
           }
         }
@@ -1334,6 +1518,67 @@
             "items": {
               "$ref": "#/components/schemas/JobTriggerDto"
             }
+          }
+        }
+      },
+      "PositionQueryDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "enable": {
+            "type": "boolean"
+          },
+          "bindState": {
+            "type": "string",
+            "enum": [
+              "BIND",
+              "UNBIND",
+              "ALL"
+            ]
+          }
+        }
+      },
+      "PageResponseDtoListPositionRespDto": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PositionRespDto"
+            }
+          }
+        }
+      },
+      "PositionRespDto": {
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "parentId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "isBound": {
+            "type": "boolean"
           }
         }
       },

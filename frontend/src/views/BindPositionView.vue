@@ -23,12 +23,12 @@
                   clip-rule="evenodd"></path>
               </svg>
               <span
-                class="ml-1 text-gray-400 hover:text-primary-600 md:ml-2 dark:text-gray-500 dark:hover:text-white">部门分配</span>
+                class="ml-1 text-gray-400 hover:text-primary-600 md:ml-2 dark:text-gray-500 dark:hover:text-white">岗位分配</span>
             </div>
           </li>
         </ol>
       </nav>
-      <h1 class="text-xl mb-2 font-semibold text-gray-900 sm:text-2xl dark:text-white">部门分配</h1>
+      <h1 class="text-xl mb-2 font-semibold text-gray-900 sm:text-2xl dark:text-white">岗位分配</h1>
     </div>
     <div class="relative">
       <form class="max-w-sm mb-4 grid grid-cols-5 gap-y-4">
@@ -43,9 +43,9 @@
                   d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
               </svg>
             </div>
-            <input type="search" id="default-search" v-model="departmentName"
+            <input type="search" id="default-search" v-model="positionName"
               class="block p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="部门名称" required />
+              placeholder="岗位名称" required />
           </div>
         </div>
         <select id="countries" v-model="bindState"
@@ -60,13 +60,13 @@
       </form>
       <div class="flex items-center justify-end gap-2 absolute right-5 bottom-2">
         <button @click="() => {
-          if (checkedDepartmentIds.length === 0) {
+          if (checkedPositionIds.length === 0) {
             alertStore.showAlert({
-              content: '没有选择部门',
+              content: '没有选择岗位',
               level: 'error',
             });
           } else {
-            departmentBindModal?.show();
+            positionBindModal?.show();
           }
         }"
           class="flex items-center block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -74,13 +74,13 @@
           绑定
         </button>
         <button @click="() => {
-          if (checkedDepartmentIds.length === 0) {
+          if (checkedPositionIds.length === 0) {
             alertStore.showAlert({
-              content: '没有选择部门',
+              content: '没有选择岗位',
               level: 'error',
             });
           } else {
-            departmentUnbindModal?.show();
+            positionUnbindModal?.show();
           }
         }"
           class="flex items-center block text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
@@ -100,33 +100,30 @@
               <label for="checkbox-all-search" class="sr-only">checkbox</label>
             </div>
           </th>
-          <th scope="col" class="px-6 py-3">上级部门</th>
-          <th scope="col" class="px-6 py-3">部门名称</th>
+          <th scope="col" class="px-6 py-3">岗位名称</th>
           <th scope="col" class="px-6 py-3">绑定状态</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="department in departments" :key="department.id"
+        <tr v-for="position in positions" :key="position.id"
           class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
           <td class="w-4 p-4">
             <div class="flex items-center">
-              <input :id="'checkbox-table-search-' + department.id" :value="department.id" type="checkbox"
-                v-model="checkedDepartmentIds"
+              <input :id="'checkbox-table-search-' + position.id" :value="position.id" type="checkbox"
+                v-model="checkedPositionIds"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-              <label :for="'checkbox-table-search-' + department.id" class="sr-only">checkbox</label>
+              <label :for="'checkbox-table-search-' + position.id" class="sr-only">checkbox</label>
             </div>
           </td>
+
           <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            {{ department.parentName }}
-          </td>
-          <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            {{ department.name }}
+            {{ position.name }}
           </td>
           <td class="px-6 py-4">
             <div class="flex items-center">
-              <div class="h-2.5 w-2.5 rounded-full me-2" :class="department.isBound ? 'bg-green-500' : 'bg-red-500'">
+              <div class="h-2.5 w-2.5 rounded-full me-2" :class="position.isBound ? 'bg-green-500' : 'bg-red-500'">
               </div> {{
-              department.isBound === true ? "已绑定" : "未绑定" }}
+              position.isBound === true ? "已绑定" : "未绑定" }}
             </div>
           </td>
         </tr>
@@ -136,12 +133,12 @@
     <TablePagination :pageChange="handlePageChange" :total="total" />
   </div>
 
-  <BindModal :id="'department-bind-modal'" :closeModal="() => {
-    departmentBindModal!.hide();
-  }" :onSubmit="handleBindDepartmentSubmit" title="绑定选中的部门吗"></BindModal>
-  <UnModal :id="'department-unbind-modal'" :closeModal="() => {
-    departmentUnbindModal!.hide();
-  }" :onSubmit="handleUnbindDepartmentSubmit" title="解绑选中的部门吗"></UnModal>
+  <BindModal :id="'position-bind-modal'" :closeModal="() => {
+    positionBindModal!.hide();
+  }" :onSubmit="handleBindPositionSubmit" title="绑定选中的岗位吗"></BindModal>
+  <UnModal :id="'position-unbind-modal'" :closeModal="() => {
+    positionUnbindModal!.hide();
+  }" :onSubmit="handleUnbindPositionSubmit" title="解绑选中的岗位吗"></UnModal>
 </template>
 
 <script setup lang="ts">
@@ -149,6 +146,8 @@ import BindModal from "@/components/PopupModal.vue";
 import UnModal from "@/components/PopupModal.vue";
 import TablePagination from "@/components/TablePagination.vue";
 import { useDepartmentQuery } from "@/composables/department/useDepartmentQuery";
+import { usePositionBind } from "@/composables/position/useDepartmentBind";
+import { usePositionQuery } from "@/composables/position/useDepartmentQuery";
 import { RouteName } from "@/router/constants";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { onMounted, ref, watch } from "vue";
@@ -156,91 +155,91 @@ import { useRoute } from "vue-router";
 import { useDepartmentBind } from "../composables/department/useDepartmentBind";
 import useAlertStore from "../composables/store/useAlertStore";
 
-const departmentName = ref<string>("");
-const checkedDepartmentIds = ref<number[]>([]);
-const departmentBindModal = ref<ModalInterface>();
-const departmentUnbindModal = ref<ModalInterface>();
+const positionName = ref<string>("");
+const checkedPositionIds = ref<number[]>([]);
+const positionBindModal = ref<ModalInterface>();
+const positionUnbindModal = ref<ModalInterface>();
 const allChecked = ref<boolean>(false);
 const $route = useRoute();
 const bindState = ref<"BIND" | "ALL" | "UNBIND">("BIND");
 
 const alertStore = useAlertStore();
 
-const { total, departments, fetchDepartmentWith } = useDepartmentQuery();
+const { total, positions, fetchPositionWith } = usePositionQuery();
 
-const { bindDepartment, unbindDepartment } = useDepartmentBind();
+const { bindPosition, unbindPosition } = usePositionBind();
 
-const handleBindDepartmentSubmit = async () => {
-	await bindDepartment(
+const handleBindPositionSubmit = async () => {
+	await bindPosition(
 		Number($route.params.userId),
-		checkedDepartmentIds.value,
+		checkedPositionIds.value,
 	);
-	departmentBindModal.value?.hide();
+	positionBindModal.value?.hide();
 	alertStore.showAlert({
 		content: "操作成功",
 		level: "success",
 	});
-	await fetchDepartmentWith({
-		name: departmentName.value,
+	await fetchPositionWith({
+		name: positionName.value,
 		userId: Number($route.params.userId),
 		bindState: bindState.value,
 	});
 };
 
-const handleUnbindDepartmentSubmit = async () => {
-	await unbindDepartment(
+const handleUnbindPositionSubmit = async () => {
+	await unbindPosition(
 		Number($route.params.userId),
-		checkedDepartmentIds.value,
+		checkedPositionIds.value,
 	);
-	departmentUnbindModal.value?.hide();
+	positionUnbindModal.value?.hide();
 	alertStore.showAlert({
 		content: "操作成功",
 		level: "success",
 	});
-	await fetchDepartmentWith({
-		name: departmentName.value,
+	await fetchPositionWith({
+		name: positionName.value,
 		userId: Number($route.params.userId),
 		bindState: bindState.value,
 	});
 };
 
 onMounted(async () => {
-	await fetchDepartmentWith({
-		name: departmentName.value,
+	await fetchPositionWith({
+		name: positionName.value,
 		userId: Number($route.params.userId),
 		bindState: bindState.value,
 	});
 	initFlowbite();
 	const $bindModalElement: HTMLElement | null = document.querySelector(
-		"#department-bind-modal",
+		"#position-bind-modal",
 	);
-	departmentBindModal.value = new Modal(
+	positionBindModal.value = new Modal(
 		$bindModalElement,
 		{},
-		{ id: "department-bind-modal" },
+		{ id: "position-bind-modal" },
 	);
 	const $unbindModalElement: HTMLElement | null = document.querySelector(
 		"#department-unbind-modal",
 	);
-	departmentUnbindModal.value = new Modal(
+	positionUnbindModal.value = new Modal(
 		$unbindModalElement,
 		{},
-		{ id: "department-unbind-modal" },
+		{ id: "position-unbind-modal" },
 	);
 });
 
 const handleSearch = async () => {
-	await fetchDepartmentWith({
-		name: departmentName.value,
+	await fetchPositionWith({
+		name: positionName.value,
 		userId: Number($route.params.userId),
 		bindState: bindState.value,
 	});
 };
 
 const handlePageChange = async (page: number, pageSize: number) => {
-	await fetchDepartmentWith(
+	await fetchPositionWith(
 		{
-			name: departmentName.value,
+			name: positionName.value,
 			userId: Number($route.params.userId),
 			bindState: bindState.value,
 		},
@@ -251,9 +250,9 @@ const handlePageChange = async (page: number, pageSize: number) => {
 
 watch(allChecked, async () => {
 	if (allChecked.value) {
-		checkedDepartmentIds.value = departments.value?.map((d) => d.id!) ?? [];
+		checkedPositionIds.value = positions.value?.map((d) => d.id!) ?? [];
 	} else {
-		checkedDepartmentIds.value = [];
+		checkedPositionIds.value = [];
 	}
 });
 </script>

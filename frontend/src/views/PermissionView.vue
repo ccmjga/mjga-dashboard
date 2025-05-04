@@ -132,15 +132,15 @@ import PermissionUpsertModal from "@/components/PermissionUpsertModal.vue";
 import PermissionDeleteModal from "@/components/PopupModal.vue";
 import usePermissionDelete from "@/composables/permission/usePermissionDelete";
 
-import { RouteName, RoutePath } from "@/router/constants";
 import type { components } from "@/api/types/schema";
+import TablePagination from "@/components/TablePagination.vue";
+import { RouteName, RoutePath } from "@/router/constants";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
 import usePermissionsQuery from "../composables/permission/usePermissionQuery";
-import useAlertStore from "../composables/store/useAlertStore";
 import usePermissionUpsert from "../composables/permission/usePermissionUpsert";
+import useAlertStore from "../composables/store/useAlertStore";
 import type { PermissionUpsertModel } from "../types/permission";
-import TablePagination from "@/components/TablePagination.vue";
 
 const permissionName = ref<string>("");
 const selectedPermission = ref<components["schemas"]["PermissionDto"]>();

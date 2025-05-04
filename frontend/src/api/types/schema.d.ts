@@ -4,1264 +4,1504 @@
  */
 
 export interface paths {
-	"/urp/users/{userId}/unbind-role": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post: operations["unBindRoleToUser"];
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/urp/users/{userId}/bind-role": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post: operations["bindRoleToUser"];
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/urp/user": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get: operations["queryUserWithRolePermission"];
-		put?: never;
-		post: operations["upsertUser"];
-		delete: operations["deleteUser"];
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/urp/roles/{roleId}/unbind-permission": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post: operations["unBindPermissionToRole"];
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/urp/roles/{roleId}/bind-permission": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post: operations["bindPermissionToRole"];
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/urp/role": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get: operations["queryRoleWithPermission"];
-		put?: never;
-		post: operations["upsertRole"];
-		delete: operations["deleteRole"];
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/urp/permission": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post: operations["upsertPermission"];
-		delete: operations["deletePermission"];
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/urp/me": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get: operations["currentUser"];
-		put?: never;
-		post: operations["upsertMe"];
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/urp/department/unbind": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post: operations["unBindDepartmentBy"];
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/urp/department/bind": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post: operations["bindDepartmentBy"];
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/scheduler/trigger/resume": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post: operations["resumeTrigger"];
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/scheduler/trigger/pause": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post: operations["pauseJob"];
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/scheduler/job/update": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post: operations["updateJob"];
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/scheduler/job/trigger": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post: operations["triggerJob"];
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/department": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post: operations["upsertDepartment"];
-		delete: operations["deleteDepartment"];
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/auth/sign-up": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post: operations["signUp"];
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/auth/sign-out": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post: operations["signOut"];
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/auth/sign-in": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get?: never;
-		put?: never;
-		post: operations["signIn"];
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/urp/users": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get: operations["queryUsers"];
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/urp/roles": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get: operations["queryRoles"];
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/urp/permissions": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get: operations["queryPermissions"];
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/scheduler/jobs": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get: operations["jobs"];
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/department/query": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get: operations["queryDepartments"];
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
-	"/department/page-query": {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		get: operations["pageQueryDepartments"];
-		put?: never;
-		post?: never;
-		delete?: never;
-		options?: never;
-		head?: never;
-		patch?: never;
-		trace?: never;
-	};
+    "/urp/users/{userId}/unbind-role": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["unBindRoleToUser"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/urp/users/{userId}/bind-role": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["bindRoleToUser"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/urp/user": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["queryUserWithRolePermission"];
+        put?: never;
+        post: operations["upsertUser"];
+        delete: operations["deleteUser"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/urp/roles/{roleId}/unbind-permission": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["unBindPermissionToRole"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/urp/roles/{roleId}/bind-permission": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["bindPermissionToRole"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/urp/role": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["queryRoleWithPermission"];
+        put?: never;
+        post: operations["upsertRole"];
+        delete: operations["deleteRole"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/urp/position/unbind": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["unBindPositionBy"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/urp/position/bind": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["bindPositionBy"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/urp/permission": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["upsertPermission"];
+        delete: operations["deletePermission"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/urp/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["currentUser"];
+        put?: never;
+        post: operations["upsertMe"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/urp/department/unbind": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["unBindDepartmentBy"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/urp/department/bind": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["bindDepartmentBy"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/scheduler/trigger/resume": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["resumeTrigger"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/scheduler/trigger/pause": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["pauseJob"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/scheduler/job/update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["updateJob"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/scheduler/job/trigger": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["triggerJob"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/position": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["upsertPosition"];
+        delete: operations["deletePosition"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/department": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["upsertDepartment"];
+        delete: operations["deleteDepartment"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/sign-up": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["signUp"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/sign-out": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["signOut"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/sign-in": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["signIn"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/urp/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["queryUsers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/urp/roles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["queryRoles"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/urp/permissions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["queryPermissions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/scheduler/jobs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["jobs"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/position/query": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["queryPositions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/position/page-query": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["pageQueryPositions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/department/query": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["queryDepartments"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/department/page-query": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["pageQueryDepartments"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-	schemas: {
-		UserUpsertDto: {
-			/** Format: int64 */
-			id?: number;
-			username: string;
-			password: string;
-			enable: boolean;
-		};
-		RoleUpsertDto: {
-			/** Format: int64 */
-			id?: number;
-			code: string;
-			name: string;
-		};
-		PermissionUpsertDto: {
-			/** Format: int64 */
-			id?: number;
-			code: string;
-			name: string;
-		};
-		DepartmentBindDto: {
-			/** Format: int64 */
-			userId: number;
-			departmentIds: number[];
-		};
-		TriggerKey: {
-			name?: string;
-			group?: string;
-		};
-		JobKey: {
-			name?: string;
-			group?: string;
-		};
-		Department: {
-			/** Format: int64 */
-			id?: number;
-			name?: string;
-			/** Format: int64 */
-			parentId?: number;
-		};
-		SignUpDto: {
-			username: string;
-			password: string;
-		};
-		SignInDto: {
-			username: string;
-			password: string;
-		};
-		PageRequestDto: {
-			/** Format: int32 */
-			page?: number;
-			/** Format: int32 */
-			size?: number;
-			sortBy?: {
-				[key: string]: "ASC" | "DESC";
-			};
-			/** Format: int64 */
-			offset?: number;
-			sortFields?: components["schemas"]["SortFieldObject"][];
-		};
-		SortFieldObject: {
-			name?: string;
-			/** @enum {string} */
-			order?: "ASC" | "DESC" | "DEFAULT";
-		};
-		UserQueryDto: {
-			username?: string;
-		};
-		PageResponseDtoListUserRolePermissionDto: {
-			/** Format: int64 */
-			total?: number;
-			data?: components["schemas"]["UserRolePermissionDto"][];
-		};
-		PermissionRespDto: {
-			/** Format: int64 */
-			id?: number;
-			code?: string;
-			name?: string;
-			isBound?: boolean;
-		};
-		RoleDto: {
-			/** Format: int64 */
-			id?: number;
-			code?: string;
-			name?: string;
-			isBound?: boolean;
-			permissions?: components["schemas"]["PermissionRespDto"][];
-		};
-		UserRolePermissionDto: {
-			/** Format: int64 */
-			id?: number;
-			username?: string;
-			password?: string;
-			enable?: boolean;
-			roles?: components["schemas"]["RoleDto"][];
-			/** Format: date-time */
-			createTime?: string;
-			permissions?: components["schemas"]["PermissionRespDto"][];
-		};
-		RoleQueryDto: {
-			/** Format: int64 */
-			userId?: number;
-			/** Format: int64 */
-			roleId?: number;
-			roleCode?: string;
-			roleName?: string;
-			roleIdList?: number[];
-			/** @enum {string} */
-			bindState?: "BIND" | "UNBIND" | "ALL";
-		};
-		PageResponseDtoListRoleDto: {
-			/** Format: int64 */
-			total?: number;
-			data?: components["schemas"]["RoleDto"][];
-		};
-		PermissionQueryDto: {
-			/** Format: int64 */
-			roleId?: number;
-			/** Format: int64 */
-			permissionId?: number;
-			permissionCode?: string;
-			permissionName?: string;
-			permissionIdList?: number[];
-			/** @enum {string} */
-			bindState?: "BIND" | "UNBIND" | "ALL";
-		};
-		PageResponseDtoListPermissionRespDto: {
-			/** Format: int64 */
-			total?: number;
-			data?: components["schemas"]["PermissionRespDto"][];
-		};
-		JobTriggerDto: {
-			name?: string;
-			group?: string;
-			className?: string;
-			jobDataMap?: {
-				[key: string]: Record<string, never>;
-			};
-			triggerName?: string;
-			triggerGroup?: string;
-			schedulerType?: string;
-			cronExpression?: string;
-			/** Format: int64 */
-			startTime?: number;
-			/** Format: int64 */
-			endTime?: number;
-			/** Format: int64 */
-			nextFireTime?: number;
-			/** Format: int64 */
-			previousFireTime?: number;
-			triggerState?: string;
-			triggerJobDataMap?: {
-				[key: string]: Record<string, never>;
-			};
-		};
-		PageResponseDtoListJobTriggerDto: {
-			/** Format: int64 */
-			total?: number;
-			data?: components["schemas"]["JobTriggerDto"][];
-		};
-		DepartmentQueryDto: {
-			/** Format: int64 */
-			userId?: number;
-			name?: string;
-			enable?: boolean;
-			/** @enum {string} */
-			bindState?: "BIND" | "UNBIND" | "ALL";
-		};
-		DepartmentRespDto: {
-			/** Format: int64 */
-			id: number;
-			name: string;
-			/** Format: int64 */
-			parentId?: number;
-			parentName?: string;
-			isBound?: boolean;
-		};
-		PageResponseDtoListDepartmentRespDto: {
-			/** Format: int64 */
-			total?: number;
-			data?: components["schemas"]["DepartmentRespDto"][];
-		};
-	};
-	responses: never;
-	parameters: never;
-	requestBodies: never;
-	headers: never;
-	pathItems: never;
+    schemas: {
+        UserUpsertDto: {
+            /** Format: int64 */
+            id?: number;
+            username: string;
+            password: string;
+            enable: boolean;
+        };
+        RoleUpsertDto: {
+            /** Format: int64 */
+            id?: number;
+            code: string;
+            name: string;
+        };
+        PositionBindDto: {
+            /** Format: int64 */
+            userId: number;
+            positionIds: number[];
+        };
+        PermissionUpsertDto: {
+            /** Format: int64 */
+            id?: number;
+            code: string;
+            name: string;
+        };
+        DepartmentBindDto: {
+            /** Format: int64 */
+            userId: number;
+            departmentIds: number[];
+        };
+        TriggerKey: {
+            name?: string;
+            group?: string;
+        };
+        JobKey: {
+            name?: string;
+            group?: string;
+        };
+        Position: {
+            /** Format: int64 */
+            id?: number;
+            name?: string;
+        };
+        Department: {
+            /** Format: int64 */
+            id?: number;
+            name?: string;
+            /** Format: int64 */
+            parentId?: number;
+        };
+        SignUpDto: {
+            username: string;
+            password: string;
+        };
+        SignInDto: {
+            username: string;
+            password: string;
+        };
+        PageRequestDto: {
+            /** Format: int32 */
+            page?: number;
+            /** Format: int32 */
+            size?: number;
+            sortBy?: {
+                [key: string]: "ASC" | "DESC";
+            };
+            /** Format: int64 */
+            offset?: number;
+            sortFields?: components["schemas"]["SortFieldObject"][];
+        };
+        SortFieldObject: {
+            name?: string;
+            /** @enum {string} */
+            order?: "ASC" | "DESC" | "DEFAULT";
+        };
+        UserQueryDto: {
+            username?: string;
+        };
+        PageResponseDtoListUserRolePermissionDto: {
+            /** Format: int64 */
+            total?: number;
+            data?: components["schemas"]["UserRolePermissionDto"][];
+        };
+        PermissionRespDto: {
+            /** Format: int64 */
+            id?: number;
+            code?: string;
+            name?: string;
+            isBound?: boolean;
+        };
+        RoleDto: {
+            /** Format: int64 */
+            id?: number;
+            code?: string;
+            name?: string;
+            isBound?: boolean;
+            permissions?: components["schemas"]["PermissionRespDto"][];
+        };
+        UserRolePermissionDto: {
+            /** Format: int64 */
+            id?: number;
+            username?: string;
+            password?: string;
+            enable?: boolean;
+            roles?: components["schemas"]["RoleDto"][];
+            /** Format: date-time */
+            createTime?: string;
+            permissions?: components["schemas"]["PermissionRespDto"][];
+        };
+        RoleQueryDto: {
+            /** Format: int64 */
+            userId?: number;
+            /** Format: int64 */
+            roleId?: number;
+            roleCode?: string;
+            roleName?: string;
+            roleIdList?: number[];
+            /** @enum {string} */
+            bindState?: "BIND" | "UNBIND" | "ALL";
+        };
+        PageResponseDtoListRoleDto: {
+            /** Format: int64 */
+            total?: number;
+            data?: components["schemas"]["RoleDto"][];
+        };
+        PermissionQueryDto: {
+            /** Format: int64 */
+            roleId?: number;
+            /** Format: int64 */
+            permissionId?: number;
+            permissionCode?: string;
+            permissionName?: string;
+            permissionIdList?: number[];
+            /** @enum {string} */
+            bindState?: "BIND" | "UNBIND" | "ALL";
+        };
+        PageResponseDtoListPermissionRespDto: {
+            /** Format: int64 */
+            total?: number;
+            data?: components["schemas"]["PermissionRespDto"][];
+        };
+        JobTriggerDto: {
+            name?: string;
+            group?: string;
+            className?: string;
+            jobDataMap?: {
+                [key: string]: Record<string, never>;
+            };
+            triggerName?: string;
+            triggerGroup?: string;
+            schedulerType?: string;
+            cronExpression?: string;
+            /** Format: int64 */
+            startTime?: number;
+            /** Format: int64 */
+            endTime?: number;
+            /** Format: int64 */
+            nextFireTime?: number;
+            /** Format: int64 */
+            previousFireTime?: number;
+            triggerState?: string;
+            triggerJobDataMap?: {
+                [key: string]: Record<string, never>;
+            };
+        };
+        PageResponseDtoListJobTriggerDto: {
+            /** Format: int64 */
+            total?: number;
+            data?: components["schemas"]["JobTriggerDto"][];
+        };
+        PositionQueryDto: {
+            /** Format: int64 */
+            userId?: number;
+            name?: string;
+            enable?: boolean;
+            /** @enum {string} */
+            bindState?: "BIND" | "UNBIND" | "ALL";
+        };
+        PageResponseDtoListPositionRespDto: {
+            /** Format: int64 */
+            total?: number;
+            data?: components["schemas"]["PositionRespDto"][];
+        };
+        PositionRespDto: {
+            /** Format: int64 */
+            id: number;
+            name: string;
+            /** Format: int64 */
+            parentId?: number;
+            isBound?: boolean;
+        };
+        DepartmentQueryDto: {
+            /** Format: int64 */
+            userId?: number;
+            name?: string;
+            enable?: boolean;
+            /** @enum {string} */
+            bindState?: "BIND" | "UNBIND" | "ALL";
+        };
+        DepartmentRespDto: {
+            /** Format: int64 */
+            id: number;
+            name: string;
+            /** Format: int64 */
+            parentId?: number;
+            parentName?: string;
+            isBound?: boolean;
+        };
+        PageResponseDtoListDepartmentRespDto: {
+            /** Format: int64 */
+            total?: number;
+            data?: components["schemas"]["DepartmentRespDto"][];
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-	unBindRoleToUser: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path: {
-				userId: number;
-			};
-			cookie?: never;
-		};
-		requestBody: {
-			content: {
-				"application/json": number[];
-			};
-		};
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	bindRoleToUser: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path: {
-				userId: number;
-			};
-			cookie?: never;
-		};
-		requestBody: {
-			content: {
-				"application/json": number[];
-			};
-		};
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	queryUserWithRolePermission: {
-		parameters: {
-			query: {
-				userId: number;
-			};
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody?: never;
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content: {
-					"*/*": components["schemas"]["UserRolePermissionDto"];
-				};
-			};
-		};
-	};
-	upsertUser: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody: {
-			content: {
-				"application/json": components["schemas"]["UserUpsertDto"];
-			};
-		};
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	deleteUser: {
-		parameters: {
-			query: {
-				userId: number;
-			};
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody?: never;
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	unBindPermissionToRole: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path: {
-				roleId: number;
-			};
-			cookie?: never;
-		};
-		requestBody: {
-			content: {
-				"application/json": number[];
-			};
-		};
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	bindPermissionToRole: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path: {
-				roleId: number;
-			};
-			cookie?: never;
-		};
-		requestBody: {
-			content: {
-				"application/json": number[];
-			};
-		};
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	queryRoleWithPermission: {
-		parameters: {
-			query: {
-				roleId: number;
-			};
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody?: never;
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content: {
-					"*/*": components["schemas"]["RoleDto"];
-				};
-			};
-		};
-	};
-	upsertRole: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody: {
-			content: {
-				"application/json": components["schemas"]["RoleUpsertDto"];
-			};
-		};
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	deleteRole: {
-		parameters: {
-			query: {
-				roleId: number;
-			};
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody?: never;
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	upsertPermission: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody: {
-			content: {
-				"application/json": components["schemas"]["PermissionUpsertDto"];
-			};
-		};
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	deletePermission: {
-		parameters: {
-			query: {
-				permissionId: number;
-			};
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody?: never;
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	currentUser: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody?: never;
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content: {
-					"*/*": components["schemas"]["UserRolePermissionDto"];
-				};
-			};
-		};
-	};
-	upsertMe: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody: {
-			content: {
-				"application/json": components["schemas"]["UserUpsertDto"];
-			};
-		};
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	unBindDepartmentBy: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody: {
-			content: {
-				"application/json": components["schemas"]["DepartmentBindDto"];
-			};
-		};
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	bindDepartmentBy: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody: {
-			content: {
-				"application/json": components["schemas"]["DepartmentBindDto"];
-			};
-		};
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	resumeTrigger: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody: {
-			content: {
-				"application/json": components["schemas"]["TriggerKey"];
-			};
-		};
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	pauseJob: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody: {
-			content: {
-				"application/json": components["schemas"]["TriggerKey"];
-			};
-		};
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	updateJob: {
-		parameters: {
-			query: {
-				cron: string;
-			};
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody: {
-			content: {
-				"application/json": components["schemas"]["TriggerKey"];
-			};
-		};
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	triggerJob: {
-		parameters: {
-			query: {
-				startAt: number;
-			};
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody: {
-			content: {
-				"application/json": components["schemas"]["JobKey"];
-			};
-		};
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	upsertDepartment: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody: {
-			content: {
-				"application/json": components["schemas"]["Department"];
-			};
-		};
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	deleteDepartment: {
-		parameters: {
-			query: {
-				id: number;
-			};
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody?: never;
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	signUp: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody: {
-			content: {
-				"application/json": components["schemas"]["SignUpDto"];
-			};
-		};
-		responses: {
-			/** @description Created */
-			201: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	signOut: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody?: never;
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	signIn: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody: {
-			content: {
-				"application/json": components["schemas"]["SignInDto"];
-			};
-		};
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content?: never;
-			};
-		};
-	};
-	queryUsers: {
-		parameters: {
-			query: {
-				pageRequestDto: components["schemas"]["PageRequestDto"];
-				userQueryDto: components["schemas"]["UserQueryDto"];
-			};
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody?: never;
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content: {
-					"*/*": components["schemas"]["PageResponseDtoListUserRolePermissionDto"];
-				};
-			};
-		};
-	};
-	queryRoles: {
-		parameters: {
-			query: {
-				pageRequestDto: components["schemas"]["PageRequestDto"];
-				roleQueryDto: components["schemas"]["RoleQueryDto"];
-			};
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody?: never;
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content: {
-					"*/*": components["schemas"]["PageResponseDtoListRoleDto"];
-				};
-			};
-		};
-	};
-	queryPermissions: {
-		parameters: {
-			query: {
-				pageRequestDto: components["schemas"]["PageRequestDto"];
-				permissionQueryDto: components["schemas"]["PermissionQueryDto"];
-			};
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody?: never;
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content: {
-					"*/*": components["schemas"]["PageResponseDtoListPermissionRespDto"];
-				};
-			};
-		};
-	};
-	jobs: {
-		parameters: {
-			query: {
-				pageRequestDto: components["schemas"]["PageRequestDto"];
-			};
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody?: never;
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content: {
-					"*/*": components["schemas"]["PageResponseDtoListJobTriggerDto"];
-				};
-			};
-		};
-	};
-	queryDepartments: {
-		parameters: {
-			query?: never;
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody?: never;
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content: {
-					"*/*": components["schemas"]["Department"][];
-				};
-			};
-		};
-	};
-	pageQueryDepartments: {
-		parameters: {
-			query: {
-				pageRequestDto: components["schemas"]["PageRequestDto"];
-				departmentQueryDto: components["schemas"]["DepartmentQueryDto"];
-			};
-			header?: never;
-			path?: never;
-			cookie?: never;
-		};
-		requestBody?: never;
-		responses: {
-			/** @description OK */
-			200: {
-				headers: {
-					[name: string]: unknown;
-				};
-				content: {
-					"*/*": components["schemas"]["PageResponseDtoListDepartmentRespDto"];
-				};
-			};
-		};
-	};
+    unBindRoleToUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": number[];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    bindRoleToUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": number[];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    queryUserWithRolePermission: {
+        parameters: {
+            query: {
+                userId: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["UserRolePermissionDto"];
+                };
+            };
+        };
+    };
+    upsertUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UserUpsertDto"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    deleteUser: {
+        parameters: {
+            query: {
+                userId: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    unBindPermissionToRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                roleId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": number[];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    bindPermissionToRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                roleId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": number[];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    queryRoleWithPermission: {
+        parameters: {
+            query: {
+                roleId: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RoleDto"];
+                };
+            };
+        };
+    };
+    upsertRole: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RoleUpsertDto"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    deleteRole: {
+        parameters: {
+            query: {
+                roleId: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    unBindPositionBy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PositionBindDto"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    bindPositionBy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PositionBindDto"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    upsertPermission: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PermissionUpsertDto"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    deletePermission: {
+        parameters: {
+            query: {
+                permissionId: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    currentUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["UserRolePermissionDto"];
+                };
+            };
+        };
+    };
+    upsertMe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UserUpsertDto"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    unBindDepartmentBy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DepartmentBindDto"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    bindDepartmentBy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DepartmentBindDto"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    resumeTrigger: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TriggerKey"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    pauseJob: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TriggerKey"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    updateJob: {
+        parameters: {
+            query: {
+                cron: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TriggerKey"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    triggerJob: {
+        parameters: {
+            query: {
+                startAt: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JobKey"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    upsertPosition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Position"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    deletePosition: {
+        parameters: {
+            query: {
+                id: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    upsertDepartment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["Department"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    deleteDepartment: {
+        parameters: {
+            query: {
+                id: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    signUp: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SignUpDto"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    signOut: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    signIn: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SignInDto"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    queryUsers: {
+        parameters: {
+            query: {
+                pageRequestDto: components["schemas"]["PageRequestDto"];
+                userQueryDto: components["schemas"]["UserQueryDto"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PageResponseDtoListUserRolePermissionDto"];
+                };
+            };
+        };
+    };
+    queryRoles: {
+        parameters: {
+            query: {
+                pageRequestDto: components["schemas"]["PageRequestDto"];
+                roleQueryDto: components["schemas"]["RoleQueryDto"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PageResponseDtoListRoleDto"];
+                };
+            };
+        };
+    };
+    queryPermissions: {
+        parameters: {
+            query: {
+                pageRequestDto: components["schemas"]["PageRequestDto"];
+                permissionQueryDto: components["schemas"]["PermissionQueryDto"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PageResponseDtoListPermissionRespDto"];
+                };
+            };
+        };
+    };
+    jobs: {
+        parameters: {
+            query: {
+                pageRequestDto: components["schemas"]["PageRequestDto"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PageResponseDtoListJobTriggerDto"];
+                };
+            };
+        };
+    };
+    queryPositions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["Position"][];
+                };
+            };
+        };
+    };
+    pageQueryPositions: {
+        parameters: {
+            query: {
+                pageRequestDto: components["schemas"]["PageRequestDto"];
+                positionQueryDto: components["schemas"]["PositionQueryDto"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PageResponseDtoListPositionRespDto"];
+                };
+            };
+        };
+    };
+    queryDepartments: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["Department"][];
+                };
+            };
+        };
+    };
+    pageQueryDepartments: {
+        parameters: {
+            query: {
+                pageRequestDto: components["schemas"]["PageRequestDto"];
+                departmentQueryDto: components["schemas"]["DepartmentQueryDto"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PageResponseDtoListDepartmentRespDto"];
+                };
+            };
+        };
+    };
 }

@@ -104,7 +104,7 @@
           <td class="px-6 py-4 flex items-center gap-x-2">
             <!-- Edit Modal toggle -->
             <button @click="handleUpsertUserClick(user)"
-              class="flex items-center block gap-x-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              class="flex items-center block gap-x-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               type="button">
               <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                 fill="none" viewBox="0 0 24 24">
@@ -115,8 +115,8 @@
             </button>
             <button
               class="flex items-center block gap-x-1
-              bg-yellow-600 hover:bg-yellow-700 focus:outline-none dark:bg-yellow-600 dark:hover:bg-yellow-700
-              focus:ring-yellow-500 block text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              bg-pink-600 hover:bg-pink-700 focus:outline-none dark:bg-pink-600 dark:hover:bg-pink-700
+              focus:ring-pink-500 block text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center"
               @click="handleBindRoleClick(user)" type="button">
               <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                 height="24" fill="none" viewBox="0 0 24 24">
@@ -127,8 +127,20 @@
             </button>
             <button
               class="flex items-center block gap-x-1
+              bg-yellow-600 hover:bg-yellow-700 focus:outline-none dark:bg-yellow-600 dark:hover:bg-yellow-700
+              focus:ring-yellow-500 block text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center"
+              @click="handleBindPositionClick(user)" type="button">
+              <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              </svg>
+              分配岗位
+            </button>
+            <button
+              class="flex items-center block gap-x-1
               bg-green-600 hover:bg-green-700 focus:outline-none dark:bg-green-600 dark:hover:bg-green-700
-              focus:ring-green-500 block text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              focus:ring-green-500 block text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center"
               @click="handleBindDepartmentClick(user)" type="button">
               <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                 viewBox="0 0 24 24">
@@ -140,7 +152,7 @@
             <button
               class="flex items-center block gap-x-1
               bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700
-              dark:focus:ring-red-900 block text-white focus:ring-4 focus:outline-nonefont-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              dark:focus:ring-red-900 block text-white focus:ring-4 focus:outline-nonefont-medium rounded-lg text-sm px-4 py-2.5 text-center"
               @click="handleDeleteUserClick(user)" type="button">
               <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                 height="24" fill="none" viewBox="0 0 24 24">
@@ -255,6 +267,17 @@ const handleBindDepartmentClick = async (
 ) => {
 	router.push({
 		name: RouteName.BINDDEPARTMENTVIEW,
+		params: {
+			userId: user.id,
+		},
+	});
+};
+
+const handleBindPositionClick = async (
+	user: components["schemas"]["UserRolePermissionDto"],
+) => {
+	router.push({
+		name: RouteName.BINDPOSITIONVIEW,
 		params: {
 			userId: user.id,
 		},

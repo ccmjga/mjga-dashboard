@@ -5,6 +5,7 @@ import permissionHandlers from "./permissionHandlers";
 import roleHandlers from "./roleHandlers";
 import userHandlers from "./userHandlers";
 import departmentHandlers from "./departmentHandlers";
+import positionHandlers from "./positionHandlers";
 export const worker = setupWorker(
 	...userHandlers,
 	...authHandlers,
@@ -12,4 +13,5 @@ export const worker = setupWorker(
 	...permissionHandlers,
 	...jobHandlers,
 	...departmentHandlers,
+	...positionHandlers,
 );

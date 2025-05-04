@@ -131,6 +131,7 @@
 
 <script setup lang="ts">
 import DepartmentDeleteModal from "@/components/PopupModal.vue";
+import TablePagination from "@/components/TablePagination.vue";
 import DepartmentUpsertModal from "@/components/UpsertDepartmentModal.vue";
 import { RouteName } from "@/router/constants";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
@@ -140,7 +141,6 @@ import useDepartmentDelete from "../composables/department/useDepartmentDelete";
 import { useDepartmentQuery } from "../composables/department/useDepartmentQuery";
 import { useDepartmentUpsert } from "../composables/department/useDepartmentUpsert";
 import useAlertStore from "../composables/store/useAlertStore";
-import TablePagination from "@/components/TablePagination.vue";
 
 const name = ref<string>("");
 const selectedDepartment = ref<components["schemas"]["Department"]>();

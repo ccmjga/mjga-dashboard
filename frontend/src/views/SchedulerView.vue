@@ -151,15 +151,15 @@
 <script setup lang="ts">
 import JobUpdateModal from "@/components/JobUpdateModal.vue";
 import PopupModal from "@/components/PopupModal.vue";
+import TablePagination from "@/components/TablePagination.vue";
 import { useJobControl } from "@/composables/job/useJobControl";
 import { useJobsPaginationQuery } from "@/composables/job/useJobQuery";
 import { useJobUpdate } from "@/composables/job/useJobUpdate";
 import useAlertStore from "@/composables/store/useAlertStore";
+import { RouteName } from "@/router/constants";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
 import type { components } from "../api/types/schema";
-import { RouteName } from "@/router/constants";
-import TablePagination from "@/components/TablePagination.vue";
 
 const jobName = ref<string>("");
 const jobResumeModal = ref<ModalInterface>();
