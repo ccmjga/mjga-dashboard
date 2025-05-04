@@ -102,6 +102,7 @@
           </th>
           <th scope="col" class="px-6 py-3">角色编码</th>
           <th scope="col" class="px-6 py-3">角色名称</th>
+          <th scope="col" class="px-6 py-3">绑定状态</th>
         </tr>
       </thead>
       <tbody>
@@ -119,6 +120,13 @@
           </td>
           <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
             {{ role.name }}
+          </td>
+          <td class="px-6 py-4">
+            <div class="flex items-center">
+              <div class="h-2.5 w-2.5 rounded-full me-2" :class="role.isBound ? 'bg-green-500' : 'bg-red-500'">
+              </div> {{
+              role.isBound === true ? "已绑定" : "未绑定" }}
+            </div>
           </td>
         </tr>
       </tbody>

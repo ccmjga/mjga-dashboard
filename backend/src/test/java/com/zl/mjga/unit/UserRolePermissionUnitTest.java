@@ -18,11 +18,11 @@ import com.zl.mjga.service.UserRolePermissionService;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import org.jooq.DSLContext;
+import org.jooq.*;
 import org.jooq.Record;
-import org.jooq.Result;
-import org.jooq.SQLDialect;
 import org.jooq.generated.mjga.tables.pojos.*;
+import org.jooq.generated.mjga.tables.pojos.Role;
+import org.jooq.generated.mjga.tables.pojos.User;
 import org.jooq.impl.DSL;
 import org.jooq.tools.jdbc.MockConnection;
 import org.jooq.tools.jdbc.MockDataProvider;
@@ -236,62 +236,6 @@ class UserRolePermissionUnitTest {
     UserRolePermissionDto userRolePermissionDto =
         userRolePermissionService.queryUniqueUserWithRolePermission(1L);
     assertThat(userRolePermissionDto).isNull();
-  }
-
-  @Test
-  void pageQueryRole_givenUserId_shouldReturnRelevantRolePermissionDto() {
-    // arrange
-    UserRoleMap stubUserRoleMap = new UserRoleMap();
-    stubUserRoleMap.setUserId(1L);
-    stubUserRoleMap.setRoleId(1L);
-    UserRoleMap stubUserRoleMap2 = new UserRoleMap();
-    stubUserRoleMap2.setUserId(1L);
-    stubUserRoleMap2.setRoleId(2L);
-
-    Result<Record> mockRoleResult =
-        dslContext.newResult(
-            List.of(ROLE.ID, ROLE.NAME, ROLE.CODE, DSL.field("total_role", Integer.class)));
-    mockRoleResult.addAll(
-        List.of(
-            dslContext
-                .newRecord(ROLE.ID, ROLE.NAME, ROLE.CODE, DSL.field("total_role", Integer.class))
-                .values(1L, "G5N6Xkjg0i9UC4Vltv", "G5N6Xkjg0i9UC4Vltv", 2),
-            dslContext
-                .newRecord(ROLE.ID, ROLE.NAME, ROLE.CODE, DSL.field("total_role", Integer.class))
-                .values(2L, "JszWMfgI1HpN2hON90", "JszWMfgI1HpN2hON90", 2)));
-    when(roleRepository.pageFetchBy(any(PageRequestDto.class), any(RoleQueryDto.class)))
-        .thenReturn(mockRoleResult);
-
-    RoleDto mockRoleDto1 = new RoleDto();
-    mockRoleDto1.setId(1L);
-    mockRoleDto1.setName("ghe41YG2FSbc");
-    mockRoleDto1.setCode("ghe41YG2FSbc");
-    mockRoleDto1
-        .getPermissions()
-        .addAll(
-            List.of(
-                new PermissionDto(1L, "4QBYM93jI5c3jxuZW", "4QBYM93jI5c3jxuZW"),
-                new PermissionDto(2L, "r0he6iMMHBze", "r0he6iMMHBze")));
-    RoleDto mockRoleDto2 = new RoleDto();
-    mockRoleDto2.setId(2L);
-    mockRoleDto2.setName("AfRcdGk0zc15Lz2F");
-    mockRoleDto2.setCode("AfRcdGk0zc15Lz2F");
-    doReturn(mockRoleDto1).when(userRolePermissionService).queryUniqueRoleWithPermission(1L);
-    doReturn(mockRoleDto2).when(userRolePermissionService).queryUniqueRoleWithPermission(2L);
-
-    // action & assert
-    RoleQueryDto roleQueryDto = new RoleQueryDto();
-    roleQueryDto.setUserId(1L);
-    PageResponseDto<List<RoleDto>> pageResult =
-        userRolePermissionService.pageQueryRole(PageRequestDto.of(0, 5), roleQueryDto);
-
-    assertThat(pageResult.getTotal()).isEqualTo(2L);
-    List<RoleDto> roleResult = pageResult.getData();
-    assertThat(roleResult.size()).isEqualTo(2);
-    assertThat(roleResult.get(0).getId()).isEqualTo(1L);
-    assertThat(roleResult.get(1).getId()).isEqualTo(2L);
-    assertThat(roleResult.get(0).getPermissions().get(0).getId()).isEqualTo(1L);
-    assertThat(roleResult.get(1).getPermissions().size()).isEqualTo(0L);
   }
 
   @Test

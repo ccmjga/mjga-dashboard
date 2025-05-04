@@ -1117,6 +1117,9 @@
           "name": {
             "type": "string"
           },
+          "isBound": {
+            "type": "boolean"
+          },
           "permissions": {
             "type": "array",
             "items": {

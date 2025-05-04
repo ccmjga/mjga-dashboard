@@ -83,12 +83,16 @@ public class UserRolePermissionService {
         roleRecords.stream()
             .map(
                 record -> {
-                  RoleDto roleDto = queryUniqueRoleWithPermission(record.getValue(ROLE.ID));
-                  roleDto.setIsBound(
-                      record.field("is_bound", Boolean.class) != null
-                          ? record.getValue("is_bound", Boolean.class)
-                          : null);
-                  return roleDto;
+                  return RoleDto.builder()
+                      .id(record.getValue("id", Long.class))
+                      .code(record.getValue("code", String.class))
+                      .name(record.getValue("name", String.class))
+                      .isBound(
+                          record.field("is_bound", Boolean.class) != null
+                              ? record.getValue("is_bound", Boolean.class)
+                              : null)
+                      .permissions(record.getValue("permissions", List.class))
+                      .build();
                 })
             .toList();
     return new PageResponseDto<>(

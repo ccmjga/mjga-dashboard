@@ -475,6 +475,7 @@ export interface components {
             id?: number;
             code?: string;
             name?: string;
+            isBound?: boolean;
             permissions?: components["schemas"]["PermissionDto"][];
         };
         UserRolePermissionDto: {

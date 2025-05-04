@@ -18,6 +18,7 @@ export default [
 				"manager",
 			]),
 			name: faker.person.jobTitle(),
+			isBound: faker.datatype.boolean(),
 			permissions: faker.helpers.multiple(generatePermission, {
 				count: { min: 1, max: 5 },
 			}),

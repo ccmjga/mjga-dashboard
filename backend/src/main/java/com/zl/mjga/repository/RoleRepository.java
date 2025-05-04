@@ -1,6 +1,5 @@
 package com.zl.mjga.repository;
 
-import static org.jooq.generated.mjga.Tables.DEPARTMENT;
 import static org.jooq.generated.mjga.tables.Permission.PERMISSION;
 import static org.jooq.generated.mjga.tables.Role.ROLE;
 import static org.jooq.generated.mjga.tables.RolePermissionMap.ROLE_PERMISSION_MAP;
@@ -14,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.generated.mjga.tables.daos.RoleDao;
+import org.jooq.generated.mjga.tables.pojos.Permission;
 import org.jooq.generated.mjga.tables.pojos.Role;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +40,18 @@ public class RoleRepository extends RoleDao {
         .select(
             asterisk(),
             roleQueryDto.getUserId() != null
-                ? DSL.when(DEPARTMENT.ID.in(selectUsersRoleIds(roleQueryDto.getUserId())), true)
+                ? when(ROLE.ID.in(selectUsersRoleIds(roleQueryDto.getUserId())), true)
                     .otherwise(false)
                     .as("is_bound")
                 : noField(),
+            multiset(
+                    select(PERMISSION.asterisk())
+                        .from(ROLE_PERMISSION_MAP)
+                        .leftJoin(PERMISSION)
+                        .on(ROLE_PERMISSION_MAP.PERMISSION_ID.eq(PERMISSION.ID))
+                        .where(ROLE_PERMISSION_MAP.ROLE_ID.eq(ROLE.ID)))
+                .convertFrom(r -> r.into(Permission.class))
+                .as("permissions"),
             DSL.count(ROLE.ID).over().as("total_role"))
         .from(ROLE)
         .where(
