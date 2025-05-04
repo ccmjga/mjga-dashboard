@@ -6,8 +6,9 @@ import lombok.*;
 @NoArgsConstructor
 @Data
 @Builder
-public class PermissionDto {
+public class PermissionRespDto {
   private Long id;
   private String code;
   private String name;
+  private Boolean isBound;
 }

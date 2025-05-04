@@ -178,7 +178,7 @@ class UserRolePermissionMvcTest {
     stubRoleDto.setId(1L);
     stubRoleDto.setName(stubRoleName);
     stubRoleDto.setCode(stubRoleCode);
-    stubRoleDto.setPermissions(List.of(new PermissionDto(1L, "9VWU1nmU89zEVH", "9VWU1nmU89zEVH")));
+    stubRoleDto.setPermissions(List.of(new PermissionRespDto(1L, "9VWU1nmU89zEVH", "9VWU1nmU89zEVH", false)));
     when(userRolePermissionService.pageQueryRole(PageRequestDto.of(0, 5), stubRoleQueryDto))
         .thenReturn(new PageResponseDto<>(1, List.of(stubRoleDto)));
 
@@ -206,13 +206,13 @@ class UserRolePermissionMvcTest {
     stubPermissionQueryDto.setPermissionCode(stubPermissionCode);
     stubPermissionQueryDto.setPermissionName(stubPermissionName);
 
-    PermissionDto stubPermissionDto = new PermissionDto();
-    stubPermissionDto.setId(stubPermissionId);
-    stubPermissionDto.setName(stubPermissionName);
-    stubPermissionDto.setCode(stubPermissionCode);
+    PermissionRespDto stubPermissionRespDto = new PermissionRespDto();
+    stubPermissionRespDto.setId(stubPermissionId);
+    stubPermissionRespDto.setName(stubPermissionName);
+    stubPermissionRespDto.setCode(stubPermissionCode);
     when(userRolePermissionService.pageQueryPermission(
             PageRequestDto.of(0, 5), stubPermissionQueryDto))
-        .thenReturn(new PageResponseDto<>(1, List.of(stubPermissionDto)));
+        .thenReturn(new PageResponseDto<>(1, List.of(stubPermissionRespDto)));
 
     mockMvc
         .perform(

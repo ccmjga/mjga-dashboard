@@ -108,7 +108,7 @@ public class UserRolePermissionController {
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).READ_USER_ROLE_PERMISSION)")
   @GetMapping("/permissions")
   @ResponseStatus(HttpStatus.OK)
-  PageResponseDto<List<PermissionDto>> queryPermissions(
+  PageResponseDto<List<PermissionRespDto>> queryPermissions(
       @ModelAttribute PageRequestDto pageRequestDto,
       @ModelAttribute PermissionQueryDto permissionQueryDto) {
     return userRolePermissionService.pageQueryPermission(pageRequestDto, permissionQueryDto);

@@ -3,8 +3,8 @@ package com.zl.mjga.repository;
 import static org.jooq.generated.mjga.tables.Permission.PERMISSION;
 import static org.jooq.generated.mjga.tables.Role.ROLE;
 import static org.jooq.generated.mjga.tables.RolePermissionMap.ROLE_PERMISSION_MAP;
-import static org.jooq.impl.DSL.asterisk;
-import static org.jooq.impl.DSL.noCondition;
+import static org.jooq.impl.DSL.*;
+import static org.jooq.impl.DSL.noField;
 
 import com.zl.mjga.dto.PageRequestDto;
 import com.zl.mjga.dto.urp.PermissionQueryDto;
@@ -29,12 +29,21 @@ public class PermissionRepository extends PermissionDao {
   public Result<Record> pageFetchBy(
       PageRequestDto pageRequestDto, PermissionQueryDto permissionQueryDto) {
     return ctx()
-        .select(asterisk(), DSL.count().over().as("total_permission"))
+        .select(
+            asterisk(),
+            permissionQueryDto.getRoleId() != null
+                ? when(ROLE.ID.in(selectRolesPermissionIds(permissionQueryDto.getRoleId())), true)
+                    .otherwise(false)
+                    .as("is_bound")
+                : noField(),
+            DSL.count().over().as("total_permission"))
         .from(PERMISSION)
         .where(
             switch (permissionQueryDto.getBindState()) {
-              case BIND -> PERMISSION.ID.in(selectRolesPermissionIds(permissionQueryDto));
-              case UNBIND -> ROLE.ID.notIn(selectRolesPermissionIds(permissionQueryDto));
+              case BIND ->
+                  PERMISSION.ID.in(selectRolesPermissionIds(permissionQueryDto.getRoleId()));
+              case UNBIND ->
+                  ROLE.ID.notIn(selectRolesPermissionIds(permissionQueryDto.getRoleId()));
               case ALL -> noCondition();
             })
         .and(
@@ -55,12 +64,11 @@ public class PermissionRepository extends PermissionDao {
         .fetch();
   }
 
-  private SelectConditionStep<Record1<Long>> selectRolesPermissionIds(
-      PermissionQueryDto permissionQueryDto) {
+  private SelectConditionStep<Record1<Long>> selectRolesPermissionIds(Long roleId) {
     return ctx()
         .select(ROLE_PERMISSION_MAP.ROLE_ID)
         .from(ROLE_PERMISSION_MAP)
-        .where(ROLE_PERMISSION_MAP.ROLE_ID.eq(permissionQueryDto.getRoleId()));
+        .where(ROLE_PERMISSION_MAP.ROLE_ID.eq(roleId));
   }
 
   public List<Permission> selectByPermissionIdIn(List<Long> permissionIdList) {

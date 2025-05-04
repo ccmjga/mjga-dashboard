@@ -8,7 +8,7 @@ import static org.jooq.generated.mjga.tables.UserRoleMap.USER_ROLE_MAP;
 import static org.jooq.impl.DSL.*;
 
 import com.zl.mjga.dto.PageRequestDto;
-import com.zl.mjga.dto.urp.PermissionDto;
+import com.zl.mjga.dto.urp.PermissionRespDto;
 import com.zl.mjga.dto.urp.RoleDto;
 import com.zl.mjga.dto.urp.UserQueryDto;
 import com.zl.mjga.dto.urp.UserRolePermissionDto;
@@ -56,7 +56,7 @@ public class UserRepository extends UserDao {
                                         .on(ROLE_PERMISSION_MAP.PERMISSION_ID.eq(PERMISSION.ID))
                                         .where(ROLE_PERMISSION_MAP.ROLE_ID.eq(ROLE.ID)))
                                 .convertFrom(
-                                    r -> r.map((record) -> record.into(PermissionDto.class)))
+                                    r -> r.map((record) -> record.into(PermissionRespDto.class)))
                                 .as("permissions"))
                         .from(USER_ROLE_MAP)
                         .leftJoin(ROLE)

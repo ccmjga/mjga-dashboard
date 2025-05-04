@@ -109,19 +109,29 @@ public class UserRolePermissionService {
     return roleDto;
   }
 
-  public PageResponseDto<List<PermissionDto>> pageQueryPermission(
+  public PageResponseDto<List<PermissionRespDto>> pageQueryPermission(
       PageRequestDto pageRequestDto, PermissionQueryDto permissionQueryDto) {
     Result<Record> permissionRecords =
         permissionRepository.pageFetchBy(pageRequestDto, permissionQueryDto);
     if (permissionRecords.isEmpty()) {
       return PageResponseDto.empty();
     }
-    List<PermissionDto> permissionDtoList =
-        permissionRecords.into(Permission.class).stream()
-            .map(pojo -> new PermissionDto(pojo.getId(), pojo.getName(), pojo.getCode()))
+    List<PermissionRespDto> permissionRespDtoList =
+        permissionRecords.stream()
+            .map(
+                record ->
+                    PermissionRespDto.builder()
+                        .id(record.getValue("id", Long.class))
+                        .name(record.getValue("name", String.class))
+                        .code(record.getValue("code", String.class))
+                        .isBound(
+                            record.field("is_bound", Boolean.class) != null
+                                ? record.getValue("is_bound", Boolean.class)
+                                : null)
+                        .build())
             .toList();
     return new PageResponseDto<>(
-        permissionRecords.get(0).getValue("total_permission", Integer.class), permissionDtoList);
+        permissionRecords.get(0).getValue("total_permission", Integer.class), permissionRespDtoList);
   }
 
   public void bindPermissionToRole(Long roleId, List<Long> permissionIdList) {
@@ -215,18 +225,18 @@ public class UserRolePermissionService {
     if (roleResult.get(0).getValue(PERMISSION.ID) != null) {
       roleResult.forEach(
           (record) -> {
-            PermissionDto permissionDto = createRbacDtoPermissionPart(record);
-            roleDto.getPermissions().add(permissionDto);
+            PermissionRespDto permissionRespDto = createRbacDtoPermissionPart(record);
+            roleDto.getPermissions().add(permissionRespDto);
           });
     }
   }
 
-  private PermissionDto createRbacDtoPermissionPart(Record record) {
-    PermissionDto permissionDto = new PermissionDto();
-    permissionDto.setId(record.getValue(PERMISSION.ID));
-    permissionDto.setCode(record.getValue(PERMISSION.CODE));
-    permissionDto.setName(record.getValue(PERMISSION.NAME));
-    return permissionDto;
+  private PermissionRespDto createRbacDtoPermissionPart(Record record) {
+    PermissionRespDto permissionRespDto = new PermissionRespDto();
+    permissionRespDto.setId(record.getValue(PERMISSION.ID));
+    permissionRespDto.setCode(record.getValue(PERMISSION.CODE));
+    permissionRespDto.setName(record.getValue(PERMISSION.NAME));
+    return permissionRespDto;
   }
 
   private RoleDto createRbacDtoRolePart(List<Record> roleResult) {

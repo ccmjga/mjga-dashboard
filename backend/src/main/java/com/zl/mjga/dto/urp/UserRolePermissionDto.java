@@ -26,7 +26,7 @@ public class UserRolePermissionDto {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
   private OffsetDateTime createTime;
 
-  public Set<PermissionDto> getPermissions() {
+  public Set<PermissionRespDto> getPermissions() {
     return roles.stream()
         .flatMap((roleDto) -> roleDto.getPermissions().stream())
         .collect(Collectors.toSet());

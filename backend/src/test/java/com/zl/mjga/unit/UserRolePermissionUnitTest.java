@@ -118,11 +118,11 @@ class UserRolePermissionUnitTest {
     mockRoleDto.setId(stubRoleId);
     mockRoleDto.setCode(stubRoleCode);
     mockRoleDto.setName(stubRoleName);
-    PermissionDto permissionDto = new PermissionDto();
-    permissionDto.setId(stubPermissionId);
-    permissionDto.setCode(stubPermissionCode);
-    permissionDto.setName(stubPermissionName);
-    mockRoleDto.getPermissions().add(permissionDto);
+    PermissionRespDto permissionRespDto = new PermissionRespDto();
+    permissionRespDto.setId(stubPermissionId);
+    permissionRespDto.setCode(stubPermissionCode);
+    permissionRespDto.setName(stubPermissionName);
+    mockRoleDto.getPermissions().add(permissionRespDto);
     mockUserRolePermissionDto1.setId(stubUserId1);
     mockUserRolePermissionDto1.setUsername(stubUserName1);
     mockUserRolePermissionDto1.setPassword(stubUserPassword1);
@@ -210,9 +210,9 @@ class UserRolePermissionUnitTest {
                 stubRoleCode,
                 true,
                 List.of(
-                    new PermissionDto(stubPermissionId, stubPermissionName, stubPermissionCode),
-                    new PermissionDto(
-                        stubPermissionId2, stubPermissionName2, stubPermissionCode2)))));
+                    new PermissionRespDto(stubPermissionId, stubPermissionName, stubPermissionCode, false),
+                    new PermissionRespDto(
+                        stubPermissionId2, stubPermissionName2, stubPermissionCode2, false)))));
 
     when(userRepository.fetchUniqueUserDtoWithNestedRolePermissionBy(stubUserId))
         .thenReturn(mockResult);
@@ -292,10 +292,10 @@ class UserRolePermissionUnitTest {
         .thenReturn(mockRoleResult);
     PermissionQueryDto permissionQueryDto = new PermissionQueryDto();
     permissionQueryDto.setRoleId(1L);
-    PageResponseDto<List<PermissionDto>> pageResult =
+    PageResponseDto<List<PermissionRespDto>> pageResult =
         userRolePermissionService.pageQueryPermission(PageRequestDto.of(0, 5), permissionQueryDto);
     assertThat(pageResult.getTotal()).isEqualTo(2L);
-    List<PermissionDto> permissionResult = pageResult.getData();
+    List<PermissionRespDto> permissionResult = pageResult.getData();
     assertThat(permissionResult.get(0).getId()).isEqualTo(1L);
     assertThat(permissionResult.get(1).getId()).isEqualTo(2L);
   }
@@ -312,12 +312,12 @@ class UserRolePermissionUnitTest {
     when(permissionRepository.pageFetchBy(any(PageRequestDto.class), any(PermissionQueryDto.class)))
         .thenReturn(mockRoleResult);
     PermissionQueryDto permissionQueryDto = new PermissionQueryDto();
-    PageResponseDto<List<PermissionDto>> pageResult =
+    PageResponseDto<List<PermissionRespDto>> pageResult =
         userRolePermissionService.pageQueryPermission(PageRequestDto.of(0, 5), permissionQueryDto);
 
     assertThat(pageResult.getTotal()).isEqualTo(0L);
     permissionQueryDto.setRoleId(1L);
-    PageResponseDto<List<PermissionDto>> pageResult2 =
+    PageResponseDto<List<PermissionRespDto>> pageResult2 =
         userRolePermissionService.pageQueryPermission(PageRequestDto.of(0, 5), permissionQueryDto);
     assertThat(pageResult2.getTotal()).isEqualTo(0);
   }

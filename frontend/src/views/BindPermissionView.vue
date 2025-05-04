@@ -60,12 +60,30 @@
           @click.prevent="handleSearch">搜索</button>
       </form>
       <div class="flex items-center justify-end gap-2 absolute right-5 bottom-2">
-        <button @click="() => {permissionBindModal?.show();}"
+        <button @click="() => {
+          if (checkedPermissionIds.length === 0) {
+            alertStore.showAlert({
+              content: '没有选择权限',
+              level: 'error',
+            });
+          } else {
+            permissionBindModal?.show();
+          }
+        }"
           class="flex items-center block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           type="button">
           绑定
         </button>
-        <button @click="() => {permissionUnbindModal?.show();}"
+        <button @click="() => {
+          if (checkedPermissionIds.length === 0) {
+            alertStore.showAlert({
+              content: '没有选择权限',
+              level: 'error',
+            });
+          } else {
+            permissionUnbindModal?.show();
+          }
+        }"
           class="flex items-center block text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           type="button">
           解绑
@@ -85,6 +103,7 @@
           </th>
           <th scope="col" class="px-6 py-3">权限编码</th>
           <th scope="col" class="px-6 py-3">权限名称</th>
+          <th scope="col" class="px-6 py-3">绑定状态</th>
         </tr>
       </thead>
       <tbody>
@@ -103,6 +122,13 @@
           </td>
           <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
             {{ permission.name }}
+          </td>
+          <td class="px-6 py-4">
+            <div class="flex items-center">
+              <div class="h-2.5 w-2.5 rounded-full me-2" :class="permission.isBound ? 'bg-green-500' : 'bg-red-500'">
+              </div> {{
+              permission.isBound === true ? "已绑定" : "未绑定" }}
+            </div>
           </td>
         </tr>
       </tbody>

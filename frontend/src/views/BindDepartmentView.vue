@@ -180,7 +180,7 @@ const handleBindDepartmentSubmit = async () => {
 		content: "操作成功",
 		level: "success",
 	});
-  await fetchDepartmentWith({
+	await fetchDepartmentWith({
 		name: departmentName.value,
 		userId: Number($route.params.userId),
 		bindState: bindState.value,

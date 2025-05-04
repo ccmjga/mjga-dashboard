@@ -7,6 +7,7 @@ export default [
 			id: faker.number.int({ min: 1, max: 20 }),
 			code: `perm_${faker.lorem.words({ min: 1, max: 1 })}`,
 			name: faker.lorem.words({ min: 1, max: 1 }),
+			isBound: faker.datatype.boolean(),
 		});
 
 		const mockData = {

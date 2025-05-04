@@ -766,7 +766,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/PageResponseDtoListPermissionDto"
+                  "$ref": "#/components/schemas/PageResponseDtoListPermissionRespDto"
                 }
               }
             }
@@ -1089,7 +1089,7 @@
           }
         }
       },
-      "PermissionDto": {
+      "PermissionRespDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -1101,6 +1101,9 @@
           },
           "name": {
             "type": "string"
+          },
+          "isBound": {
+            "type": "boolean"
           }
         }
       },
@@ -1123,7 +1126,7 @@
           "permissions": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PermissionDto"
+              "$ref": "#/components/schemas/PermissionRespDto"
             }
           }
         }
@@ -1159,7 +1162,7 @@
             "uniqueItems": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PermissionDto"
+              "$ref": "#/components/schemas/PermissionRespDto"
             }
           }
         }
@@ -1247,7 +1250,7 @@
           }
         }
       },
-      "PageResponseDtoListPermissionDto": {
+      "PageResponseDtoListPermissionRespDto": {
         "type": "object",
         "properties": {
           "total": {
@@ -1257,7 +1260,7 @@
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PermissionDto"
+              "$ref": "#/components/schemas/PermissionRespDto"
             }
           }
         }
