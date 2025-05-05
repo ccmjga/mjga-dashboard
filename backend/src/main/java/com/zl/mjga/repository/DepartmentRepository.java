@@ -1,7 +1,6 @@
 package com.zl.mjga.repository;
 
-import static org.jooq.generated.mjga.Tables.DEPARTMENT;
-import static org.jooq.generated.mjga.Tables.USER_DEPARTMENT_MAP;
+import static org.jooq.generated.mjga.Tables.*;
 import static org.jooq.generated.mjga.tables.Permission.PERMISSION;
 import static org.jooq.generated.mjga.tables.Role.ROLE;
 import static org.jooq.impl.DSL.noCondition;
@@ -63,9 +62,9 @@ public class DepartmentRepository extends DepartmentDao {
   }
 
   private SelectConditionStep<Record1<Long>> selectUsersDepartment(Long userId) {
-    return ctx()
-        .select(USER_DEPARTMENT_MAP.DEPARTMENT_ID)
-        .from(USER_DEPARTMENT_MAP)
-        .where(USER_DEPARTMENT_MAP.USER_ID.eq(userId));
+    return DSL.select(USER.department().ID)
+        .from(USER)
+        .leftJoin(USER.department())
+        .where(USER.ID.eq(userId));
   }
 }

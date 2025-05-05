@@ -1,9 +1,7 @@
 package com.zl.mjga.repository;
 
-import static org.jooq.generated.mjga.tables.Permission.PERMISSION;
+import static org.jooq.generated.mjga.Tables.USER;
 import static org.jooq.generated.mjga.tables.Role.ROLE;
-import static org.jooq.generated.mjga.tables.RolePermissionMap.ROLE_PERMISSION_MAP;
-import static org.jooq.generated.mjga.tables.UserRoleMap.USER_ROLE_MAP;
 import static org.jooq.impl.DSL.*;
 
 import com.zl.mjga.dto.PageRequestDto;
@@ -44,12 +42,7 @@ public class RoleRepository extends RoleDao {
                     .otherwise(false)
                     .as("is_bound")
                 : noField(),
-            multiset(
-                    select(PERMISSION.asterisk())
-                        .from(ROLE_PERMISSION_MAP)
-                        .leftJoin(PERMISSION)
-                        .on(ROLE_PERMISSION_MAP.PERMISSION_ID.eq(PERMISSION.ID))
-                        .where(ROLE_PERMISSION_MAP.ROLE_ID.eq(ROLE.ID)))
+            multiset(select(ROLE.permission().asterisk()).from(ROLE.permission()))
                 .convertFrom(r -> r.into(Permission.class))
                 .as("permissions"),
             DSL.count(ROLE.ID).over().as("total_role"))
@@ -77,20 +70,16 @@ public class RoleRepository extends RoleDao {
   }
 
   private SelectConditionStep<Record1<Long>> selectUsersRoleIds(Long userId) {
-    return ctx()
-        .select(USER_ROLE_MAP.ROLE_ID)
-        .from(USER_ROLE_MAP)
-        .where(USER_ROLE_MAP.USER_ID.eq(userId));
+    return DSL.select(USER.role().ID)
+        .from(USER)
+        .leftJoin(USER.role())
+        .where(USER.role().ID.eq(userId));
   }
 
   public Result<Record> fetchUniqueRoleWithPermission(Long roleId) {
     return ctx()
-        .select(asterisk())
-        .from(ROLE)
-        .leftJoin(ROLE_PERMISSION_MAP)
-        .on(ROLE.ID.eq(ROLE_PERMISSION_MAP.ROLE_ID))
-        .leftJoin(PERMISSION)
-        .on(ROLE_PERMISSION_MAP.PERMISSION_ID.eq(PERMISSION.ID))
+        .select(ROLE.asterisk(), ROLE.permission().asterisk())
+        .from(ROLE, ROLE.permission())
         .where(ROLE.ID.eq(roleId))
         .orderBy(ROLE.ID)
         .fetch();

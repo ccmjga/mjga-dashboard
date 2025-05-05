@@ -52,8 +52,9 @@ public class PositionRepository extends PositionDao {
 
   private SelectConditionStep<Record1<Long>> selectUsersPosition(Long userId) {
     return ctx()
-        .select(USER_POSITION_MAP.POSITION_ID)
-        .from(USER_POSITION_MAP)
-        .where(USER_POSITION_MAP.USER_ID.eq(userId));
+        .select(USER.position().ID)
+        .from(USER)
+        .leftJoin(USER.position())
+        .where(USER.ID.eq(userId));
   }
 }

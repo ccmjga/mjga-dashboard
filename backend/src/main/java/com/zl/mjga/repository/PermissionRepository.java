@@ -2,7 +2,6 @@ package com.zl.mjga.repository;
 
 import static org.jooq.generated.mjga.tables.Permission.PERMISSION;
 import static org.jooq.generated.mjga.tables.Role.ROLE;
-import static org.jooq.generated.mjga.tables.RolePermissionMap.ROLE_PERMISSION_MAP;
 import static org.jooq.impl.DSL.*;
 import static org.jooq.impl.DSL.noField;
 
@@ -65,10 +64,10 @@ public class PermissionRepository extends PermissionDao {
   }
 
   private SelectConditionStep<Record1<Long>> selectRolesPermissionIds(Long roleId) {
-    return ctx()
-        .select(ROLE_PERMISSION_MAP.ROLE_ID)
-        .from(ROLE_PERMISSION_MAP)
-        .where(ROLE_PERMISSION_MAP.ROLE_ID.eq(roleId));
+    return DSL.select(ROLE.permission().ID)
+        .from(ROLE)
+        .leftJoin(ROLE.permission())
+        .where(ROLE.ID.eq(roleId));
   }
 
   public List<Permission> selectByPermissionIdIn(List<Long> permissionIdList) {

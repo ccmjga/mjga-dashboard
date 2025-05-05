@@ -48,11 +48,14 @@ public class UserRepository extends UserDao {
                             USER.role().asterisk(),
                             multiset(
                                     select(USER.role().permission().asterisk())
-                                        .from(USER.role().permission()))
+                                        .from(USER)
+                                        .leftJoin(USER.role())
+                                        .leftJoin(USER.role().permission()))
                                 .convertFrom(
                                     r -> r.map((record) -> record.into(PermissionRespDto.class)))
                                 .as("permissions"))
-                        .from(USER.role()))
+                        .from(USER)
+                        .leftJoin(USER.role()))
                 .convertFrom(r -> r.map((record) -> record.into(RoleDto.class)))
                 .as("roles"))
         .from(USER)
@@ -91,7 +94,9 @@ public class UserRepository extends UserDao {
   public Result<Record> fetchUniqueUserWithRolePermissionBy(Long userId) {
     return ctx()
         .select(USER.asterisk(), USER.role().asterisk(), USER.role().permission().asterisk())
-        .from(USER, USER.role(), USER.role().permission())
+        .from(USER)
+        .leftJoin(USER.role())
+        .leftJoin(USER.role().permission())
         .where(USER.ID.eq(userId))
         .fetch();
   }
