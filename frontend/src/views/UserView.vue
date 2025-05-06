@@ -98,7 +98,7 @@
           <td class="px-6 py-4">
             <div class="flex items-center">
               <div class="h-2.5 w-2.5 rounded-full me-2" :class="user.enable ? 'bg-blue-500' : 'bg-red-500'"></div> {{
-              user.enable === true ? "启用" : "关闭" }}
+              user.enable === true ? "启用" : "禁用" }}
             </div>
           </td>
           <td class="px-6 py-4">
