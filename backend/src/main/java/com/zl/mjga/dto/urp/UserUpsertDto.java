@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class UserUpsertDto {
   private Long id;
   @NotEmpty private String username;
-  @NotEmpty private String password;
+  private String password;
   @NotNull private Boolean enable;
 }

@@ -86,7 +86,7 @@ public class PageRequestDto {
   }
 
   public long getOffset() {
-    return (page -1) * size;
+    return (page - 1) * size;
   }
 
   public void setSortBy(String sortBy) {

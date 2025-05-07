@@ -42,7 +42,7 @@ public class UserRolePermissionService {
   public void upsertUser(UserUpsertDto userUpsertDto) {
     User user = new User();
     BeanUtils.copyProperties(userUpsertDto, user);
-    userRepository.merge(user);
+    userRepository.mergeWithoutNullFieldBy(user);
   }
 
   public void upsertRole(RoleUpsertDto roleUpsertDto) {

@@ -476,7 +476,7 @@ export interface components {
             /** Format: int64 */
             id?: number;
             username: string;
-            password: string;
+            password?: string;
             enable: boolean;
         };
         RoleUpsertDto: {
@@ -530,9 +530,9 @@ export interface components {
             password: string;
         };
         PageRequestDto: {
-            /** Format: int32 */
+            /** Format: int64 */
             page?: number;
-            /** Format: int32 */
+            /** Format: int64 */
             size?: number;
             sortBy?: {
                 [key: string]: "ASC" | "DESC";

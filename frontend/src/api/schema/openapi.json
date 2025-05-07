@@ -1023,7 +1023,6 @@
       "UserUpsertDto": {
         "required": [
           "enable",
-          "password",
           "username"
         ],
         "type": "object",
@@ -1206,11 +1205,11 @@
         "properties": {
           "page": {
             "type": "integer",
-            "format": "int32"
+            "format": "int64"
           },
           "size": {
             "type": "integer",
-            "format": "int32"
+            "format": "int64"
           },
           "sortBy": {
             "type": "object",

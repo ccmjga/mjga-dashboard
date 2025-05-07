@@ -9,9 +9,11 @@ import com.zl.mjga.dto.urp.PermissionRespDto;
 import com.zl.mjga.dto.urp.RoleDto;
 import com.zl.mjga.dto.urp.UserQueryDto;
 import com.zl.mjga.dto.urp.UserRolePermissionDto;
+import org.apache.commons.lang3.StringUtils;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.generated.mjga.tables.daos.*;
+import org.jooq.generated.mjga.tables.pojos.User;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -23,6 +25,34 @@ public class UserRepository extends UserDao {
   @Autowired
   public UserRepository(Configuration configuration) {
     super(configuration);
+  }
+
+  @Transactional
+  public void mergeWithoutNullFieldBy(User user) {
+    ctx()
+        .mergeInto(USER)
+        .using(
+            select(
+                    value(user.getId()).as("id"),
+                    value(user.getUsername()).as("username"),
+                    value(user.getPassword()).as("password"),
+                    value(user.getEnable()).as("enable"))
+                .asTable("newUser"))
+        .on(USER.ID.eq(DSL.field(DSL.name("newUser", "id"), Long.class)))
+        .whenMatchedThenUpdate()
+        .set(USER.USERNAME, DSL.field(DSL.name("newUser", "username"), String.class))
+        .set(
+            USER.PASSWORD,
+            StringUtils.isNotEmpty(user.getPassword())
+                ? DSL.field(DSL.name("newUser", "password"), String.class)
+                : USER.PASSWORD)
+        .set(USER.ENABLE, DSL.field(DSL.name("newUser", "enable"), Boolean.class))
+        .whenNotMatchedThenInsert(USER.USERNAME, USER.PASSWORD, USER.ENABLE)
+        .values(
+            DSL.field(DSL.name("newUser", "username"), String.class),
+            DSL.field(DSL.name("newUser", "password"), String.class),
+            DSL.field(DSL.name("newUser", "enable"), Boolean.class))
+        .execute();
   }
 
   public Result<Record> pageFetchBy(PageRequestDto pageRequestDto, UserQueryDto userQueryDto) {

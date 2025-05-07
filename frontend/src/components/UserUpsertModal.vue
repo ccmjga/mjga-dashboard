@@ -78,13 +78,7 @@ const { user, onSubmit } = defineProps<{
 	onSubmit: (data: UserUpsertSubmitModel) => void;
 }>();
 
-const formData = ref({
-	id: user?.id,
-	username: user?.username,
-	password: user?.password,
-	enable: user?.enable,
-	confirmPassword: user?.password,
-});
+const formData = ref();
 
 watch(
 	() => user,
@@ -92,22 +86,29 @@ watch(
 		formData.value = {
 			id: newUser?.id,
 			username: newUser?.username,
-			password: newUser?.password,
+			password: undefined,
 			enable: newUser?.enable,
-			confirmPassword: newUser?.password,
+			confirmPassword: undefined,
 		};
 	},
+	{
+		immediate: true,
+	}
 );
 
 const handleSubmit = () => {
 	const userSchema = z
 		.object({
+			id: z.number().optional(),
 			username: z.string().min(4, "用户名至少4个字符"),
-			password: z.string().min(5, "密码至少5个字符"),
-			confirmPassword: z.string(),
 			enable: z.boolean(),
+			password: z.string().min(5, "密码至少5个字符").optional(),
+			confirmPassword: z.string().min(5, "密码至少5个字符").optional(),
 		})
-		.refine((data) => data.password === data.confirmPassword, {
+		.refine((data) => {
+			if (data.password) return true;
+			return data.password === data.confirmPassword;
+		}, {
 			message: "您的密码输入不一致，请重新输入。",
 		});
 
@@ -118,7 +119,7 @@ const handleSubmit = () => {
 		if (error instanceof z.ZodError) {
 			alertStore.showAlert({
 				level: "error",
-				content: `请检查您填写的字段：${error.errors[0].path}`,
+				content: error.errors[0].message,
 			});
 		}
 	}
