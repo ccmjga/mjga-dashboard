@@ -30,14 +30,22 @@ export function usePagination(options: UsePaginationOptions = {}) {
 	});
 
 	const displayRange = computed(() => {
-		const start = (currentPage.value - 1) * pageSize.value + 1;
-		const end = Math.min(currentPage.value * pageSize.value, total.value);
+		const start =
+			total.value === 0 ? 0 : (currentPage.value - 1) * pageSize.value + 1;
+		const end =
+			total.value === 0
+				? 0
+				: Math.min(currentPage.value * pageSize.value, total.value);
 		return { start, end };
 	});
 
-	const isFirstPage = computed(() => currentPage.value === 1);
+	const isFirstPage = computed(
+		() => total.value === 0 || currentPage.value === 1,
+	);
 
-	const isLastPage = computed(() => currentPage.value === totalPages.value);
+	const isLastPage = computed(
+		() => total.value === 0 || currentPage.value === totalPages.value,
+	);
 
 	const updatePaginationState = (state: Partial<PaginationState>) => {
 		if (state.currentPage !== undefined) currentPage.value = state.currentPage;

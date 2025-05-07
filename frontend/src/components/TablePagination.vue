@@ -17,19 +17,19 @@
             ]">上一页</a>
       </li>
       <li v-for="page in pageNumbers" :key="page">
-        <a href="#" @click.prevent="handlePageChangeClick(page)" :class="[
+        <button @click.prevent="handlePageChangeClick(page)" :class="[
               'flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 dark:hover:text-white',
               currentPage === page 
                 ? 'text-blue-600 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
                 : 'text-gray-500 bg-white dark:text-gray-400'
-            ]">{{ page }}</a>
+            ]">{{ page }}</button>
       </li>
 
       <li>
-        <a href="#" @click.prevent="handlePageChangeClick(currentPage + 1)" :class="[
+        <button @click.prevent="handlePageChangeClick(currentPage + 1)" :class="[
               'flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
               { 'opacity-50 cursor-not-allowed': isLastPage }
-            ]">下一页</a>
+            ]">下一页</button>
       </li>
     </ul>
   </nav>
@@ -53,7 +53,7 @@ const {
 	isLastPage,
 	totalPages,
 	updatePaginationState,
-} = usePagination({});
+} = usePagination();
 
 const handlePageChangeClick = async (page: number) => {
 	if (page < 1 || page > totalPages.value) return;

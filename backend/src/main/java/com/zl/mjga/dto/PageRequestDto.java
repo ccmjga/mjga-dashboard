@@ -19,8 +19,8 @@ public class PageRequestDto {
 
   public static final String SPACE = " ";
 
-  private int page;
-  private int size;
+  private long page;
+  private long size;
 
   private Map<String, Direction> sortBy = new HashMap<>();
 
@@ -76,8 +76,8 @@ public class PageRequestDto {
   }
 
   private void checkPageAndSize(int page, int size) {
-    if (page < 0) {
-      throw new IllegalArgumentException("Page index must not be less than zero");
+    if (page <= 0) {
+      throw new IllegalArgumentException("Page index must not be equal or less than zero");
     }
 
     if (size < 1) {
@@ -86,7 +86,7 @@ public class PageRequestDto {
   }
 
   public long getOffset() {
-    return (long) page * (long) size;
+    return (page -1) * size;
   }
 
   public void setSortBy(String sortBy) {
