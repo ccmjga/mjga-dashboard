@@ -27,6 +27,6 @@ enableMocking().then(() => {
 	const { signOut } = useUserAuth();
 	const { showAlert } = useAlertStore();
 	app.use(router);
-	app.config.errorHandler = errorHandler(router, signOut);
+	app.config.errorHandler = errorHandler(router, signOut, showAlert);
 	app.mount("#app");
 });

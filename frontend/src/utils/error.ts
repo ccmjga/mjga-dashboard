@@ -1,20 +1,24 @@
 import type { ComponentPublicInstance } from "vue";
-import { useRouter, type Router } from "vue-router";
-import useAlertStore from "../composables/store/useAlertStore";
+import type { Router } from "vue-router";
 import { RoutePath } from "../router/constants";
 import {
 	ForbiddenError,
 	InternalServerError,
 	SystemError,
 	UnAuthError,
-} from "../types/error.d";
-import type { AlertProps } from "../types/alert";
+} from "../types/error";
 
 const errorHandler =
 	(
 		router: Router,
 		signOut: () => void,
-		showAlert: (alert: AlertProps) => void,
+		showAlert: ({
+			content,
+			level,
+		}: {
+			content: string;
+			level: "info" | "success" | "warning" | "error";
+		}) => void,
 	) =>
 	(err: unknown, instance: ComponentPublicInstance | null, info: string) => {
 		if (err instanceof UnAuthError) {

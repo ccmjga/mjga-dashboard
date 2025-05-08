@@ -12,9 +12,9 @@ const useUserStore = defineStore("userStore", () => {
 		},
 	);
 
-	const set: (userRolePermission?: components["schemas"]["UserRolePermissionDto"]) => void = (
-		userRolePermission,
-	) => {
+	const set: (
+		userRolePermission?: components["schemas"]["UserRolePermissionDto"],
+	) => void = (userRolePermission) => {
 		user.value = userRolePermission;
 	};
 

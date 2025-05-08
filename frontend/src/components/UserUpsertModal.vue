@@ -93,7 +93,7 @@ watch(
 	},
 	{
 		immediate: true,
-	}
+	},
 );
 
 const handleSubmit = () => {
@@ -105,12 +105,15 @@ const handleSubmit = () => {
 			password: z.string().min(5, "密码至少5个字符").optional(),
 			confirmPassword: z.string().min(5, "密码至少5个字符").optional(),
 		})
-		.refine((data) => {
-			if (data.password) return true;
-			return data.password === data.confirmPassword;
-		}, {
-			message: "您的密码输入不一致，请重新输入。",
-		});
+		.refine(
+			(data) => {
+				if (data.password) return true;
+				return data.password === data.confirmPassword;
+			},
+			{
+				message: "您的密码输入不一致，请重新输入。",
+			},
+		);
 
 	try {
 		const validatedData = userSchema.parse(formData.value);

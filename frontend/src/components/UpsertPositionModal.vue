@@ -52,7 +52,7 @@ import type { PositionUpsertModel } from "../types/position";
 
 const alertStore = useAlertStore();
 
-const { position,  onSubmit } = defineProps<{
+const { position, onSubmit } = defineProps<{
 	position?: components["schemas"]["Position"];
 	closeModal: () => void;
 	onSubmit: (position: PositionUpsertModel) => void;

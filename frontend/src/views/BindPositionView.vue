@@ -170,10 +170,7 @@ const { total, positions, fetchPositionWith } = usePositionQuery();
 const { bindPosition, unbindPosition } = usePositionBind();
 
 const handleBindPositionSubmit = async () => {
-	await bindPosition(
-		Number($route.params.userId),
-		checkedPositionIds.value,
-	);
+	await bindPosition(Number($route.params.userId), checkedPositionIds.value);
 	positionBindModal.value?.hide();
 	alertStore.showAlert({
 		content: "操作成功",
@@ -187,10 +184,7 @@ const handleBindPositionSubmit = async () => {
 };
 
 const handleUnbindPositionSubmit = async () => {
-	await unbindPosition(
-		Number($route.params.userId),
-		checkedPositionIds.value,
-	);
+	await unbindPosition(Number($route.params.userId), checkedPositionIds.value);
 	positionUnbindModal.value?.hide();
 	alertStore.showAlert({
 		content: "操作成功",

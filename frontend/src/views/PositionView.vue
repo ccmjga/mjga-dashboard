@@ -145,13 +145,8 @@ const selectedPosition = ref<components["schemas"]["Position"]>();
 const positionUpsertModal = ref<ModalInterface>();
 const positionDeleteModal = ref<ModalInterface>();
 
-const {
-	positions,
-	allPositions,
-	fetchPositionWith,
-	fetchAllPositions,
-	total,
-} = usePositionQuery();
+const { positions, allPositions, fetchPositionWith, fetchAllPositions, total } =
+	usePositionQuery();
 
 const { deletePosition } = usePositionDelete();
 const { upsertPosition } = usePositionUpsert();
