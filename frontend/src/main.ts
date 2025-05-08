@@ -4,10 +4,10 @@ import { createPinia } from "pinia";
 import { createApp } from "vue";
 
 import App from "./App.vue";
-import router from "./router";
-import errorHandler from "./utils/error";
 import useUserAuth from "./composables/auth/useUserAuth";
 import useAlertStore from "./composables/store/useAlertStore";
+import router from "./router";
+import makeErrorHandler from "./utils/error";
 
 async function enableMocking() {
 	if (import.meta.env.VITE_ENABLE_MOCK === "false") {
@@ -27,6 +27,7 @@ enableMocking().then(() => {
 	const { signOut } = useUserAuth();
 	const { showAlert } = useAlertStore();
 	app.use(router);
-	app.config.errorHandler = errorHandler(router, signOut, showAlert);
+	const errorHandler = makeErrorHandler(router, signOut, showAlert);
+	app.config.errorHandler = errorHandler;
 	app.mount("#app");
 });

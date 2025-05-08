@@ -26,11 +26,13 @@ class SystemError extends HttpError {
 	}
 }
 
-class InternalServerError extends HttpError {
-	constructor(status: number, detail: string) {
-		super("服务器错误，请稍候再试", status, detail);
-		this.name = "InternalServerError";
+class AppServerError extends HttpError {
+	response: Response;
+	constructor(response: Response, detail?: string) {
+		super("服务器错误，请稍候再试", response.status, detail);
+		this.response = response;
+		this.name = "AppServerError";
 	}
 }
 
-export { UnAuthError, ForbiddenError, SystemError, InternalServerError };
+export { UnAuthError, ForbiddenError, SystemError, AppServerError };

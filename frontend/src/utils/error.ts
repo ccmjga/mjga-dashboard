@@ -3,12 +3,12 @@ import type { Router } from "vue-router";
 import { RoutePath } from "../router/constants";
 import {
 	ForbiddenError,
-	InternalServerError,
+	AppServerError,
 	SystemError,
 	UnAuthError,
 } from "../types/error";
 
-const errorHandler =
+const makeErrorHandler =
 	(
 		router: Router,
 		signOut: () => void,
@@ -21,6 +21,7 @@ const errorHandler =
 		}) => void,
 	) =>
 	(err: unknown, instance: ComponentPublicInstance | null, info: string) => {
+		console.log(err, instance, info);
 		if (err instanceof UnAuthError) {
 			signOut();
 			router.push(RoutePath.LOGIN);
@@ -44,7 +45,7 @@ const errorHandler =
 			});
 			return;
 		}
-		if (err instanceof InternalServerError) {
+		if (err instanceof AppServerError) {
 			showAlert({
 				level: "error",
 				content: err.message,
@@ -53,4 +54,4 @@ const errorHandler =
 		}
 	};
 
-export default errorHandler;
+export default makeErrorHandler;

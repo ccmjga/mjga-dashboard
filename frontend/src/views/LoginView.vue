@@ -58,7 +58,7 @@ const handleLogin = async () => {
 		});
 		const redirectPath =
 			(route.query.redirect as string) ||
-			`${RoutePath.DASHBOARD}/${RoutePath.OVERVIEW}`;
+			`${RoutePath.DASHBOARD}/${RoutePath.USERVIEW}`;
 		router.push(redirectPath);
 	} catch (e) {
 		alertStore.showAlert({
@@ -73,5 +73,4 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
