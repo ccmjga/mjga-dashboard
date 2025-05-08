@@ -75,7 +75,7 @@ const alertStore = useAlertStore();
 const { user, onSubmit } = defineProps<{
 	user?: components["schemas"]["UserRolePermissionDto"];
 	closeModal: () => void;
-	onSubmit: (data: UserUpsertSubmitModel) => void;
+	onSubmit: (data: UserUpsertSubmitModel) => Promise<void>;
 }>();
 
 const formData = ref();
@@ -96,7 +96,7 @@ watch(
 	},
 );
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
 	const userSchema = z
 		.object({
 			id: z.number().optional(),
@@ -117,7 +117,7 @@ const handleSubmit = () => {
 
 	try {
 		const validatedData = userSchema.parse(formData.value);
-		onSubmit(validatedData);
+		await onSubmit(validatedData);
 	} catch (error) {
 		if (error instanceof z.ZodError) {
 			alertStore.showAlert({
@@ -125,6 +125,7 @@ const handleSubmit = () => {
 				content: error.errors[0].message,
 			});
 		}
+		throw error;
 	}
 };
 

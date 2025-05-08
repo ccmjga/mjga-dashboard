@@ -37,13 +37,13 @@
 
 <script setup lang="ts">
 import { initFlowbite } from "flowbite";
-import { onMounted, ref } from "vue";
+import { onMounted } from "vue";
 
 defineProps<{
 	title: string;
 	id: string;
 	closeModal: () => void;
-	onSubmit: (event: Event) => void;
+	onSubmit: (event: Event) => Promise<void>;
 }>();
 
 onMounted(() => {

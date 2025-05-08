@@ -1,5 +1,5 @@
 <template>
-  <div id="permission-upsert-modal" tabindex="-1" aria-hidden="true"
+  <div :id tabindex="-1" aria-hidden="true"
     class="bg-gray-900/50 dark:bg-gray-900/80 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-md max-h-full">
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -44,23 +44,20 @@
 <script setup lang="ts">
 import useAlertStore from "@/composables/store/useAlertStore";
 import type { PermissionUpsertModel } from "@/types/permission";
-import { computed, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { z } from "zod";
 import type { components } from "../api/types/schema";
 
-const { permission, onSubmit, closeModal } = defineProps<{
+const { id, permission, onSubmit, closeModal } = defineProps<{
+	id: string;
 	permission?: components["schemas"]["PermissionRespDto"];
 	closeModal: () => void;
-	onSubmit: (data: PermissionUpsertModel) => void;
+	onSubmit: (data: PermissionUpsertModel) => Promise<void>;
 }>();
 
 const alertStore = useAlertStore();
 
-const formData = ref({
-	id: permission?.id,
-	name: permission?.name,
-	code: permission?.code,
-});
+const formData = ref();
 
 watch(
 	() => permission,
@@ -74,22 +71,24 @@ watch(
 	{ immediate: true },
 );
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
 	const permissionSchema = z.object({
-		name: z.string().min(3, "权限名称至少3个字符"),
-		code: z.string().min(3, "权限代码至少3个字符"),
+		id: z.number().optional(),
+		name: z.string().min(4, "权限名称至少4个字符"),
+		code: z.string().min(4, "权限代码至少4个字符"),
 	});
 
 	try {
 		const validatedData = permissionSchema.parse(formData.value);
-		onSubmit(validatedData);
+		await onSubmit(validatedData);
 	} catch (error) {
 		if (error instanceof z.ZodError) {
 			alertStore.showAlert({
 				level: "error",
-				content: `请检查您填写的字段：${error.errors[0].path}`,
+				content: error.errors[0].message,
 			});
 		}
+		throw error;
 	}
 };
 </script>

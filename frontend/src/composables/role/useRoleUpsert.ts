@@ -6,7 +6,7 @@ export const useRoleUpsert = () => {
 		name: string;
 		code: string;
 	}) => {
-		const { data } = await client.POST("/urp/role", {
+		await client.POST("/urp/role", {
 			body: role,
 		});
 	};

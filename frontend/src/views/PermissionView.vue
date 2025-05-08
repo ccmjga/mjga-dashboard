@@ -123,8 +123,8 @@
 
   <PermissionDeleteModal :id="'permission-delete-modal'" :closeModal="() => {
     permissionDeleteModal!.hide();
-  }" :onSubmit="deleteSelectedPermission" title="确定删除该权限吗" content="删除权限"></PermissionDeleteModal>
-  <PermissionUpsertModal :onSubmit="handleUpsertModalSubmit" :closeModal="() => {
+  }" :onSubmit="handleDeleteModalSubmit" title="确定删除该权限吗" content="删除权限"></PermissionDeleteModal>
+  <PermissionUpsertModal :id="'permission-upsert-modal'" :onSubmit="handleUpsertModalSubmit" :closeModal="() => {
     permissionUpsertModal!.hide();
   }" :permission="selectedPermission">
   </PermissionUpsertModal>
@@ -137,7 +137,7 @@ import usePermissionDelete from "@/composables/permission/usePermissionDelete";
 
 import type { components } from "@/api/types/schema";
 import TablePagination from "@/components/TablePagination.vue";
-import { RouteName, RoutePath } from "@/router/constants";
+import { RouteName } from "@/router/constants";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { nextTick, onMounted, ref } from "vue";
 import usePermissionsQuery from "../composables/permission/usePermissionQuery";
@@ -196,7 +196,7 @@ const handleUpsertPermissionClick = async (
 	});
 };
 
-const deleteSelectedPermission = async (event: Event) => {
+const handleDeleteModalSubmit = async (event: Event) => {
 	if (!selectedPermission?.value?.id) return;
 	await deletePermission(selectedPermission.value.id);
 	permissionDeleteModal.value?.hide();

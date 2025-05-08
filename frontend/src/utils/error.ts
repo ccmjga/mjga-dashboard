@@ -21,7 +21,6 @@ const makeErrorHandler =
 		}) => void,
 	) =>
 	(err: unknown, instance: ComponentPublicInstance | null, info: string) => {
-		console.log(err, instance, info);
 		if (err instanceof UnAuthError) {
 			signOut();
 			router.push(RoutePath.LOGIN);

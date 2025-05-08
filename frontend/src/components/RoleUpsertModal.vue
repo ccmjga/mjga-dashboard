@@ -32,7 +32,7 @@
                 required />
             </div>
           </div>
-          <button type="submit" @click="handleSubmit"
+          <button type="submit" @click.prevent="handleSubmit"
             class="text-white flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center self-start mt-5">
             保存
           </button>
@@ -55,14 +55,10 @@ const alertStore = useAlertStore();
 const { role, onSubmit } = defineProps<{
 	role?: components["schemas"]["RoleDto"];
 	closeModal: () => void;
-	onSubmit: (data: RoleUpsertModel) => void;
+	onSubmit: (data: RoleUpsertModel) => Promise<void>;
 }>();
 
-const formData = ref({
-	id: role?.id,
-	name: role?.name,
-	code: role?.code,
-});
+const formData = ref();
 
 watch(
 	() => role,
@@ -73,24 +69,27 @@ watch(
 			code: newRole?.code,
 		};
 	},
+  { immediate: true },
 );
 
-const handleSubmit = (event: Event) => {
+const handleSubmit = async () => {
 	const roleSchema = z.object({
-		name: z.string().min(1, "角色名称至少1个字符"),
-		code: z.string().min(1, "角色代码至少1个字符"),
+    id: z.number().optional(),
+		name: z.string().min(2, "角色名称至少2个字符"),
+		code: z.string().min(2, "角色代码至少2个字符"),
 	});
 
 	try {
 		const validatedData = roleSchema.parse(formData.value);
-		onSubmit(validatedData);
+		await onSubmit(validatedData);
 	} catch (error) {
 		if (error instanceof z.ZodError) {
 			alertStore.showAlert({
 				level: "error",
-				content: `请检查您填写的字段：${error.errors[0].path}`,
+				content: error.errors[0].message,
 			});
 		}
+		throw error;
 	}
 };
 

@@ -152,10 +152,9 @@ const handleUpdateClick = async () => {
 		});
 	} catch (error) {
 		if (error instanceof z.ZodError) {
-			console.error("表单验证错误:", error.errors);
 			alertStore.showAlert({
 				level: "error",
-				content: `请检查您填写的字段：${error.errors[0].path}`,
+				content: error.errors[0].message,
 			});
 		}
 	}

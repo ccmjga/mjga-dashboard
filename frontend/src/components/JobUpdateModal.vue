@@ -36,22 +36,26 @@
 </template>
 
 <script setup lang="ts">
+import useAlertStore from "@/composables/store/useAlertStore";
 import type { components } from "@/api/types/schema";
-import { computed, ref, watch } from "vue";
+import { ref, watch } from "vue";
+import { z } from "zod";
 
-const props = defineProps<{
+const {  job, closeModal, onSubmit } = defineProps<{
 	id: string;
 	job?: components["schemas"]["JobTriggerDto"];
 	closeModal: () => void;
-	onSubmit: (data: Partial<components["schemas"]["JobTriggerDto"]>) => void;
+	onSubmit: (data: Partial<components["schemas"]["JobTriggerDto"]>) => Promise<void>;
 }>();
+
+const alertStore = useAlertStore();
 
 const formData = ref<Partial<components["schemas"]["JobTriggerDto"]>>({
 	cronExpression: "",
 });
 
 watch(
-	() => props.job,
+	() => job,
 	(newVal) => {
 		if (newVal) {
 			formData.value = { ...newVal };
@@ -60,7 +64,22 @@ watch(
 	{ immediate: true },
 );
 
-const handleSubmit = () => {
-	props.onSubmit(formData.value);
+const handleSubmit = async () => {
+	const jobSchema = z.object({
+		cronExpression: z.string().min(5, "长度非法"),
+	});
+
+	try {
+		const validatedData = jobSchema.parse(formData.value);
+		await onSubmit(validatedData);
+	} catch (error) {
+		if (error instanceof z.ZodError) {
+			alertStore.showAlert({
+				level: "error",
+				content: error.errors[0].message,
+			});
+		}
+		throw error;
+	}
 };
 </script>

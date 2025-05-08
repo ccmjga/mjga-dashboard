@@ -65,7 +65,7 @@ const { department, allDepartments, onSubmit } = defineProps<{
 	department?: components["schemas"]["Department"];
 	allDepartments: components["schemas"]["Department"][];
 	closeModal: () => void;
-	onSubmit: (department: DepartmentUpsertModel) => void;
+	onSubmit: (department: DepartmentUpsertModel) => Promise<void>;
 }>();
 
 const formData = ref({
@@ -91,22 +91,23 @@ watch(
 	},
 );
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
 	const userSchema = z.object({
-		name: z.string().min(1, "部门名称至少1个字符"),
+		name: z.string().min(2, "部门名称至少2个字符"),
 		enable: z.boolean(),
 	});
 
 	try {
 		const validatedData = userSchema.parse(formData.value);
-		onSubmit(validatedData);
+		await onSubmit(validatedData);
 	} catch (error) {
 		if (error instanceof z.ZodError) {
 			alertStore.showAlert({
 				level: "error",
-				content: `请检查您填写的字段：${error.errors[0].path}`,
+				content: error.errors[0].message,
 			});
 		}
+		throw error;
 	}
 };
 

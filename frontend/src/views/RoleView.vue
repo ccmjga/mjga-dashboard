@@ -167,7 +167,7 @@ const { total, roles, fetchRolesWith } = useRolesQuery();
 const { deleteRole } = useRoleDelete();
 const alertStore = useAlertStore();
 const router = useRouter();
-const roleUpsert = useRoleUpsert();
+const upsertRole = useRoleUpsert();
 onMounted(async () => {
 	await fetchRolesWith({
 		name: roleName.value,
@@ -190,7 +190,7 @@ onMounted(async () => {
 });
 
 const handleUpsertModalSubmit = async (data: RoleUpsertModel) => {
-	await roleUpsert.upsertRole(data);
+	await upsertRole.upsertRole(data);
 	await fetchRolesWith({
 		name: roleName.value,
 	});
