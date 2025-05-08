@@ -14,3 +14,11 @@ interface ImportMetaEnv {
 interface ImportMeta {
 	readonly env: ImportMetaEnv;
 }
+
+interface AppConfig {
+	errorHandler?: (
+		err: unknown,
+		instance: ComponentPublicInstance | null,
+		info: string,
+	) => void;
+}
