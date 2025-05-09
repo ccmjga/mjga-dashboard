@@ -383,7 +383,7 @@ class UserRolePermissionUnitTest {
 
     when(permissionRepository.selectByPermissionIdIn(anyList()))
         .thenReturn(List.of(stubPermission));
-    userRolePermissionService.bindPermissionToRole(stubRoleId, List.of(stubPermission.getId()));
+    userRolePermissionService.bindPermissionBy(stubRoleId, List.of(stubPermission.getId()));
     verify(rolePermissionMapRepository, times(1)).insert(Mockito.eq(List.of(rolePermissionMap)));
   }
 
@@ -398,7 +398,7 @@ class UserRolePermissionUnitTest {
     when(permissionRepository.selectByPermissionIdIn(anyList())).thenReturn(new ArrayList<>());
     assertThatThrownBy(
             () ->
-                userRolePermissionService.bindPermissionToRole(
+                userRolePermissionService.bindPermissionBy(
                     stubRoleId, List.of(stubPermission.getId())))
         .isInstanceOf(BusinessException.class)
         .hasMessage("bind permission not exist");

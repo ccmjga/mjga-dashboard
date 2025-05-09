@@ -62,7 +62,7 @@ class UserRolePermissionMvcTest {
     Long stubUserId = 1L;
     mockMvc
         .perform(
-            delete(String.format("/urp/user?userId=%s", stubUserId))
+            delete(String.format("/urp/user?roleId=%s", stubUserId))
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .with(csrf()))
         .andExpect(status().isOk());
@@ -186,7 +186,7 @@ class UserRolePermissionMvcTest {
     mockMvc
         .perform(
             get(String.format(
-                    "/urp/roles?page=0&size=5&userId=%s&roleId=%s&roleCode=%s&roleName=%s",
+                    "/urp/roles?page=0&size=5&roleId=%s&roleId=%s&roleCode=%s&roleName=%s",
                     stubUserId, stubRoleId, stubRoleCode, stubRoleName))
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
         .andExpect(status().isOk())
@@ -266,6 +266,6 @@ class UserRolePermissionMvcTest {
                     """)
                 .with(csrf()))
         .andExpect(status().isOk());
-    verify(userRolePermissionService, times(1)).bindPermissionToRole(stubRoleId, stubPermissionIds);
+    verify(userRolePermissionService, times(1)).bindPermissionBy(stubRoleId, stubPermissionIds);
   }
 }

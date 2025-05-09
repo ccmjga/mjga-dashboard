@@ -31,7 +31,7 @@ public class DataBackupJobTest extends AbstractQuartzTest {
     assertEquals("data-backup-job", dataBackupJobDetail.getKey().getName());
     assertEquals("batch-service", dataBackupJobDetail.getKey().getGroup());
     assertTrue(dataBackupJobDetail.isDurable());
-    assertEquals("Gh2mxa", dataBackupJobDetail.getJobDataMap().getString("userId"));
+    assertEquals("Gh2mxa", dataBackupJobDetail.getJobDataMap().getString("roleId"));
   }
 
   @Test

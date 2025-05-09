@@ -35,7 +35,7 @@ public class QuartzConfig {
   public JobDetailFactoryBean dataBackupJobDetail() {
     JobDetailFactoryBean factory = new JobDetailFactoryBean();
     factory.setJobClass(DataBackupJob.class);
-    factory.setJobDataMap(new JobDataMap(Map.of("userId", "Gh2mxa")));
+    factory.setJobDataMap(new JobDataMap(Map.of("roleId", "Gh2mxa")));
     factory.setName("data-backup-job");
     factory.setGroup("batch-service");
     factory.setDurability(true);

@@ -93,7 +93,7 @@ public class UserRepository extends UserDao {
         .fetchOneInto(UserRolePermissionDto.class);
   }
 
-  //  public UserRolePermissionDto fetchUniqueUserDtoWithNestedRolePermissionBy(Long userId) {
+  //  public UserRolePermissionDto fetchUniqueUserDtoWithNestedRolePermissionBy(Long roleId) {
   //    return ctx()
   //        .select(
   //            USER.asterisk(),
@@ -117,7 +117,7 @@ public class UserRepository extends UserDao {
   //                .convertFrom(r -> r.map((record) -> record.into(RoleDto.class)))
   //                .as("roles"))
   //        .from(USER)
-  //        .where(USER.ID.eq(userId))
+  //        .where(USER.ID.eq(roleId))
   //        .fetchOneInto(UserRolePermissionDto.class);
   //  }
 
@@ -131,7 +131,7 @@ public class UserRepository extends UserDao {
         .fetch();
   }
 
-  //    public Result<Record> fetchUniqueUserWithRolePermissionBy(Long userId) {
+  //    public Result<Record> fetchUniqueUserWithRolePermissionBy(Long roleId) {
   //      return ctx()
   //          .select()
   //          .from(USER)
@@ -143,7 +143,7 @@ public class UserRepository extends UserDao {
   //          .on(ROLE.ID.eq(ROLE_PERMISSION_MAP.ROLE_ID))
   //          .leftJoin(PERMISSION)
   //          .on(ROLE_PERMISSION_MAP.PERMISSION_ID.eq(PERMISSION.ID))
-  //          .where(USER.ID.eq(userId))
+  //          .where(USER.ID.eq(roleId))
   //          .fetch();
   //    }
 

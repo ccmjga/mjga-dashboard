@@ -20,7 +20,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.generated.mjga.tables.pojos.*;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -137,51 +136,25 @@ public class UserRolePermissionService {
         permissionRespDtoList);
   }
 
-  public void bindPermissionToRole(Long roleId, List<Long> permissionIdList) {
-    List<Permission> permissions = permissionRepository.selectByPermissionIdIn(permissionIdList);
-    if (CollectionUtils.isEmpty(permissions)) {
-      throw new BusinessException("bind permission not exist");
-    }
+  public void bindPermissionBy(Long roleId, List<Long> permissionIdList) {
     List<RolePermissionMap> permissionMapList =
-        permissions.stream()
+        permissionIdList.stream()
             .map(
-                (permission -> {
+                (permissionId -> {
                   RolePermissionMap rolePermissionMap = new RolePermissionMap();
                   rolePermissionMap.setRoleId(roleId);
-                  rolePermissionMap.setPermissionId(permission.getId());
+                  rolePermissionMap.setPermissionId(permissionId);
                   return rolePermissionMap;
                 }))
             .collect(Collectors.toList());
-    rolePermissionMapRepository.insert(permissionMapList);
+    rolePermissionMapRepository.merge(permissionMapList);
   }
 
-  public void unBindPermissionToRole(Long roleId, List<Long> permissionIdList) {
+  public void unBindPermissionBy(Long roleId, List<Long> permissionIdList) {
     if (CollectionUtils.isEmpty(permissionIdList)) {
       return;
     }
-    List<Permission> permissions = permissionRepository.selectByPermissionIdIn(permissionIdList);
-    if (CollectionUtils.isEmpty(permissions)) {
-      throw new BusinessException("unbind role not exist");
-    }
     rolePermissionMapRepository.deleteBy(roleId, permissionIdList);
-  }
-
-  public @NonNull List<Long> removeDuplicateRoleId(Long userId, List<Long> roleIdList) {
-    UserRolePermissionDto userRolePermissionDto =
-        userRepository.fetchUniqueUserDtoWithNestedRolePermissionBy(userId);
-    List<Long> userRoleIdList =
-        userRolePermissionDto.getRoles().stream().map(RoleDto::getId).toList();
-    return roleIdList.stream().filter(roleId -> !userRoleIdList.contains(roleId)).toList();
-  }
-
-  public @NonNull List<Long> removeDuplicatePermissionId(Long roleId, List<Long> permissionIdList) {
-    List<Long> rolePermissionIdList =
-        rolePermissionMapRepository.fetchByRoleId(roleId).stream()
-            .map(RolePermissionMap::getPermissionId)
-            .toList();
-    return permissionIdList.stream()
-        .filter(permissionId -> !rolePermissionIdList.contains(permissionId))
-        .toList();
   }
 
   public void unBindRoleToUser(Long userId, List<Long> roleIdList) {
@@ -196,21 +169,17 @@ public class UserRolePermissionService {
   }
 
   public void bindRoleToUser(Long userId, List<Long> roleIdList) {
-    List<Role> roles = roleRepository.selectByRoleIdIn(roleIdList);
-    if (CollectionUtils.isEmpty(roles)) {
-      throw new BusinessException("bind role not exist");
-    }
     List<UserRoleMap> userRoleMapList =
-        roles.stream()
+        roleIdList.stream()
             .map(
-                (role -> {
+                (roleId -> {
                   UserRoleMap userRoleMap = new UserRoleMap();
                   userRoleMap.setUserId(userId);
-                  userRoleMap.setRoleId(role.getId());
+                  userRoleMap.setRoleId(roleId);
                   return userRoleMap;
                 }))
             .collect(Collectors.toList());
-    userRoleMapRepository.insert(userRoleMapList);
+    userRoleMapRepository.merge(userRoleMapList);
   }
 
   @Transactional(rollbackFor = Throwable.class)
@@ -266,12 +235,17 @@ public class UserRolePermissionService {
 
   @Transactional(rollbackFor = Throwable.class)
   public void bindDepartmentBy(DepartmentBindDto departmentBindDto) {
-    for (Long departmentId : departmentBindDto.departmentIds()) {
-      UserDepartmentMap userDepartmentMap = new UserDepartmentMap();
-      userDepartmentMap.setUserId(departmentBindDto.userId());
-      userDepartmentMap.setDepartmentId(departmentId);
-      userDepartmentMapRepository.insert(userDepartmentMap);
-    }
+    List<UserDepartmentMap> userDepartmentMaps =
+        departmentBindDto.departmentIds().stream()
+            .map(
+                (departmentId) -> {
+                  UserDepartmentMap userDepartmentMap = new UserDepartmentMap();
+                  userDepartmentMap.setUserId(departmentBindDto.userId());
+                  userDepartmentMap.setDepartmentId(departmentId);
+                  return userDepartmentMap;
+                })
+            .toList();
+    userDepartmentMapRepository.merge(userDepartmentMaps);
   }
 
   @Transactional(rollbackFor = Throwable.class)
@@ -286,12 +260,17 @@ public class UserRolePermissionService {
 
   @Transactional(rollbackFor = Throwable.class)
   public void bindPositionBy(PositionBindDto positionBindDto) {
-    for (Long positionId : positionBindDto.positionIds()) {
-      UserPositionMap userPositionMap = new UserPositionMap();
-      userPositionMap.setUserId(positionBindDto.userId());
-      userPositionMap.setPositionId(positionId);
-      userPositionMapRepository.insert(userPositionMap);
-    }
+    List<UserPositionMap> userPositionMaps =
+        positionBindDto.positionIds().stream()
+            .map(
+                (positionId) -> {
+                  UserPositionMap userPositionMap = new UserPositionMap();
+                  userPositionMap.setUserId(positionBindDto.userId());
+                  userPositionMap.setPositionId(positionId);
+                  return userPositionMap;
+                })
+            .toList();
+    userPositionMapRepository.merge(userPositionMaps);
   }
 
   @Transactional(rollbackFor = Throwable.class)

@@ -3,7 +3,9 @@ package com.zl.mjga.controller;
 import com.zl.mjga.dto.PageRequestDto;
 import com.zl.mjga.dto.PageResponseDto;
 import com.zl.mjga.dto.department.DepartmentBindDto;
+import com.zl.mjga.dto.permission.PermissionBindDto;
 import com.zl.mjga.dto.position.PositionBindDto;
+import com.zl.mjga.dto.role.RoleBindDto;
 import com.zl.mjga.dto.urp.*;
 import com.zl.mjga.repository.RoleRepository;
 import com.zl.mjga.repository.UserRepository;
@@ -11,7 +13,6 @@ import com.zl.mjga.service.UserRolePermissionService;
 import java.security.Principal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.collections4.CollectionUtils;
 import org.jooq.generated.mjga.tables.pojos.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -116,39 +117,33 @@ public class UserRolePermissionController {
   }
 
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_USER_ROLE_PERMISSION)")
-  @PostMapping("/users/{userId}/bind-role")
+  @PostMapping("/role/bind")
   @ResponseStatus(HttpStatus.OK)
-  void bindRoleToUser(@PathVariable Long userId, @RequestBody List<Long> roleIdList) {
-    List<Long> filtedRoleIdList =
-        userRolePermissionService.removeDuplicateRoleId(userId, roleIdList);
-    if (CollectionUtils.isNotEmpty(filtedRoleIdList)) {
-      userRolePermissionService.bindRoleToUser(userId, filtedRoleIdList);
-    }
+  void bindRoleToUser(@RequestBody RoleBindDto roleBindDto) {
+    userRolePermissionService.bindRoleToUser(roleBindDto.userId(), roleBindDto.roleIds());
   }
 
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_USER_ROLE_PERMISSION)")
-  @PostMapping("/users/{userId}/unbind-role")
+  @PostMapping("/role/bind")
   @ResponseStatus(HttpStatus.OK)
-  void unBindRoleToUser(@PathVariable Long userId, @RequestBody List<Long> roleIdList) {
-    userRolePermissionService.unBindRoleToUser(userId, roleIdList);
+  void unBindRoleToUser(@RequestBody RoleBindDto roleBindDto) {
+    userRolePermissionService.unBindRoleToUser(roleBindDto.userId(), roleBindDto.roleIds());
   }
 
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_USER_ROLE_PERMISSION)")
-  @PostMapping("/roles/{roleId}/bind-permission")
+  @PostMapping("/permission/bind")
   @ResponseStatus(HttpStatus.OK)
-  void bindPermissionToRole(@PathVariable Long roleId, @RequestBody List<Long> permissionIdList) {
-    List<Long> filtedPermissionIdList =
-        userRolePermissionService.removeDuplicatePermissionId(roleId, permissionIdList);
-    if (CollectionUtils.isNotEmpty(filtedPermissionIdList)) {
-      userRolePermissionService.bindPermissionToRole(roleId, filtedPermissionIdList);
-    }
+  void bindPermissionToRole(@RequestBody PermissionBindDto permissionBindDto) {
+    userRolePermissionService.bindPermissionBy(
+        permissionBindDto.roleId(), permissionBindDto.permissionIds());
   }
 
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_USER_ROLE_PERMISSION)")
-  @PostMapping("/roles/{roleId}/unbind-permission")
+  @PostMapping("/permission/unbind")
   @ResponseStatus(HttpStatus.OK)
-  void unBindPermissionToRole(@PathVariable Long roleId, @RequestBody List<Long> permissionIdList) {
-    userRolePermissionService.unBindPermissionToRole(roleId, permissionIdList);
+  void unBindPermissionToRole(@RequestBody PermissionBindDto permissionBindDto) {
+    userRolePermissionService.unBindPermissionBy(
+        permissionBindDto.roleId(), permissionBindDto.permissionIds());
   }
 
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_DEPARTMENT_PERMISSION)")

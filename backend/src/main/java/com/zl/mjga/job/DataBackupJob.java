@@ -10,7 +10,7 @@ public class DataBackupJob implements Job {
 
   @Override
   public void execute(JobExecutionContext context) {
-    String userId = context.getJobDetail().getJobDataMap().getString("userId");
+    String userId = context.getJobDetail().getJobDataMap().getString("roleId");
     log.info(
         MessageFormat.format(
             "Job execute: JobName {0} Param {1} Thread: {2}",
