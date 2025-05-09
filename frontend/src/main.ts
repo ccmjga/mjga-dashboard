@@ -7,7 +7,7 @@ import App from "./App.vue";
 import useUserAuth from "./composables/auth/useUserAuth";
 import useAlertStore from "./composables/store/useAlertStore";
 import router from "./router";
-import makeErrorHandler from "./utils/error";
+import makeErrorHandler from "./utils/errorHandler";
 
 async function enableMocking() {
 	if (import.meta.env.VITE_ENABLE_MOCK === "false") {

@@ -1,25 +1,24 @@
 import client from "@/api/client";
 
 export const useRoleBind = () => {
-	const bindRole = async (userId: number, roleIds: number[]) => {
-		await client.POST("/urp/users/{userId}/bind-role", {
-			params: {
-				path: {
-					userId,
-				},
+	const bindRole = async ({
+		userId,
+		roleIds,
+	}: { userId: number; roleIds: number[] }) => {
+		await client.POST("/urp/role/bind", {
+			body: {
+				userId,
+				roleIds,
 			},
-			body: roleIds,
 		});
 	};
 
 	const unbindRole = async (userId: number, roleIds: number[]) => {
-		await client.POST("/urp/users/{userId}/unbind-role", {
-			params: {
-				path: {
-					userId,
-				},
+		await client.POST("/urp/role/unbind", {
+			body: {
+				userId,
+				roleIds,
 			},
-			body: roleIds,
 		});
 	};
 	return {

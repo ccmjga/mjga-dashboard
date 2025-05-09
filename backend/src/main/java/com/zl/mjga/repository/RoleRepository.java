@@ -70,10 +70,7 @@ public class RoleRepository extends RoleDao {
   }
 
   private SelectConditionStep<Record1<Long>> selectUsersRoleIds(Long userId) {
-    return DSL.select(USER.role().ID)
-        .from(USER)
-        .leftJoin(USER.role())
-        .where(USER.ID.eq(userId));
+    return DSL.select(USER.role().ID).from(USER).leftJoin(USER.role()).where(USER.ID.eq(userId));
   }
 
   public Result<Record> fetchUniqueRoleWithPermission(Long roleId) {

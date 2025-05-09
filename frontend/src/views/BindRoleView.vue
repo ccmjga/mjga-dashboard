@@ -154,6 +154,7 @@ import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useRoleBind } from "../composables/role/useRoleBind";
 import useAlertStore from "../composables/store/useAlertStore";
+import { tr } from "@faker-js/faker";
 
 const roleName = ref<string>("");
 const checkedRoleIds = ref<number[]>([]);
@@ -168,20 +169,35 @@ const { total, roles, fetchRolesWith } = useRolesQuery();
 const { bindRole, unbindRole } = useRoleBind();
 
 const handleBindRoleSubmit = async () => {
-	await bindRole(Number($route.params.userId), checkedRoleIds.value);
+	await bindRole({
+		userId: Number($route.params.userId),
+		roleIds: checkedRoleIds.value,
+	});
 	roleBindModal.value?.hide();
+  clearCheckedRoleIds();
 	alertStore.showAlert({
 		content: "操作成功",
 		level: "success",
+	});
+  	await fetchRolesWith({
+		name: roleName.value,
+		userId: Number($route.params.userId),
+		bindState: bindState.value,
 	});
 };
 
 const handleUnbindRoleSubmit = async () => {
 	await unbindRole(Number($route.params.userId), checkedRoleIds.value);
+  clearCheckedRoleIds()
 	roleUnbindModal.value?.hide();
 	alertStore.showAlert({
 		content: "操作成功",
 		level: "success",
+	});
+	await fetchRolesWith({
+		name: roleName.value,
+		userId: Number($route.params.userId),
+		bindState: bindState.value,
 	});
 };
 
@@ -228,13 +244,17 @@ const handlePageChange = async (page: number, pageSize: number) => {
 	);
 };
 
-watch(allChecked, async () => {
+watch(allChecked, () => {
 	if (allChecked.value) {
 		checkedRoleIds.value = roles.value?.map((r) => r.id!) ?? [];
 	} else {
 		checkedRoleIds.value = [];
 	}
 });
+
+const clearCheckedRoleIds = () => {
+	checkedRoleIds.value = [];
+};
 </script>
 
 <style scoped></style>

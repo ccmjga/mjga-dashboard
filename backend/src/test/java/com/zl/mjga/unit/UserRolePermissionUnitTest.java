@@ -355,7 +355,6 @@ class UserRolePermissionUnitTest {
     verify(userRoleMapRepository, times(0)).insert(anyList());
   }
 
-
   @Test
   void bindPermissionToRole_givenExistPermissionId_shouldInsertRolePermissionMapWithNoError() {
     Long stubRoleId = 1L;
@@ -390,7 +389,6 @@ class UserRolePermissionUnitTest {
         .hasMessage("bind permission not exist");
     verify(rolePermissionMapRepository, times(0)).insert(Mockito.eq(new ArrayList<>()));
   }
-
 
   @Test
   void upsertUser_whenGivenUserDtoWithOutId_shouldCreatUser() {

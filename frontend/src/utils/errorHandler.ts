@@ -3,7 +3,7 @@ import type { Router } from "vue-router";
 import { RoutePath } from "../router/constants";
 import {
 	ForbiddenError,
-	AppServerError,
+	InternalServerError,
 	SystemError,
 	UnAuthError,
 } from "../types/error";
@@ -44,10 +44,10 @@ const makeErrorHandler =
 			});
 			return;
 		}
-		if (err instanceof AppServerError) {
+		if (err instanceof InternalServerError) {
 			showAlert({
 				level: "error",
-				content: err.message,
+				content: err.detail ?? err.message,
 			});
 			return;
 		}

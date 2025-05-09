@@ -10,6 +10,7 @@ import com.zl.mjga.dto.urp.*;
 import com.zl.mjga.repository.RoleRepository;
 import com.zl.mjga.repository.UserRepository;
 import com.zl.mjga.service.UserRolePermissionService;
+import jakarta.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -119,21 +120,21 @@ public class UserRolePermissionController {
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_USER_ROLE_PERMISSION)")
   @PostMapping("/role/bind")
   @ResponseStatus(HttpStatus.OK)
-  void bindRoleBy(@RequestBody RoleBindDto roleBindDto) {
+  void bindRoleBy(@RequestBody @Valid RoleBindDto roleBindDto) {
     userRolePermissionService.bindRoleToUser(roleBindDto.userId(), roleBindDto.roleIds());
   }
 
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_USER_ROLE_PERMISSION)")
   @PostMapping("/role/unbind")
   @ResponseStatus(HttpStatus.OK)
-  void unBindRoleBy(@RequestBody RoleBindDto roleBindDto) {
+  void unBindRoleBy(@RequestBody @Valid RoleBindDto roleBindDto) {
     userRolePermissionService.unBindRoleToUser(roleBindDto.userId(), roleBindDto.roleIds());
   }
 
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_USER_ROLE_PERMISSION)")
   @PostMapping("/permission/bind")
   @ResponseStatus(HttpStatus.OK)
-  void bindPermissionBy(@RequestBody PermissionBindDto permissionBindDto) {
+  void bindPermissionBy(@RequestBody @Valid PermissionBindDto permissionBindDto) {
     userRolePermissionService.bindPermissionBy(
         permissionBindDto.roleId(), permissionBindDto.permissionIds());
   }
@@ -141,7 +142,7 @@ public class UserRolePermissionController {
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_USER_ROLE_PERMISSION)")
   @PostMapping("/permission/unbind")
   @ResponseStatus(HttpStatus.OK)
-  void unBindPermissionBy(@RequestBody PermissionBindDto permissionBindDto) {
+  void unBindPermissionBy(@RequestBody @Valid PermissionBindDto permissionBindDto) {
     userRolePermissionService.unBindPermissionBy(
         permissionBindDto.roleId(), permissionBindDto.permissionIds());
   }
@@ -149,28 +150,28 @@ public class UserRolePermissionController {
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_DEPARTMENT_PERMISSION)")
   @PostMapping("/department/bind")
   @ResponseStatus(HttpStatus.OK)
-  public void bindDepartmentBy(@RequestBody DepartmentBindDto departmentBindDto) {
+  public void bindDepartmentBy(@RequestBody @Valid DepartmentBindDto departmentBindDto) {
     userRolePermissionService.bindDepartmentBy(departmentBindDto);
   }
 
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_DEPARTMENT_PERMISSION)")
   @PostMapping("/department/unbind")
   @ResponseStatus(HttpStatus.OK)
-  public void unBindDepartmentBy(@RequestBody DepartmentBindDto departmentBindDto) {
+  public void unBindDepartmentBy(@RequestBody @Valid DepartmentBindDto departmentBindDto) {
     userRolePermissionService.unBindDepartmentBy(departmentBindDto);
   }
 
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_DEPARTMENT_PERMISSION)")
   @PostMapping("/position/bind")
   @ResponseStatus(HttpStatus.OK)
-  public void bindPositionBy(@RequestBody PositionBindDto positionBindDto) {
+  public void bindPositionBy(@RequestBody @Valid PositionBindDto positionBindDto) {
     userRolePermissionService.bindPositionBy(positionBindDto);
   }
 
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_DEPARTMENT_PERMISSION)")
   @PostMapping("/position/unbind")
   @ResponseStatus(HttpStatus.OK)
-  public void unBindPositionBy(@RequestBody PositionBindDto positionBindDto) {
+  public void unBindPositionBy(@RequestBody @Valid PositionBindDto positionBindDto) {
     userRolePermissionService.unBindPositionBy(positionBindDto);
   }
 }
