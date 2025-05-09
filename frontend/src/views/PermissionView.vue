@@ -59,7 +59,7 @@
     </div>
 
     <table class="w-full text-sm text-left rtl:text-right shadow-lg rounded-lg text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <thead class="text-xs  uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
           <th scope="col" class="p-4">
             <div class="flex items-center">
@@ -68,8 +68,8 @@
               <label for="checkbox-all-search" class="sr-only">checkbox</label>
             </div>
           </th>
-          <th scope="col" class="px-6 py-3">权限编码</th>
           <th scope="col" class="px-6 py-3">权限名称</th>
+          <th scope="col" class="px-6 py-3">权限编码</th>
           <th scope="col" class="px-6 py-3">操作</th>
         </tr>
       </thead>
@@ -84,9 +84,9 @@
             </div>
           </td>
           <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            {{ permission.code }}
+            {{ permission.name }}
           </td>
-          <td class="px-6 py-4">{{ permission.name }}</td>
+          <td class="px-6 py-4">{{ permission.code }}</td>
           <td class="px-6 py-4">
             <div class="flex items-center gap-x-2">
               <button @click="handleUpsertPermissionClick(permission)"
@@ -181,6 +181,10 @@ onMounted(async () => {
 
 const handleUpsertModalSubmit = async (data: PermissionUpsertModel) => {
 	await permissionUpsert.upsertPermission(data);
+  	await fetchPermissionsWith({
+		name: permissionName.value,
+	});
+  permissionUpsertModal.value?.hide();
 	alertStore.showAlert({
 		content: "操作成功",
 		level: "success",

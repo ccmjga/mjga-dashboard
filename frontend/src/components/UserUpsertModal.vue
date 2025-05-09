@@ -100,10 +100,16 @@ const handleSubmit = async () => {
 	const userSchema = z
 		.object({
 			id: z.number().optional(),
-			username: z.string().min(4, "用户名至少4个字符"),
+			username: z.string({
+        message: "用户名不能为空",
+      }).min(4, "用户名至少4个字符"),
 			enable: z.boolean(),
-			password: z.string().min(5, "密码至少5个字符").optional(),
-			confirmPassword: z.string().min(5, "密码至少5个字符").optional(),
+			password: z.string({
+        message: "密码不能为空",
+      }).min(5, "密码至少5个字符").optional(),
+			confirmPassword: z.string({
+        message: "密码不能为空",
+      }).min(5, "密码至少5个字符").optional(),
 		})
 		.refine(
 			(data) => {
@@ -124,8 +130,9 @@ const handleSubmit = async () => {
 				level: "error",
 				content: error.errors[0].message,
 			});
-		}
-		throw error;
+		} else {
+      throw error;
+    }
 	}
 };
 

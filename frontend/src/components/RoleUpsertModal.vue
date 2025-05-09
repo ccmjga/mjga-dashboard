@@ -58,7 +58,7 @@ const { role, onSubmit } = defineProps<{
 	onSubmit: (data: RoleUpsertModel) => Promise<void>;
 }>();
 
-const formData = ref();
+const formData = ref({});
 
 watch(
 	() => role,
@@ -73,10 +73,14 @@ watch(
 );
 
 const handleSubmit = async () => {
-	const roleSchema = z.object({
+		const roleSchema = z.object({
     id: z.number().optional(),
-		name: z.string().min(2, "角色名称至少2个字符"),
-		code: z.string().min(2, "角色代码至少2个字符"),
+		name: z.string({
+      message: "角色名称不能为空",
+    }).min(2, "角色名称至少2个字符"),
+		code: z.string({
+      message: "角色代码不能为空",
+    }).min(2, "角色代码至少2个字符"),
 	});
 
 	try {
@@ -88,8 +92,9 @@ const handleSubmit = async () => {
 				level: "error",
 				content: error.errors[0].message,
 			});
-		}
-		throw error;
+		} else {
+      throw error;
+    }
 	}
 };
 
