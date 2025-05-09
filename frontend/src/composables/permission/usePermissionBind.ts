@@ -1,24 +1,32 @@
 import client from "@/api/client";
 export const usePermissionBind = () => {
-	const bindPermission = async (roleId: number, permissionIds: number[]) => {
-		await client.POST("/urp/roles/{roleId}/bind-permission", {
-			params: {
-				path: {
-					roleId,
-				},
+	const bindPermission = async ({
+		roleId,
+		permissionIds,
+	}: {
+		roleId: number;
+		permissionIds: number[];
+	}) => {
+		await client.POST("/urp/permission/bind", {
+			body: {
+				roleId,
+				permissionIds,
 			},
-			body: permissionIds,
 		});
 	};
 
-	const unbindPermission = async (roleId: number, permissionIds: number[]) => {
-		await client.POST("/urp/roles/{roleId}/unbind-permission", {
-			params: {
-				path: {
-					roleId,
-				},
+	const unbindPermission = async ({
+		roleId,
+		permissionIds,
+	}: {
+		roleId: number;
+		permissionIds: number[];
+	}) => {
+		await client.POST("/urp/permission/unbind", {
+			body: {
+				roleId,
+				permissionIds,
 			},
-			body: permissionIds,
 		});
 	};
 	return {

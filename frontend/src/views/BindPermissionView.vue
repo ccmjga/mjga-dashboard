@@ -170,26 +170,38 @@ const { total, permissions, fetchPermissionsWith } = usePermissionsQuery();
 const { bindPermission, unbindPermission } = usePermissionBind();
 
 const handleBindPermissionSubmit = async () => {
-	await bindPermission(
-		Number($route.params.roleId),
-		checkedPermissionIds.value,
-	);
+	await bindPermission({
+		roleId: Number($route.params.roleId),
+		permissionIds: checkedPermissionIds.value,
+	});
 	permissionBindModal.value?.hide();
 	alertStore.showAlert({
 		content: "操作成功",
 		level: "success",
 	});
+  clearCheckedRoleIds();
+  await fetchPermissionsWith({
+		name: permissionName.value,
+		roleId: Number($route.params.roleId),
+		bindState: bindState.value,
+	});
 };
 
 const handleUnbindPermissionSubmit = async () => {
-	await unbindPermission(
-		Number($route.params.roleId),
-		checkedPermissionIds.value,
-	);
+	await unbindPermission({
+		roleId: Number($route.params.roleId),
+		permissionIds: checkedPermissionIds.value,
+	});
 	permissionUnbindModal.value?.hide();
 	alertStore.showAlert({
 		content: "操作成功",
 		level: "success",
+	});
+	clearCheckedRoleIds();
+	await fetchPermissionsWith({
+		name: permissionName.value,
+		roleId: Number($route.params.roleId),
+		bindState: bindState.value,
 	});
 };
 
@@ -245,6 +257,10 @@ watch(allChecked, async () => {
 		checkedPermissionIds.value = [];
 	}
 });
+
+const clearCheckedRoleIds = () => {
+	checkedPermissionIds.value = [];
+};
 </script>
 
 <style scoped></style>
