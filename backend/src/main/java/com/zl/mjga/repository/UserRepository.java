@@ -78,14 +78,11 @@ public class UserRepository extends UserDao {
                             USER.role().asterisk(),
                             multiset(
                                     select(USER.role().permission().asterisk())
-                                        .from(USER)
-                                        .leftJoin(USER.role())
-                                        .leftJoin(USER.role().permission()))
+                                        .from(USER.role().permission()))
                                 .convertFrom(
                                     r -> r.map((record) -> record.into(PermissionRespDto.class)))
                                 .as("permissions"))
-                        .from(USER)
-                        .leftJoin(USER.role()))
+                        .from(USER.role()))
                 .convertFrom(r -> r.map((record) -> record.into(RoleDto.class)))
                 .as("roles"))
         .from(USER)

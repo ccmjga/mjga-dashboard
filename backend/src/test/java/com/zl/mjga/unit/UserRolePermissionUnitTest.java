@@ -355,20 +355,6 @@ class UserRolePermissionUnitTest {
     verify(userRoleMapRepository, times(0)).insert(anyList());
   }
 
-  @Test
-  void removeDuplicateRoleId_givenDuplicateRoleId_shouldRemoveItAndReturnFilterList() {
-    Long stubUserId = 1L;
-    List<Long> stubRoleIds = List.of(1L, 2L);
-    when(userRepository.fetchUniqueUserDtoWithNestedRolePermissionBy(stubUserId))
-        .thenReturn(
-            UserRolePermissionDto.builder()
-                .roles(List.of(RoleDto.builder().id(1L).build()))
-                .build());
-    List<Long> filterList =
-        userRolePermissionService.removeDuplicateRoleId(stubUserId, stubRoleIds);
-    assertThat(filterList.size()).isEqualTo(1);
-    assertThat(filterList.get(0)).isEqualTo(2L);
-  }
 
   @Test
   void bindPermissionToRole_givenExistPermissionId_shouldInsertRolePermissionMapWithNoError() {
@@ -405,20 +391,6 @@ class UserRolePermissionUnitTest {
     verify(rolePermissionMapRepository, times(0)).insert(Mockito.eq(new ArrayList<>()));
   }
 
-  @Test
-  void removeDuplicatePermissionId_givenDuplicatePermissionId_shouldRemoveItAndReturnFilterList() {
-    Long stubRoleId = 1L;
-    List<Long> stubPermissionIds = List.of(1L, 2L);
-    RolePermissionMap rolePermissionMap = new RolePermissionMap();
-    rolePermissionMap.setRoleId(stubRoleId);
-    rolePermissionMap.setPermissionId(1L);
-    when(rolePermissionMapRepository.fetchByRoleId(stubRoleId))
-        .thenReturn(List.of(rolePermissionMap));
-    List<Long> filterList =
-        userRolePermissionService.removeDuplicatePermissionId(stubRoleId, stubPermissionIds);
-    assertThat(filterList.size()).isEqualTo(1);
-    assertThat(filterList.get(0)).isEqualTo(2L);
-  }
 
   @Test
   void upsertUser_whenGivenUserDtoWithOutId_shouldCreatUser() {

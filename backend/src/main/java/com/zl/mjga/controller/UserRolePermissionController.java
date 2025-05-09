@@ -119,21 +119,21 @@ public class UserRolePermissionController {
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_USER_ROLE_PERMISSION)")
   @PostMapping("/role/bind")
   @ResponseStatus(HttpStatus.OK)
-  void bindRoleToUser(@RequestBody RoleBindDto roleBindDto) {
+  void bindRoleBy(@RequestBody RoleBindDto roleBindDto) {
     userRolePermissionService.bindRoleToUser(roleBindDto.userId(), roleBindDto.roleIds());
   }
 
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_USER_ROLE_PERMISSION)")
-  @PostMapping("/role/bind")
+  @PostMapping("/role/unbind")
   @ResponseStatus(HttpStatus.OK)
-  void unBindRoleToUser(@RequestBody RoleBindDto roleBindDto) {
+  void unBindRoleBy(@RequestBody RoleBindDto roleBindDto) {
     userRolePermissionService.unBindRoleToUser(roleBindDto.userId(), roleBindDto.roleIds());
   }
 
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_USER_ROLE_PERMISSION)")
   @PostMapping("/permission/bind")
   @ResponseStatus(HttpStatus.OK)
-  void bindPermissionToRole(@RequestBody PermissionBindDto permissionBindDto) {
+  void bindPermissionBy(@RequestBody PermissionBindDto permissionBindDto) {
     userRolePermissionService.bindPermissionBy(
         permissionBindDto.roleId(), permissionBindDto.permissionIds());
   }
@@ -141,7 +141,7 @@ public class UserRolePermissionController {
   @PreAuthorize("hasAuthority(T(com.zl.mjga.model.urp.EPermission).WRITE_USER_ROLE_PERMISSION)")
   @PostMapping("/permission/unbind")
   @ResponseStatus(HttpStatus.OK)
-  void unBindPermissionToRole(@RequestBody PermissionBindDto permissionBindDto) {
+  void unBindPermissionBy(@RequestBody PermissionBindDto permissionBindDto) {
     userRolePermissionService.unBindPermissionBy(
         permissionBindDto.roleId(), permissionBindDto.permissionIds());
   }

@@ -73,7 +73,7 @@ public class RoleRepository extends RoleDao {
     return DSL.select(USER.role().ID)
         .from(USER)
         .leftJoin(USER.role())
-        .where(USER.role().ID.eq(userId));
+        .where(USER.ID.eq(userId));
   }
 
   public Result<Record> fetchUniqueRoleWithPermission(Long roleId) {
