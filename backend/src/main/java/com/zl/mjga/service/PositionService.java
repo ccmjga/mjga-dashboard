@@ -24,7 +24,9 @@ public class PositionService {
   public PageResponseDto<List<PositionRespDto>> pageQueryPosition(
       PageRequestDto pageRequestDto, PositionQueryDto positionQueryDto) {
     Result<Record> records = positionRepository.pageFetchBy(pageRequestDto, positionQueryDto);
-
+    if (records.isEmpty()) {
+      return PageResponseDto.empty();
+    }
     List<PositionRespDto> positions =
         records.map(
             record ->

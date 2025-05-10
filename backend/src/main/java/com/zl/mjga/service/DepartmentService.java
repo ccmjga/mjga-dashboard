@@ -31,7 +31,7 @@ public class DepartmentService {
         records.map(
             record -> {
               return DepartmentRespDto.builder()
-                      .id(record.getValue(DEPARTMENT.ID))
+                  .id(record.getValue(DEPARTMENT.ID))
                   .name(record.getValue(DEPARTMENT.NAME))
                   .parentId(record.getValue(DEPARTMENT.PARENT_ID))
                   .isBound(

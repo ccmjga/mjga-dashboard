@@ -1,7 +1,6 @@
 <template>
-
   <!-- Main modal -->
-  <div id="user-upsert-modal" tabindex="-1" aria-hidden="true"
+  <div :id tabindex="-1" aria-hidden="true"
     class="bg-gray-900/50 dark:bg-gray-900/80 hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
     <div class="relative p-4 w-full max-w-md max-h-full">
       <!-- Modal content -->
@@ -49,42 +48,42 @@ import { onMounted, ref, watch } from "vue";
 import { z } from "zod";
 import type { components } from "../api/types/schema";
 import type { PositionUpsertModel } from "../types/position";
+import { tr } from "@faker-js/faker";
 
 const alertStore = useAlertStore();
 
-const { position, onSubmit } = defineProps<{
+const { id, position, onSubmit } = defineProps<{
+	id: string;
 	position?: components["schemas"]["Position"];
 	closeModal: () => void;
 	onSubmit: (position: PositionUpsertModel) => Promise<void>;
 }>();
 
-const formData = ref({
-	...(position ?? {
-		id: undefined,
-		name: undefined,
-	}),
-});
+const formData = ref();
 
 watch(
 	() => position,
 	(newPosition) => {
 		formData.value = {
-			...(newPosition ?? {
-				id: undefined,
-				name: undefined,
-			}),
+			id: newPosition?.id,
+			name: newPosition?.name,
 		};
 	},
+	{ immediate: true },
 );
 
 const handleSubmit = async () => {
-	const userSchema = z.object({
-		name: z.string().min(2, "岗位名称至少2个字符"),
-		enable: z.boolean(),
+	const schema = z.object({
+		id: z.number().optional(),
+		name: z
+			.string({
+				message: "岗位名称不能为空",
+			})
+			.min(2, "岗位名称至少2个字符"),
 	});
 
 	try {
-		const validatedData = userSchema.parse(formData.value);
+		const validatedData = schema.parse(formData.value);
 		await onSubmit(validatedData);
 	} catch (error) {
 		if (error instanceof z.ZodError) {

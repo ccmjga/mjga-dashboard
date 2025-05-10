@@ -121,16 +121,17 @@
   <PositionDeleteModal :id="'position-delete-modal'" :closeModal="() => {
     positionDeleteModal!.hide();
   }" :onSubmit="handleDeletePositionSubmit" title="确定删除该岗位吗" content="删除岗位"></PositionDeleteModal>
-  <UpsertPositionModal :id="'position-upsert-modal'" :onSubmit="handleUpsertPositionSubmit" :closeModal="() => {
+  
+  <PositionUpsertModal :id="'position-upsert-modal'" :onSubmit="handleUpsertPositionSubmit" :closeModal="() => {
     positionUpsertModal!.hide();
   }" :position="selectedPosition" :allPositions="allPositions">
-  </UpsertPositionModal>
+  </PositionUpsertModal>
 </template>
 
 <script setup lang="ts">
 import PositionDeleteModal from "@/components/PopupModal.vue";
 import TablePagination from "@/components/TablePagination.vue";
-import UpsertPositionModal from "@/components/PositionUpsertModal.vue";
+import PositionUpsertModal from "@/components/PositionUpsertModal.vue";
 import usePositionDelete from "@/composables/position/useDepartmentDelete";
 import { usePositionQuery } from "@/composables/position/useDepartmentQuery";
 import { usePositionUpsert } from "@/composables/position/useDepartmentUpsert";
@@ -160,23 +161,23 @@ onMounted(async () => {
 	});
 	initFlowbite();
 	const $upsertModalElement: HTMLElement | null = document.querySelector(
-		"#department-upsert-modal",
+		"#position-upsert-modal",
 	);
 	const $deleteModalElement: HTMLElement | null = document.querySelector(
-		"#department-delete-modal",
+		"#position-delete-modal",
 	);
 	positionUpsertModal.value = new Modal(
 		$upsertModalElement,
 		{},
 		{
-			id: "department-upsert-modal",
+			id: "position-upsert-modal",
 		},
 	);
 	positionDeleteModal.value = new Modal(
 		$deleteModalElement,
 		{},
 		{
-			id: "department-delete-modal",
+			id: "position-delete-modal",
 		},
 	);
 });
@@ -184,12 +185,15 @@ onMounted(async () => {
 const handleUpsertPositionSubmit = async (
 	position: components["schemas"]["Position"],
 ) => {
-	positionUpsertModal.value?.hide();
 	await upsertPosition(position);
-	fetchAllPositions();
+	positionUpsertModal.value?.hide();
 	alertStore.showAlert({
 		content: "操作成功",
 		level: "success",
+	});
+	fetchAllPositions();
+	await fetchPositionWith({
+		name: name.value,
 	});
 };
 
@@ -205,11 +209,14 @@ const handleUpsertPositionClick = async (
 const handleDeletePositionSubmit = async () => {
 	if (!selectedPosition?.value?.id) return;
 	await deletePosition(selectedPosition.value.id);
-	fetchAllPositions();
 	positionDeleteModal.value?.hide();
 	alertStore.showAlert({
 		content: "删除成功",
 		level: "success",
+	});
+	fetchAllPositions();
+	await fetchPositionWith({
+		name: name.value,
 	});
 };
 

@@ -28,28 +28,23 @@ const makeErrorHandler =
 				level: "error",
 				content: err.message,
 			});
-			return;
-		}
-		if (err instanceof ForbiddenError) {
+		} else if (err instanceof ForbiddenError) {
 			showAlert({
 				level: "error",
 				content: err.message,
 			});
-			return;
-		}
-		if (err instanceof SystemError) {
+		} else if (err instanceof SystemError) {
 			showAlert({
 				level: "error",
 				content: err.message,
 			});
-			return;
-		}
-		if (err instanceof InternalServerError) {
+		} else if (err instanceof InternalServerError) {
 			showAlert({
 				level: "error",
 				content: err.detail ?? err.message,
 			});
-			return;
+		} else {
+			throw err;
 		}
 	};
 

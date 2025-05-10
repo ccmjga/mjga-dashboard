@@ -28,7 +28,8 @@ public class DepartmentRepository extends DepartmentDao {
     Department parent = DEPARTMENT.as("parent");
     return ctx()
         .select(
-            DEPARTMENT.asterisk(),parent.NAME.as("parent_name"),
+            DEPARTMENT.asterisk(),
+            parent.NAME.as("parent_name"),
             departmentQueryDto.getUserId() != null
                 ? DSL.when(
                         DEPARTMENT.ID.in(selectUsersDepartment(departmentQueryDto.getUserId())),

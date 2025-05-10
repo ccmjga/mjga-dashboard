@@ -145,14 +145,12 @@
 import BindModal from "@/components/PopupModal.vue";
 import UnModal from "@/components/PopupModal.vue";
 import TablePagination from "@/components/TablePagination.vue";
-import { useDepartmentQuery } from "@/composables/department/useDepartmentQuery";
 import { usePositionBind } from "@/composables/position/useDepartmentBind";
 import { usePositionQuery } from "@/composables/position/useDepartmentQuery";
 import { RouteName } from "@/router/constants";
 import { Modal, type ModalInterface, initFlowbite } from "flowbite";
 import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
-import { useDepartmentBind } from "../composables/department/useDepartmentBind";
 import useAlertStore from "../composables/store/useAlertStore";
 
 const positionName = ref<string>("");
