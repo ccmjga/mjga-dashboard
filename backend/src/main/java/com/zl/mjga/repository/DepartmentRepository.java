@@ -1,8 +1,6 @@
 package com.zl.mjga.repository;
 
 import static org.jooq.generated.mjga.Tables.*;
-import static org.jooq.generated.mjga.tables.Permission.PERMISSION;
-import static org.jooq.generated.mjga.tables.Role.ROLE;
 import static org.jooq.impl.DSL.noCondition;
 import static org.jooq.impl.DSL.noField;
 
@@ -11,6 +9,7 @@ import com.zl.mjga.dto.department.DepartmentQueryDto;
 import org.apache.commons.lang3.StringUtils;
 import org.jooq.*;
 import org.jooq.Record;
+import org.jooq.generated.mjga.tables.Department;
 import org.jooq.generated.mjga.tables.daos.DepartmentDao;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +25,10 @@ public class DepartmentRepository extends DepartmentDao {
 
   public Result<Record> pageFetchBy(
       PageRequestDto pageRequestDto, DepartmentQueryDto departmentQueryDto) {
+    Department parent = DEPARTMENT.as("parent");
     return ctx()
         .select(
-            DEPARTMENT.asterisk(),
+            DEPARTMENT.asterisk(),parent.NAME.as("parent_name"),
             departmentQueryDto.getUserId() != null
                 ? DSL.when(
                         DEPARTMENT.ID.in(selectUsersDepartment(departmentQueryDto.getUserId())),
@@ -36,19 +36,15 @@ public class DepartmentRepository extends DepartmentDao {
                     .otherwise(false)
                     .as("is_bound")
                 : noField(),
-            DSL.when(
-                    DEPARTMENT.PARENT_ID.isNotNull(),
-                    DSL.select(DEPARTMENT.NAME)
-                        .from(DEPARTMENT)
-                        .where(DEPARTMENT.ID.eq(DEPARTMENT.PARENT_ID))
-                        .asField("parent_name"))
-                .otherwise(noField()),
             DSL.count().over().as("total_department").convertFrom(Long::valueOf))
         .from(DEPARTMENT)
+        .leftJoin(parent)
+        .on(parent.ID.eq(DEPARTMENT.PARENT_ID))
         .where(
             switch (departmentQueryDto.getBindState()) {
-              case BIND -> PERMISSION.ID.in(selectUsersDepartment(departmentQueryDto.getUserId()));
-              case UNBIND -> ROLE.ID.notIn(selectUsersDepartment(departmentQueryDto.getUserId()));
+              case BIND -> DEPARTMENT.ID.in(selectUsersDepartment(departmentQueryDto.getUserId()));
+              case UNBIND ->
+                  DEPARTMENT.ID.notIn(selectUsersDepartment(departmentQueryDto.getUserId()));
               case ALL -> noCondition();
             })
         .and(

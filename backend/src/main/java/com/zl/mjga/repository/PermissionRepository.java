@@ -31,7 +31,9 @@ public class PermissionRepository extends PermissionDao {
         .select(
             asterisk(),
             permissionQueryDto.getRoleId() != null
-                ? when(PERMISSION.ID.in(selectRolesPermissionIds(permissionQueryDto.getRoleId())), true)
+                ? when(
+                        PERMISSION.ID.in(selectRolesPermissionIds(permissionQueryDto.getRoleId())),
+                        true)
                     .otherwise(false)
                     .as("is_bound")
                 : noField(),
@@ -42,7 +44,7 @@ public class PermissionRepository extends PermissionDao {
               case BIND ->
                   PERMISSION.ID.in(selectRolesPermissionIds(permissionQueryDto.getRoleId()));
               case UNBIND ->
-                      PERMISSION.ID.notIn(selectRolesPermissionIds(permissionQueryDto.getRoleId()));
+                  PERMISSION.ID.notIn(selectRolesPermissionIds(permissionQueryDto.getRoleId()));
               case ALL -> noCondition();
             })
         .and(

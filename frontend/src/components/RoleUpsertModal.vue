@@ -58,7 +58,7 @@ const { role, onSubmit } = defineProps<{
 	onSubmit: (data: RoleUpsertModel) => Promise<void>;
 }>();
 
-const formData = ref({});
+const formData = ref();
 
 watch(
 	() => role,

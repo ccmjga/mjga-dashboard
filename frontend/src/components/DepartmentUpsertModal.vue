@@ -68,37 +68,33 @@ const { department, allDepartments, onSubmit } = defineProps<{
 	onSubmit: (department: DepartmentUpsertModel) => Promise<void>;
 }>();
 
-const formData = ref({
-	...(department ?? {
-		id: undefined,
-		name: undefined,
-		parentId: undefined,
-		enable: undefined,
-	}),
-});
+const formData = ref();
 
 watch(
 	() => department,
 	(newDepartment) => {
 		formData.value = {
-			...(newDepartment ?? {
-				id: undefined,
-				name: undefined,
-				parentId: undefined,
-				enable: undefined,
-			}),
+			id: newDepartment?.id,
+			name: newDepartment?.name,
+			parentId: newDepartment?.parentId,
 		};
 	},
+	{ immediate: true },
 );
 
 const handleSubmit = async () => {
-	const userSchema = z.object({
-		name: z.string().min(2, "部门名称至少2个字符"),
-		enable: z.boolean(),
+	const schema = z.object({
+		id: z.number().optional(),
+		parentId: z.number().nullable().optional(),
+		name: z
+			.string({
+				message: "部门名称不能为空",
+			})
+			.min(2, "部门名称至少2个字符"),
 	});
 
 	try {
-		const validatedData = userSchema.parse(formData.value);
+		const validatedData = schema.parse(formData.value);
 		await onSubmit(validatedData);
 	} catch (error) {
 		if (error instanceof z.ZodError) {

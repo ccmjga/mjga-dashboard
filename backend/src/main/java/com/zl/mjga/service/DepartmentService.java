@@ -24,20 +24,21 @@ public class DepartmentService {
   public PageResponseDto<List<DepartmentRespDto>> pageQueryDepartment(
       PageRequestDto pageRequestDto, DepartmentQueryDto departmentQueryDto) {
     Result<Record> records = departmentRepository.pageFetchBy(pageRequestDto, departmentQueryDto);
+    if (records.isEmpty()) {
+      return PageResponseDto.empty();
+    }
     List<DepartmentRespDto> departments =
         records.map(
             record -> {
               return DepartmentRespDto.builder()
+                      .id(record.getValue(DEPARTMENT.ID))
                   .name(record.getValue(DEPARTMENT.NAME))
                   .parentId(record.getValue(DEPARTMENT.PARENT_ID))
                   .isBound(
                       record.field("is_bound") != null
                           ? record.get("is_bound", Boolean.class)
                           : null)
-                  .parentName(
-                      record.field("parent_name") != null
-                          ? record.get("parent_name", String.class)
-                          : null)
+                  .parentName(record.get("parent_name", String.class))
                   .build();
             });
     Long totalDepartment = records.get(0).getValue("total_department", Long.class);

@@ -130,7 +130,7 @@
 <script setup lang="ts">
 import PositionDeleteModal from "@/components/PopupModal.vue";
 import TablePagination from "@/components/TablePagination.vue";
-import UpsertPositionModal from "@/components/UpsertPositionModal.vue";
+import UpsertPositionModal from "@/components/PositionUpsertModal.vue";
 import usePositionDelete from "@/composables/position/useDepartmentDelete";
 import { usePositionQuery } from "@/composables/position/useDepartmentQuery";
 import { usePositionUpsert } from "@/composables/position/useDepartmentUpsert";
